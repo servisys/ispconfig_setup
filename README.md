@@ -23,6 +23,12 @@ For now it's composed of two main scritps
 		       based on the https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
                        and to fix some issue on normal installation files, provided by debian repository
 
+You can Choose during install:
+- Dovecot or Courier
+- Quota On/Off
+- Jailkit On/Off
+- Squirrelmail / Roundcube
+
 ### How do I get set up? ###
 
 * Summary of set up
