@@ -19,7 +19,7 @@
 # Global variables
 #---------------------------------------------------------------------
 CFG_HOSTNAME_FQDN=`hostname -f`;
-WT_BACKTITLE="ISPConfig 3 System Installer"
+WT_BACKTITLE="ISPConfig 3 System Installer from Temporini Matteo"
 
 
 #---------------------------------------------------------------------
