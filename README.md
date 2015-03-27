@@ -3,6 +3,10 @@
 This is a system to automate the installation of ISPConfig 3 
 control Panel ( http://www.ispconfig.org/page/home.html ).
 
+Tested on:
+- Debian 7
+- ISPConfig 3.0.5.4p5
+
 For now it is tested and developed only on Debian systems.
 
 Maybe it works well also on Ubuntu systems.
@@ -45,5 +49,5 @@ for postinstall fixup.
 
 ### Who had contributed to this work? ###
 
-* The scripts and instructions have been produced by Matteo Temporini(<temporini.matteo@gmail.com>)
+* The scripts and instructions have been produced by Matteo Temporini( <temporini.matteo@gmail.com> )
 * The code is based on the "Automatic Debian System Installation for ISPConfig 3" of Author: Mark Stunnenberg <mark@e-rave.nl>
