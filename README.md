@@ -17,8 +17,7 @@ For now it's composed of two main scritps
 
 - ispc3sysinstall.sh = is the main scritps wich will do a default install
 		       based on the https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
-- ispc3_postinstall.sh = is a collection of configuration files, fixed up to work with some enviroment,
-			     and needed to fix some issue on normal installation files, provided by debian repository
+                       and to fix some issue on normal installation files, provided by debian repository
 
 ### How do I get set up? ###
 
