@@ -427,8 +427,8 @@ InstallWebmail() {
       cd /var/lib/roundcube/plugins
       mv ispconfig3_account/config/config.inc.php.dist ispconfig3_account/config/config.inc.php
       read -p "Se non l'hai ancora fatto aggiungi l'utente roundcube agli utenti remoti di ISPConfig, con i permessi: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
-      wget http://repo.temporini.net/ispconfig/roundcube/roundcube.apache -O /etc/apache2/conf.d/roundcube
-      wget http://repo.temporini.net/ispconfig/roundcube/main.inc.php.txt -O /etc/roundcube/main.inc.php
+      wget http://repo.temporini.net/ispconfig_install/roundcube/roundcube.apache -O /etc/apache2/conf.d/roundcube
+      wget http://repo.temporini.net/ispconfig_install/roundcube/main.inc.php.txt -O /etc/roundcube/main.inc.php
       nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
 	;;
 	"squirrelmail")
@@ -498,9 +498,9 @@ InstallFix() {
   echo ""
   echo "Press ENTER to start the installation.." 
   read DUMMY
-  wget http://repo.temporini.net/ispconfig/apache2/suphp.conf.txt -O /etc/apache2/mods-available/suphp.conf
+  wget http://repo.temporini.net/ispconfig_install/apache2/suphp.conf.txt -O /etc/apache2/mods-available/suphp.conf
   /etc/init.d/apache2 reload
-  wget http://repo.temporini.net/ispconfig/postfix/master.cf -O /etc/postfix/master.cf
+  wget http://repo.temporini.net/ispconfig_install/postfix/master.cf -O /etc/postfix/master.cf
   /etc/init.d/postfix restart
   echo "All bugfix are now fixed and all should be working fine"
 }
