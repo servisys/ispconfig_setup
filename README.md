@@ -5,6 +5,7 @@ control Panel ( http://www.ispconfig.org/page/home.html ).
 
 Tested on:
 - Debian 7
+- Centos 7
 - ISPConfig 3.0.5.4p5
 
 For now it is tested and developed only on Debian systems.
