@@ -417,7 +417,7 @@ InstallWebmail() {
 	  echo "roundcube-core roundcube/db/dbname string roundcube" | debconf-set-selections
 	  echo "roundcube-core roundcube/mysql/app-pass password $RANDOMPWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/app-password-confirm password $RANDPWD" | debconf-set-selections
-	  apt-get -y install roundcube roundcube-mysql > /dev/null 2>&1
+	  apt-get -y install roundcube roundcube-mysql git > /dev/null 2>&1
 	  sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
 	  sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
 	  cd /tmp
