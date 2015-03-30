@@ -428,7 +428,7 @@ InstallWebmail() {
       mv ispconfig3_* /var/lib/roundcube/plugins
       cd /var/lib/roundcube/plugins
       mv ispconfig3_account/config/config.inc.php.dist ispconfig3_account/config/config.inc.php
-      read -p "Se non l'hai ancora fatto aggiungi l'utente roundcube agli utenti remoti di ISPConfig, con i permessi: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
+      read -p "If you heaven't done yet add roundcube remtoe user in ISPConfig, with the following permission: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
       wget http://repo.temporini.net/ispconfig_install/roundcube/roundcube.apache -O /etc/apache2/conf.d/roundcube
       wget http://repo.temporini.net/ispconfig_install/roundcube/main.inc.php.txt -O /etc/roundcube/main.inc.php
       nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
