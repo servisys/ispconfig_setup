@@ -41,19 +41,18 @@ to install debian as required for ISPConfig
 
 * Configuration
 
-After you got a fresh and perfect Debian installation you can launch the first script
+After you got a fresh and perfect Debian installation you had to
 
-- ./ispc3sysinstall.sh
+apt-get -y install unzip
+wget https://github.com/servisys/ispconfig_setup/archive/master.zip
+unzip master.zip
+cd ispconfig_master-setup
+./ispc3sysinstall.sh
 
 Follow the instruction on the screen
-
-After that launch 
-
-- ./ispc3_postinstall.sh 
-
-for postinstall fixup.
 
 ### Who had contributed to this work? ###
 
 * The scripts and instructions have been produced by Matteo Temporini( <temporini.matteo@gmail.com> )
 * The code is based on the "Automatic Debian System Installation for ISPConfig 3" of Author: Mark Stunnenberg <mark@e-rave.nl>
+* Howtoforge community https://www.howtoforge.com/community/
