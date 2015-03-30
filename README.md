@@ -47,7 +47,7 @@ After you got a fresh and perfect Debian installation you had to
 apt-get -y install unzip
 wget https://github.com/servisys/ispconfig_setup/archive/master.zip
 unzip master.zip
-cd ispconfig_master-setup
+cd ispconfig_setup-master
 ./ispc3sysinstall.sh
 ```
 
