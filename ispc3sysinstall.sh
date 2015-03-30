@@ -44,6 +44,8 @@ PreInstallCheck() {
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
+  echo "Installing pre-required packages"
+  [ -f /bin/whiptail ] && echo "whiptail found: OK"  || apt-get -y --force-yes install whiptail
   while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
   do
 	CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
