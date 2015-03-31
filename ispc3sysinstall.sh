@@ -44,34 +44,53 @@ PreInstallCheck() {
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
-  echo "Installing pre-required packages"
-  [ -f /bin/whiptail ] && echo "whiptail found: OK"  || apt-get -y install whiptail
-  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
-  do
-	CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
-  done
-
-  while [ "x$CFG_MTA" == "x" ]
-  do
-	CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "courier" "(default)" ON "dovecot" "" OFF 3>&1 1>&2 2>&3)
-  done
-
-  if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
-	CFG_QUOTA=y
-  else
-	CFG_QUOTA=n
-  fi
-
-  if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit?" 10 50) then
-	CFG_JKIT=y
-  else
-	CFG_JKIT=n
-  fi
-
-  while [ "x$CFG_WEBMAIL" == "x" ]
-  do
-	CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select your webmail client" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
-  done
+	echo "Be sure that you had main, contrib and non-free to you /etc/apt/source.list"
+	echo "Be sure the file look linke this"
+	echo "deb http://ftp.de.debian.org/debian/ wheezy main contrib non-free"
+	echo "deb-src http://ftp.de.debian.org/debian/ wheezy main contrib non-free"
+	echo "deb http://security.debian.org/ wheezy/updates main contrib non-free"
+	echo "deb-src http://security.debian.org/ wheezy/updates main contrib non-free"
+	echo "# wheezy-updates, previously known as 'volatile'"
+	echo "deb http://ftp.de.debian.org/debian/ wheezy-updates main contrib non-free"
+	echo "deb-src http://ftp.de.debian.org/debian/ wheezy-updates main contrib non-free"
+	echo ""
+	echo "Are you sure repository are ok? (yes/no) (yes = Procede with Install, no = exit installation)"
+	read ANSWER
+        if [ $ANSWER == "Yes" ] || [ $ANSWER == "yes" ]  || [ $ANSWER == "y" ] || [$ANSWER == "Y"]
+        then
+	  echo "Installing pre-required packages"
+	  [ -f /bin/whiptail ] && echo "whiptail found: OK"  || apt-get -y install whiptail
+	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
+	  do
+		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
+	  done
+	
+	  while [ "x$CFG_MTA" == "x" ]
+	  do
+		CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "courier" "(default)" ON "dovecot" "" OFF 3>&1 1>&2 2>&3)
+	  done
+	
+	  if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
+		CFG_QUOTA=y
+	  else
+		CFG_QUOTA=n
+	  fi
+	
+	  if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit?" 10 50) then
+		CFG_JKIT=y
+	  else
+		CFG_JKIT=n
+	  fi
+	
+	  while [ "x$CFG_WEBMAIL" == "x" ]
+	  do
+		CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select your webmail client" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
+	  done
+	else
+	  echo "Check your /etc/apt/source.list , then restart installation"
+	  read DUMMY
+	  exit
+	fi
 }
 
 
@@ -526,7 +545,7 @@ echo "If you're all set, press ENTER to continue or CTRL-C to cancel.."
 read DUMMY
 
 if [ -f /etc/debian_version ]; then
-#  PreInstallCheck
+  PreInstallCheck
   AskQuestions
   InstallBasics
   InstallPostfix
