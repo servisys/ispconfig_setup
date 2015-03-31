@@ -207,6 +207,10 @@ InstallApachePHP() {
   apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec php-pear php-auth php5-fpm php5-mcrypt mcrypt php5-imagick imagemagick libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python php5-curl php5-intl php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached curl > /dev/null 2>&1  
   apt-get -qqy install phpmyadmin
   a2enmod suexec rewrite ssl actions include dav_fs dav auth_digest fastcgi alias > /dev/null 2>&1
+  sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" suphp.conf
+  sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" suphp.conf
+  sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" suphp.conf
+  sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" suphp.conf
   service apache2 restart > /dev/null 2>&1
   echo "done!"
 }
@@ -499,22 +503,6 @@ InstallISPConfig() {
   tar xfz ISPConfig-3-stable.tar.gz
   cd ispconfig3_install/install/
   php -q install.php
-}
-
-#---------------------------------------------------------------------
-# Function: InstallFix
-#	Start bugfix patch
-#---------------------------------------------------------------------
-InstallFix() {
-  echo "=================================================================================="
-  echo "We are now apply some post-install bugfix.."
-  echo "=================================================================================="
-  echo ""
-  echo "Press ENTER to start the installation.." 
-  read DUMMY
-  wget http://repo.temporini.net/ispconfig_install/apache2/suphp.conf.txt -O /etc/apache2/mods-available/suphp.conf
-  /etc/init.d/apache2 reload
-  echo "All bugfix are now fixed and all should be working fine"
 }
 
 #---------------------------------------------------------------------
