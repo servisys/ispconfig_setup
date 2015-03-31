@@ -421,6 +421,7 @@ InstallWebmail() {
 	  echo "roundcube-core roundcube/app-password-confirm password $RANDPWD" | debconf-set-selections
 	  apt-get -y install roundcube roundcube-mysql git > /dev/null 2>&1
 	  sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
+	  sed -i "/Options +FollowSymLinks/a\\`echo -e '\n\r'`  DirectoryIndex index.php\\`echo -e '\n\r'`\\`echo -e '\n\r'`  <IfModule mod_php5.c>\\`echo -e '\n\r'`        AddType application/x-httpd-php .php\\`echo -e '\n\r'`\\`echo -e '\n\r'`        php_flag magic_quotes_gpc Off\\`echo -e '\n\r'`        php_flag track_vars On\\`echo -e '\n\r'`        php_flag register_globals Off\\`echo -e '\n\r'`        php_value include_path .:/usr/share/php\\`echo -e '\n\r'`  </IfModule>" /etc/roundcube/apache.conf
 	  sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
 	  cd /tmp
       git clone https://github.com/w2c/ispconfig3_roundcube.git
@@ -429,7 +430,6 @@ InstallWebmail() {
       cd /var/lib/roundcube/plugins
       mv ispconfig3_account/config/config.inc.php.dist ispconfig3_account/config/config.inc.php
       read -p "If you heaven't done yet add roundcube remtoe user in ISPConfig, with the following permission: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
-      wget http://repo.temporini.net/ispconfig_install/roundcube/roundcube.apache -O /etc/apache2/conf.d/roundcube
       wget http://repo.temporini.net/ispconfig_install/roundcube/main.inc.php.txt -O /etc/roundcube/main.inc.php
       nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
 	;;
