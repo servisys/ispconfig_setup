@@ -34,6 +34,25 @@ PreInstallCheck() {
 	echo "ERROR: Couldn't reach www.ispconfig.org, please check your internet connection!"
 	exit 1;
   fi
+  while true; do
+        echo "Be sure that you had main, contrib and non-free to you /etc/apt/source.list"
+        echo "Be sure the file look linke this"
+        echo ""
+        echo "deb http://ftp.de.debian.org/debian/ wheezy main contrib non-free"
+        echo "deb-src http://ftp.de.debian.org/debian/ wheezy main contrib non-free"
+        echo "deb http://security.debian.org/ wheezy/updates main contrib non-free"
+        echo "deb-src http://security.debian.org/ wheezy/updates main contrib non-free"
+        echo "# wheezy-updates, previously known as 'volatile'"
+        echo "deb http://ftp.de.debian.org/debian/ wheezy-updates main contrib non-free"
+        echo "deb-src http://ftp.de.debian.org/debian/ wheezy-updates main contrib non-free"
+        echo ""
+        read -p "Are you sure repository are ok? (y/n) (y = Procede with Install, no = exit installation to fix apt)" yn
+                case $yn in
+                        [Yy] ) echo "Proceed with Installation"; break;;
+                        [Nn] ) echo "Type nano /etc/apt/source.list and add contrib non-free to each line"; exit;;
+                        * ) echo "Please answer y or n.";;
+                esac
+  done
   echo "OK!"
 }
 
