@@ -57,20 +57,6 @@ PreInstallCheck() {
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
-	echo "Be sure that you had main, contrib and non-free to you /etc/apt/source.list"
-	echo "Be sure the file look linke this"
-	echo "deb http://ftp.de.debian.org/debian/ wheezy main contrib non-free"
-	echo "deb-src http://ftp.de.debian.org/debian/ wheezy main contrib non-free"
-	echo "deb http://security.debian.org/ wheezy/updates main contrib non-free"
-	echo "deb-src http://security.debian.org/ wheezy/updates main contrib non-free"
-	echo "# wheezy-updates, previously known as 'volatile'"
-	echo "deb http://ftp.de.debian.org/debian/ wheezy-updates main contrib non-free"
-	echo "deb-src http://ftp.de.debian.org/debian/ wheezy-updates main contrib non-free"
-	echo ""
-	echo "Are you sure repository are ok? (yes/no) (yes = Procede with Install, no = exit installation)"
-	read ANSWER
-        if [ $ANSWER == "Yes" ] || [ $ANSWER == "yes" ]  || [ $ANSWER == "y" ] || [$ANSWER == "Y"]
-        then
 	  echo "Installing pre-required packages"
 	  [ -f /bin/whiptail ] && echo "whiptail found: OK"  || apt-get -y install whiptail
 	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
@@ -99,11 +85,6 @@ AskQuestions() {
 	  do
 		CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select your webmail client" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
 	  done
-	else
-	  echo "Check your /etc/apt/source.list , then restart installation"
-	  read DUMMY
-	  exit
-	fi
 }
 
 
