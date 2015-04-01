@@ -1,0 +1,6 @@
+v.1.0.1
+- check on apt repository needed for ISPConfig
+- No need of external files
+
+v.1.0.0
+- Very first version of the script
