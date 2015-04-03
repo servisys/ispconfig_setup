@@ -85,6 +85,13 @@ AskQuestions() {
 	  do
 		CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select your webmail client" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
 	  done
+
+          SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country (ex. EN)" --nocancel 10 50 3>&1 1>&2 2>&3)
+          SSL_STATE=$(whiptail --title "SSL State" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - STATE (ex. Italy)" --nocancel 10 50 3>&1 1>&2 2>&3)
+          SSL_LOCALITY=$(whiptail --title "SSL Locality" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Locality (ex. Udine)" --nocancel 10 50 3>&1 1>&2 2>&3)
+          SSL_ORGANIZATION=$(whiptail --title "SSL Organization" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Organization (ex. Company L.t.d.)" --nocancel 10 50 3>&1 1>&2 2>&3)
+          SSL_ORGUNIT=$(whiptail --title "SSL Organization Unit" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Organization Unit (ex. IT Department)" --nocancel 10 50 3>&1 1>&2 2>&3)
+
 }
 
 
@@ -196,6 +203,8 @@ InstallMTA() {
 InstallAntiVirus() {
   echo -n "Installing anti-virus utilities.."
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
+  freshclam
+  /etc/init.d/clamav-daemon restart
   echo "done!"
 }
 
@@ -241,13 +250,7 @@ InstallFTP() {
   sed -i 's/ftp/\#ftp/' /etc/inetd.conf
   echo 1 > /etc/pure-ftpd/conf/TLS
   mkdir -p /etc/ssl/private/
-  echo "==========================================================================================="
-  echo "The following questions can be left as default (just press enter), but when"
-  echo "asked for 'Common Name', enter your FQDN hostname ($CFG_HOSTNAME_FQDN)."
-  echo "==========================================================================================="
-  echo "Press ENTER to continue.."
-  read DUMMY
-  openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem
+  openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem -subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCALITY/O=$SSL_ORGANIZATION/OU=$SSL_ORGUNIT/CN=$CFG_HOSTNAME_FQDN"
   chmod 600 /etc/ssl/private/pure-ftpd.pem
   service openbsd-inetd restart > /dev/null 2>&1
   service pure-ftpd-mysql restart > /dev/null 2>&1
@@ -451,16 +454,6 @@ InstallWebmail() {
 	  sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
 	  sed -i "/Options +FollowSymLinks/a\\`echo -e '\n\r'`  DirectoryIndex index.php\\`echo -e '\n\r'`\\`echo -e '\n\r'`  <IfModule mod_php5.c>\\`echo -e '\n\r'`        AddType application/x-httpd-php .php\\`echo -e '\n\r'`\\`echo -e '\n\r'`        php_flag magic_quotes_gpc Off\\`echo -e '\n\r'`        php_flag track_vars On\\`echo -e '\n\r'`        php_flag register_globals Off\\`echo -e '\n\r'`        php_value include_path .:/usr/share/php\\`echo -e '\n\r'`  </IfModule>" /etc/roundcube/apache.conf
 	  sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
-	  cd /tmp
-          git clone https://github.com/w2c/ispconfig3_roundcube.git
-          cd /tmp/ispconfig3_roundcube/
-          mv ispconfig3_* /var/lib/roundcube/plugins
-          cd /var/lib/roundcube/plugins
-          mv ispconfig3_account/config/config.inc.php.dist ispconfig3_account/config/config.inc.php
-          read -p "If you heaven't done yet add roundcube remtoe user in ISPConfig, with the following permission: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
-          sed -i "s/\$rcmail_config\['plugins'\] = array();/\$rcmail_config\['plugins'\] = array(\"jqueryui\", \"ispconfig3_account\", \"ispconfig3_autoreply\", \"ispconfig3_pass\", \"ispconfig3_spam\", \"ispconfig3_fetchmail\", \"ispconfig3_filter\");/" /etc/roundcube/main.inc.php
-          sed -i "s/\$rcmail_config\['skin'\] = 'default';/\$rcmail_config\['skin'\] = 'classic';/" /etc/roundcube/main.inc.php
-          nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
 	;;
 	"squirrelmail")
 	  echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
@@ -502,20 +495,79 @@ InstallWebmail() {
 #---------------------------------------------------------------------
 InstallISPConfig() {
   echo "Installing ISPConfig3.."
-  echo "=================================================================================="
-  echo "As a reminder, the following information is needed for the ISPConfig installation:"
-  echo "- Full qualified hostname (FQDN) of the server: $CFG_HOSTNAME_FQDN"
-  echo "- MySQL root password: $CFG_MYSQL_ROOT_PWD"
-  echo "- Common Name (eg, YOUR name): $CFG_HOSTNAME_FQDN"
-  echo "=================================================================================="
-  echo ""
-  echo "Press ENTER to start the installation.."
-  read DUMMY
   cd /tmp
   wget http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
   tar xfz ISPConfig-3-stable.tar.gz
   cd ispconfig3_install/install/
-  php -q install.php
+  echo "Create INI file"
+  touch autoinstall.ini
+  echo "[install]" > autoinstall.ini
+  echo "language=en" >> autoinstall.ini
+  echo "install_mode=standard" >> autoinstall.ini
+  echo "hostname=$CFG_HOSTNAME_FQDN" >> autoinstall.ini
+  echo "mysql_hostname=localhost" >> autoinstall.ini
+  echo "mysql_root_user=root" >> autoinstall.ini
+  echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
+  echo "mysql_database=dbispconfig" >> autoinstall.ini
+  echo "mysql_charset=utf8" >> autoinstall.ini
+  echo "http_server=apache" >> autoinstall.ini
+  echo "ispconfig_port=8080" >> autoinstall.ini
+  echo "ispconfig_use_ssl=y" >> autoinstall.ini
+  echo
+  echo "[ssl_cert]" >> autoinstall.ini
+  echo "ssl_cert_country=IT" >> autoinstall.ini
+  echo "ssl_cert_state=Italy" >> autoinstall.ini
+  echo "ssl_cert_locality=Udine" >> autoinstall.ini
+  echo "ssl_cert_organisation=Servisys di Temporini Matteo" >> autoinstall.ini
+  echo "ssl_cert_organisation_unit=IT department" >> autoinstall.ini
+  echo "ssl_cert_common_name=$CFG_HOSTNAME_FQDN" >> autoinstall.ini
+  echo
+  echo "[expert]" >> autoinstall.ini
+  echo "mysql_ispconfig_user=ispconfig" >> autoinstall.ini
+  echo "mysql_ispconfig_password=afStEratXBsgatRtsa42CadwhQ" >> autoinstall.ini
+  echo "join_multiserver_setup=n" >> autoinstall.ini
+  echo "mysql_master_hostname=master.example.com" >> autoinstall.ini
+  echo "mysql_master_root_user=root" >> autoinstall.ini
+  echo "mysql_master_root_password=ispconfig" >> autoinstall.ini
+  echo "mysql_master_database=dbispconfig" >> autoinstall.ini
+  echo "configure_mail=y" >> autoinstall.ini
+  echo "configure_jailkit=$CFG_JKIT" >> autoinstall.ini
+  echo "configure_ftp=y" >> autoinstall.ini
+  echo "configure_dns=y" >> autoinstall.ini
+  echo "configure_apache=y" >> autoinstall.ini
+  echo "configure_nginx=n" >> autoinstall.ini
+  echo "configure_firewall=y" >> autoinstall.ini
+  echo "install_ispconfig_web_interface=y" >> autoinstall.ini
+  echo
+  echo "[update]" >> autoinstall.ini
+  echo "do_backup=yes" >> autoinstall.ini
+  echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
+  echo "mysql_master_hostname=master.example.com" >> autoinstall.ini
+  echo "mysql_master_root_user=root" >> autoinstall.ini
+  echo "mysql_master_root_password=ispconfig" >> autoinstall.ini
+  echo "mysql_master_database=dbispconfig" >> autoinstall.ini
+  echo "reconfigure_permissions_in_master_database=no" >> autoinstall.ini
+  echo "reconfigure_services=yes" >> autoinstall.ini
+  echo "ispconfig_port=8080" >> autoinstall.ini
+  echo "create_new_ispconfig_ssl_cert=no" >> autoinstall.ini
+  echo "reconfigure_crontab=yes" >> autoinstall.ini
+  php -q install.php --autoinstall=autoinstall.ini
+}
+
+InstallFix(){
+  if [ $CFG_WEBMAIL == "roundcube" ]; then
+  	echo "Installing roundcube fix..."
+	cd /tmp
+	git clone https://github.com/w2c/ispconfig3_roundcube.git
+	cd /tmp/ispconfig3_roundcube/
+	mv ispconfig3_* /var/lib/roundcube/plugins
+	cd /var/lib/roundcube/plugins
+	mv ispconfig3_account/config/config.inc.php.dist ispconfig3_account/config/config.inc.php
+	read -p "If you heaven't done yet add roundcube remtoe user in ISPConfig, with the following permission: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
+	sed -i "s/\$rcmail_config\['plugins'\] = array();/\$rcmail_config\['plugins'\] = array(\"jqueryui\", \"ispconfig3_account\", \"ispconfig3_autoreply\", \"ispconfig3_pass\", \"ispconfig3_spam\", \"ispconfig3_fetchmail\", \"ispconfig3_filter\");/" /etc/roundcube/main.inc.php
+	sed -i "s/\$rcmail_config\['skin'\] = 'default';/\$rcmail_config\['skin'\] = 'classic';/" /etc/roundcube/main.inc.php
+	nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
+  fi
 }
 
 #---------------------------------------------------------------------
@@ -559,6 +611,10 @@ if [ -f /etc/debian_version ]; then
   InstallFail2ban
   InstallWebmail
   InstallISPConfig
+  InstallFix
+  echo "Well done ISPConfig installed and configured correctly!! :D"
+  echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
+  echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
 else
   echo "Unsupported linux distribution."
 fi
