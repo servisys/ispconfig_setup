@@ -1,7 +1,3 @@
-v.1.0.2
-- Added support for inserit SSL data only one time, and then used all the time SSL is needed
-- ISPconfig install processa, completelly automated, no intereaction required
-
 v.1.0.1
 - check on apt repository needed for ISPConfig
 - No need of external files
