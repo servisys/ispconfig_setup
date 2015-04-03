@@ -4,7 +4,7 @@ v.1.0.2
 - ISPconfig install process, completelly automated, no intereaction required
 - Fixed update of freshclam after install and restart demon
 - Added InstallFix pprocedure to do postinstall necessary fix
-- Fixed rounducbe user configuration
+- Fixed roundcube user configuration
 
 v.1.0.1
 - check on apt repository needed for ISPConfig
