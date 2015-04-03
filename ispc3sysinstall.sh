@@ -612,7 +612,8 @@ if [ -f /etc/debian_version ]; then
   InstallWebmail
   InstallISPConfig
   InstallFix
-  echo "Well done ISPConfig installed and configured correctly. No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
+  echo "Well done ISPConfig installed and configured correctly!! :D"
+  echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
 else
   echo "Unsupported linux distribution."
