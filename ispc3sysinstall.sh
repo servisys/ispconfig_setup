@@ -217,6 +217,8 @@ InstallMTA() {
 InstallAntiVirus() {
   echo -n "Installing anti-virus utilities.."
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
+  freshclam
+  /etc/init.d/clamav-daemon start
   echo "done!"
 }
 
@@ -507,15 +509,6 @@ InstallWebmail() {
 #---------------------------------------------------------------------
 InstallISPConfig() {
   echo "Installing ISPConfig3.."
-  echo "=================================================================================="
-  echo "As a reminder, the following information is needed for the ISPConfig installation:"
-  echo "- Full qualified hostname (FQDN) of the server: $CFG_HOSTNAME_FQDN"
-  echo "- MySQL root password: $CFG_MYSQL_ROOT_PWD"
-  echo "- Common Name (eg, YOUR name): $CFG_HOSTNAME_FQDN"
-  echo "=================================================================================="
-  echo ""
-  echo "Press ENTER to start the installation.."
-  read DUMMY
   cd /tmp
   wget http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
   tar xfz ISPConfig-3-stable.tar.gz
