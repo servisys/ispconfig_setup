@@ -1,6 +1,10 @@
 v.1.0.2
 - Added support for inserit SSL data only one time, and then used all the time SSL is needed
-- ISPconfig install processa, completelly automated, no intereaction required
+- Added possibility to insert blank information in SSL filed for quick setup
+- ISPconfig install process, completelly automated, no intereaction required
+- Fixed update of freshclam after install and restart demon
+- Added InstallFix pprocedure to do postinstall necessary fix
+- Fixed rounducbe user configuration
 
 v.1.0.1
 - check on apt repository needed for ISPConfig
