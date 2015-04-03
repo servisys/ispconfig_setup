@@ -262,13 +262,6 @@ InstallFTP() {
   sed -i 's/ftp/\#ftp/' /etc/inetd.conf
   echo 1 > /etc/pure-ftpd/conf/TLS
   mkdir -p /etc/ssl/private/
-  echo "==========================================================================================="
-  echo "The following questions can be left as default (just press enter), but when"
-  echo "asked for 'Common Name', enter your FQDN hostname ($CFG_HOSTNAME_FQDN)."
-  echo "==========================================================================================="
-  echo "Press ENTER to continue.."
-  read DUMMY
-  openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem
   openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem -subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCALITY/O=$SSL_ORGANIZATION/OU=$SSL_ORGUNIT/CN=$CFG_HOSTNAME_FQDN"
   chmod 600 /etc/ssl/private/pure-ftpd.pem
   service openbsd-inetd restart > /dev/null 2>&1
