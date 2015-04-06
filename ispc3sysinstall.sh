@@ -602,25 +602,25 @@ read DUMMY
 if [ -f /etc/debian_version ]; then
   PreInstallCheck 2> /var/log/ispconfig_setup.log
   AskQuestions 
-  InstallBasics 2> /var/log/ispconfig_setup.log
-  InstallPostfix 2> /var/log/ispconfig_setup.log
-  InstallMysql 2> /var/log/ispconfig_setup.log
-  InstallMTA 2> /var/log/ispconfig_setup.log
-  InstallAntiVirus 2> /var/log/ispconfig_setup.log
-  InstallApachePHP 2> /var/log/ispconfig_setup.log
-  InstallFTP 2> /var/log/ispconfig_setup.log
+  InstallBasics 2>> /var/log/ispconfig_setup.log
+  InstallPostfix 2>> /var/log/ispconfig_setup.log
+  InstallMysql 2>> /var/log/ispconfig_setup.log
+  InstallMTA 2>> /var/log/ispconfig_setup.log
+  InstallAntiVirus 2>> /var/log/ispconfig_setup.log
+  InstallApachePHP 2>> /var/log/ispconfig_setup.log
+  InstallFTP 2>> /var/log/ispconfig_setup.log
   if [ $CFG_QUOTA == "y" ]; then
-	InstallQuota 2> /var/log/ispconfig_setup.log
+	InstallQuota 2>> /var/log/ispconfig_setup.log
   fi
-  InstallBind 2> /var/log/ispconfig_setup.log
-  InstallWebStats 2> /var/log/ispconfig_setup.log
+  InstallBind 2>> /var/log/ispconfig_setup.log
+  InstallWebStats 2>> /var/log/ispconfig_setup.log
   if [ $CFG_JKIT == "y" ]; then
-	InstallJailkit 2> /var/log/ispconfig_setup.log
+	InstallJailkit 2>> /var/log/ispconfig_setup.log
   fi
-  InstallFail2ban 2> /var/log/ispconfig_setup.log
-  InstallWebmail 2> /var/log/ispconfig_setup.log
-  InstallISPConfig 2> /var/log/ispconfig_setup.log
-  InstallFix 2> /var/log/ispconfig_setup.log
+  InstallFail2ban 2>> /var/log/ispconfig_setup.log
+  InstallWebmail 2>> /var/log/ispconfig_setup.log
+  InstallISPConfig 2>> /var/log/ispconfig_setup.log
+  InstallFix 2>> /var/log/ispconfig_setup.log
   echo "Well done ISPConfig installed and configured correctly!! :D"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
