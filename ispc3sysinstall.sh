@@ -600,27 +600,27 @@ echo "If you're all set, press ENTER to continue or CTRL-C to cancel.."
 read DUMMY
 
 if [ -f /etc/debian_version ]; then
-  PreInstallCheck > /var/log/ispconfig_setup.log 2>&1
-  AskQuestions > /var/log/ispconfig_setup.log 2>&1
-  InstallBasics > /var/log/ispconfig_setup.log 2>&1
-  InstallPostfix > /var/log/ispconfig_setup.log 2>&1
-  InstallMysql > /var/log/ispconfig_setup.log 2>&1
-  InstallMTA > /var/log/ispconfig_setup.log 2>&1
-  InstallAntiVirus > /var/log/ispconfig_setup.log 2>&1
-  InstallApachePHP > /var/log/ispconfig_setup.log 2>&1
-  InstallFTP > /var/log/ispconfig_setup.log 2>&1
+  PreInstallCheck
+  AskQuestions
+  InstallBasics
+  InstallPostfix
+  InstallMysql
+  InstallMTA
+  InstallAntiVirus
+  InstallApachePHP
+  InstallFTP
   if [ $CFG_QUOTA == "y" ]; then
-	InstallQuota > /var/log/ispconfig_setup.log 2>&1
+	InstallQuota
   fi
-  InstallBind > /var/log/ispconfig_setup.log 2>&1
-  InstallWebStats > /var/log/ispconfig_setup.log 2>&1
+  InstallBind
+  InstallWebStats
   if [ $CFG_JKIT == "y" ]; then
-	InstallJailkit > /var/log/ispconfig_setup.log 2>&1
+	InstallJailkit
   fi
-  InstallFail2ban > /var/log/ispconfig_setup.log 2>&1
-  InstallWebmail > /var/log/ispconfig_setup.log 2>&1
-  InstallISPConfig > /var/log/ispconfig_setup.log 2>&1
-  InstallFix > /var/log/ispconfig_setup.log 2>&1
+  InstallFail2ban
+  InstallWebmail
+  InstallISPConfig
+  InstallFix
   echo "Well done ISPConfig installed and configured correctly!! :D"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
