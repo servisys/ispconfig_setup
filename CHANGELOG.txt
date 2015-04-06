@@ -1,5 +1,5 @@
 v.1.0.4
-- Adding log errors to /var/log/ispconfig_setup.log
+- Adding log errors to /var/log/ispconfig_setup.log 
 
 v.1.0.2
 - Added support for inserit SSL data only one time, and then used all the time SSL is needed
