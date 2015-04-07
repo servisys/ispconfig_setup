@@ -238,6 +238,7 @@ InstallApachePHP() {
   a2enmod auth_digest > /dev/null 2>&1
   a2enmod fastcgi > /dev/null 2>&1
   a2enmod alias > /dev/null 2>&1
+  a2enmod fcgid > /dev/null 2>&1
   service apache2 restart > /dev/null 2>&1
   sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
   sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
