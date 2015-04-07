@@ -5,7 +5,7 @@
 # ISPConfig 3 system installer
 #
 # Script: ispc3sysinstall.sh
-# Version: 1.0
+# Version: 1.0.4
 # Author: Mark Stunnenberg <mark@e-rave.nl>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
@@ -238,6 +238,7 @@ InstallApachePHP() {
   a2enmod auth_digest > /dev/null 2>&1
   a2enmod fastcgi > /dev/null 2>&1
   a2enmod alias > /dev/null 2>&1
+  a2enmod fcgid > /dev/null 2>&1
   service apache2 restart > /dev/null 2>&1
   sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
   sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
@@ -600,26 +601,26 @@ echo "If you're all set, press ENTER to continue or CTRL-C to cancel.."
 read DUMMY
 
 if [ -f /etc/debian_version ]; then
-  PreInstallCheck
-  AskQuestions
-  InstallBasics
-  InstallPostfix
-  InstallMysql
-  InstallMTA
-  InstallAntiVirus
-  InstallApachePHP
-  InstallFTP
+  PreInstallCheck 2> /var/log/ispconfig_setup.log
+  AskQuestions 
+  InstallBasics 2>> /var/log/ispconfig_setup.log
+  InstallPostfix 2>> /var/log/ispconfig_setup.log
+  InstallMysql 2>> /var/log/ispconfig_setup.log
+  InstallMTA 2>> /var/log/ispconfig_setup.log
+  InstallAntiVirus 2>> /var/log/ispconfig_setup.log
+  InstallApachePHP 2>> /var/log/ispconfig_setup.log
+  InstallFTP 2>> /var/log/ispconfig_setup.log
   if [ $CFG_QUOTA == "y" ]; then
-	InstallQuota
+	InstallQuota 2>> /var/log/ispconfig_setup.log
   fi
-  InstallBind
-  InstallWebStats
+  InstallBind 2>> /var/log/ispconfig_setup.log
+  InstallWebStats 2>> /var/log/ispconfig_setup.log
   if [ $CFG_JKIT == "y" ]; then
-	InstallJailkit
+	InstallJailkit 2>> /var/log/ispconfig_setup.log
   fi
-  InstallFail2ban
-  InstallWebmail
-  InstallISPConfig
+  InstallFail2ban 2>> /var/log/ispconfig_setup.log
+  InstallWebmail 2>> /var/log/ispconfig_setup.log
+  InstallISPConfig 2>> /var/log/ispconfig_setup.log
   InstallFix
   echo "Well done ISPConfig installed and configured correctly!! :D"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
