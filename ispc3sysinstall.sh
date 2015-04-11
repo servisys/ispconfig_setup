@@ -205,6 +205,8 @@ InstallAntiVirus() {
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
   freshclam
   /etc/init.d/clamav-daemon restart
+  mkdir /var/db/dkim/
+  amavisd genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
   echo "done!"
 }
 
