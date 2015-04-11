@@ -211,16 +211,6 @@ InstallAntiVirus() {
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
   freshclam
   /etc/init.d/clamav-daemon restart
-  if [ $CFG_DKIM == "n" ]; then
-	mkdir -p /var/db/dkim/
-	amavisd-new genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
-	echo "\$enable_dkim_verification = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
-	echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
-	echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
-	echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
-	MYNET=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
-	echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
-  fi
   echo "done!"
 }
 
@@ -260,7 +250,7 @@ InstallApachePHP() {
   sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
   sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
   sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/#/;/" /etc/apache2/mods-available/suphp.conf
+  sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
   echo "done!"
 }
 
@@ -595,6 +585,17 @@ InstallFix(){
 	sed -i "s/\$rcmail_config\['skin'\] = 'default';/\$rcmail_config\['skin'\] = 'classic';/" /etc/roundcube/main.inc.php
 	nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
   fi
+  if [ $CFG_DKIM == "n" ]; then
+	mkdir -p /var/db/dkim/
+	amavisd-new genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
+	echo "\$enable_dkim_verification = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
+	MYNET=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
+	echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
+	/etc/init.d/amavisd-new restart
+  fi  
 }
 
 #---------------------------------------------------------------------
