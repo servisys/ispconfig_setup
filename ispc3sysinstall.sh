@@ -81,7 +81,7 @@ AskQuestions() {
 		CFG_JKIT=n
 	  fi
 
-	  if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to configure DKIM for Amavis?" 10 50) then
+	  if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DKIM configuration for Amavis?" 10 50) then
 		CFG_DKIM=y
 	  else
 		CFG_DKIM=n
@@ -211,7 +211,7 @@ InstallAntiVirus() {
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
   freshclam
   /etc/init.d/clamav-daemon restart
-  if [ $CFG_DKIM == "y" ]; then
+  if [ $CFG_DKIM == "n" ]; then
 	mkdir -p /var/db/dkim/
 	amavisd-new genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
 	echo "\$enable_dkim_verification = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
