@@ -213,7 +213,7 @@ InstallAntiVirus() {
   /etc/init.d/clamav-daemon restart
   if [ $CFG_DKIM == "y" ]; then
 	mkdir -p /var/db/dkim/
-	amavisd genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
+	amavisd-new genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
 	echo "\$enable_dkim_verification = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
 	echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
 	echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
