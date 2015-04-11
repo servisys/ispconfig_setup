@@ -218,8 +218,8 @@ InstallAntiVirus() {
 	echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
 	echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
 	echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
-	mynetworks=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
-	echo "@mynetworks = qw($mynetworks);" >> /etc/amavis/conf.d/20-debian_defaults
+	MYNET=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
+	echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
   fi
   echo "done!"
 }
