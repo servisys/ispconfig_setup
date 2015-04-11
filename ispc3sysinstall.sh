@@ -205,8 +205,14 @@ InstallAntiVirus() {
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
   freshclam
   /etc/init.d/clamav-daemon restart
-  mkdir /var/db/dkim/
+  mkdir -p /var/db/dkim/
   amavisd genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
+  echo "\$enable_dkim_verification = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
+  echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
+  echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
+  echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
+  mynetworks=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
+  echo "@mynetworks = qw($mynetworks);" >> /etc/amavis/conf.d/20-debian_defaults
   echo "done!"
 }
 
