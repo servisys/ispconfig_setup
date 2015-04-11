@@ -80,7 +80,13 @@ AskQuestions() {
 	  else
 		CFG_JKIT=n
 	  fi
-	
+
+	  if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to configure DKIM for Amavis?" 10 50) then
+		CFG_DKIM=y
+	  else
+		CFG_DKIM=n
+	  fi
+	  
 	  while [ "x$CFG_WEBMAIL" == "x" ]
 	  do
 		CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select your webmail client" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
@@ -205,14 +211,16 @@ InstallAntiVirus() {
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
   freshclam
   /etc/init.d/clamav-daemon restart
-  mkdir -p /var/db/dkim/
-  amavisd genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
-  echo "\$enable_dkim_verification = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
-  echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
-  echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
-  echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
-  mynetworks=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
-  echo "@mynetworks = qw($mynetworks);" >> /etc/amavis/conf.d/20-debian_defaults
+  if [ $CFG_DKIM == "y" ]; then
+	mkdir -p /var/db/dkim/
+	amavisd genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
+	echo "\$enable_dkim_verification = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
+	mynetworks=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
+	echo "@mynetworks = qw($mynetworks);" >> /etc/amavis/conf.d/20-debian_defaults
+  fi
   echo "done!"
 }
 
