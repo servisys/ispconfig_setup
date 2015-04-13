@@ -263,6 +263,7 @@ InstallWebServer() {
 	apt-get -y install nginx
 	/etc/init.d/nginx start
 	apt-get -y install php5-fpm php5-mysqlnd php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached php-apc
+	apt-get -qqy install phpmyadmin
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
 	/etc/init.d/php5-fpm reload
@@ -670,7 +671,8 @@ if [ -f /etc/debian_version ]; then
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
   if [ $CFG_WEBSERVER == "nginx" ]; then
-  	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
+  	echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
+	echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";
   fi
 else
   echo "Unsupported linux distribution."
