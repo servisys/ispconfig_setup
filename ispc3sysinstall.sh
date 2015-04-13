@@ -267,10 +267,10 @@ InstallWebServer() {
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
 	/etc/init.d/php5-fpm reload
 	apt-get -y install fcgiwrap
-        echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
-        # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-        echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-        echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+    echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
+    # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
+    echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+    echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
   fi
   echo "done!"
 }
@@ -548,7 +548,11 @@ InstallISPConfig() {
   echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
   echo "mysql_database=dbispconfig" >> autoinstall.ini
   echo "mysql_charset=utf8" >> autoinstall.ini
-  echo "http_server=apache" >> autoinstall.ini
+  if [ $CFG_WEBSERVER == "apache" ]; then
+	echo "http_server=apache" >> autoinstall.ini
+  else
+	echo "http_server=nginx" >> autoinstall.ini
+  fi
   echo "ispconfig_port=8080" >> autoinstall.ini
   echo "ispconfig_use_ssl=y" >> autoinstall.ini
   echo
