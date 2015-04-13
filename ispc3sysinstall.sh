@@ -266,7 +266,7 @@ InstallWebServer() {
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
 	/etc/init.d/php5-fpm reload
-	apt-get install fcgiwrap
+	apt-get -y install fcgiwrap
         echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
         # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
         echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
@@ -665,8 +665,8 @@ if [ -f /etc/debian_version ]; then
   echo "Well done ISPConfig installed and configured correctly!! :D"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
-  if [ $CFG_WEBSERVER == "nginx"]; then
-  	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+  if [ $CFG_WEBSERVER == "nginx" ]; then
+  	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
   fi
 else
   echo "Unsupported linux distribution."
