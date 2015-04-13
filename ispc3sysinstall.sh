@@ -63,6 +63,11 @@ AskQuestions() {
 	  do
 		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
 	  done
+
+	  while [ "x$CFG_WEBSERVER" == "x" ]
+          do
+                CFG_WEBSERVER=$(whiptail --title "WEBSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select webserver type" 10 50 2 "apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
+          done
 	
 	  while [ "x$CFG_MTA" == "x" ]
 	  do
@@ -217,10 +222,10 @@ InstallAntiVirus() {
 
 
 #---------------------------------------------------------------------
-# Function: InstallApachePHP
+# Function: InstallWebServer
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
-InstallApachePHP() {
+InstallWebServer() {
   echo "==========================================================================================="
   echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
   echo "Due to a bug in dbconfig-common, this can't be automated."
@@ -228,29 +233,45 @@ InstallApachePHP() {
   echo "Press ENTER to continue.."
   read DUMMY
 
-  echo -n "Installing apache.."
-  echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
-# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-  echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-  apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec php-pear php-auth php5-fpm php5-mcrypt mcrypt php5-imagick imagemagick libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python php5-curl php5-intl php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached curl > /dev/null 2>&1  
-  apt-get -qqy install phpmyadmin
-  a2enmod suexec > /dev/null 2>&1
-  a2enmod rewrite > /dev/null 2>&1
-  a2enmod ssl > /dev/null 2>&1
-  a2enmod actions > /dev/null 2>&1
-  a2enmod include > /dev/null 2>&1
-  a2enmod dav_fs > /dev/null 2>&1
-  a2enmod dav > /dev/null 2>&1
-  a2enmod auth_digest > /dev/null 2>&1
-  a2enmod fastcgi > /dev/null 2>&1
-  a2enmod alias > /dev/null 2>&1
-  a2enmod fcgid > /dev/null 2>&1
-  service apache2 restart > /dev/null 2>&1
-  sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
+  if [ $CFG_WEBSERVER == "apache" ]; then
+  	echo -n "Installing apache.."
+  	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
+  	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
+ 	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+  	apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec php-pear php-auth php5-fpm php5-mcrypt mcrypt php5-imagick imagemagick libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python php5-curl php5-intl php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached curl > /dev/null 2>&1  
+  	apt-get -qqy install phpmyadmin
+	a2enmod suexec > /dev/null 2>&1
+	a2enmod rewrite > /dev/null 2>&1
+	a2enmod ssl > /dev/null 2>&1
+	a2enmod actions > /dev/null 2>&1
+  	a2enmod include > /dev/null 2>&1
+  	a2enmod dav_fs > /dev/null 2>&1
+  	a2enmod dav > /dev/null 2>&1
+  	a2enmod auth_digest > /dev/null 2>&1
+  	a2enmod fastcgi > /dev/null 2>&1
+  	a2enmod alias > /dev/null 2>&1
+  	a2enmod fcgid > /dev/null 2>&1
+  	service apache2 restart > /dev/null 2>&1
+  	sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
+  	sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
+  	sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
+  	sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
+  	sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
+  else
+	/etc/init.d/apache2 stop
+	update-rc.d -f apache2 remove
+	apt-get -y install nginx
+	/etc/init.d/nginx start
+	apt-get -y install php5-fpm php5-mysqlnd php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached php-apc
+	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
+	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
+	/etc/init.d/php5-fpm reload
+	apt-get install fcgiwrap
+        echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
+        # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
+        echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+        echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+  fi
   echo "done!"
 }
 
@@ -627,7 +648,7 @@ if [ -f /etc/debian_version ]; then
   InstallMysql 2>> /var/log/ispconfig_setup.log
   InstallMTA 2>> /var/log/ispconfig_setup.log
   InstallAntiVirus 2>> /var/log/ispconfig_setup.log
-  InstallApachePHP 2>> /var/log/ispconfig_setup.log
+  InstallWebServer 2>> /var/log/ispconfig_setup.log
   InstallFTP 2>> /var/log/ispconfig_setup.log
   if [ $CFG_QUOTA == "y" ]; then
 	InstallQuota 2>> /var/log/ispconfig_setup.log
@@ -644,6 +665,9 @@ if [ -f /etc/debian_version ]; then
   echo "Well done ISPConfig installed and configured correctly!! :D"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
+  if [ $CFG_WEBSERVER == "nginx"]; then
+  	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+  fi
 else
   echo "Unsupported linux distribution."
 fi
