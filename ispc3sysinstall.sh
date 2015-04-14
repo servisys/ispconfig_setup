@@ -21,6 +21,11 @@
 CFG_HOSTNAME_FQDN=`hostname -f`;
 WT_BACKTITLE="ISPConfig 3 System Installer from Temporini Matteo"
 
+# Bash Colour
+red='\033[0;31m'
+green='\033[0;32m'
+NC='\033[0m' # No Color
+
 
 #---------------------------------------------------------------------
 # Function: PreInstallCheck
@@ -32,7 +37,7 @@ PreInstallCheck() {
   ping -q -c 3 www.ispconfig.org > /dev/null 2>&1
 
   if [ ! "$?" -eq 0 ]; then
-	echo "ERROR: Couldn't reach www.ispconfig.org, please check your internet connection!"
+	echo -e "${red}ERROR: Couldn't reach www.ispconfig.org, please check your internet connection${NC}"
 	exit 1;
   fi
   contrib=$(cat /etc/apt/sources.list | grep contrib | grep -v "cdrom")
@@ -59,7 +64,7 @@ PreInstallCheck() {
 #---------------------------------------------------------------------
 AskQuestions() {
 	  echo "Installing pre-required packages"
-	  [ -f /bin/whiptail ] && echo "whiptail found: OK"  || apt-get -y install whiptail
+	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}"  || apt-get -y install whiptail
 	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
 	  do
 		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
@@ -111,14 +116,14 @@ InstallBasics() {
   echo -n "Updating apt and upgrading currently installed packages.."
   apt-get -qq update
   apt-get -qqy upgrade
-  echo "done!"
+  echo -e "${green}done!${NC}"
 
   echo -n "Installing basic packages.."
   apt-get -y install ssh openssh-server vim-nox ntp ntpdate debconf-utils binutils sudo git > /dev/null 2>&1
 
   echo "dash dash/sh boolean false" | debconf-set-selections
   dpkg-reconfigure -f noninteractive dash > /dev/null 2>&1
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -143,7 +148,7 @@ InstallPostfix() {
   sed -i "s/#  -o smtpd_sasl_auth_enable=yes/  -o smtpd_sasl_auth_enable=yes/" /etc/postfix/master.cf
   sed -i "s/#  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/" /etc/postfix/master.cf
   /etc/init.d/postfix restart
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -159,7 +164,7 @@ InstallMysql() {
   apt-get -y install mysql-client mysql-server > /dev/null 2>&1
   sed -i 's/bind-address		= 127.0.0.1/#bind-address		= 127.0.0.1/' /etc/mysql/my.cnf
   service mysql restart > /dev/null
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -191,12 +196,12 @@ InstallMTA() {
 	  service courier-pop-ssl restart > /dev/null
 	  service courier-authdaemon restart > /dev/null
 	  service saslauthd restart > /dev/null
-	  echo "done!"
+	  echo -e "${green}done!${NC}"
 	  ;;
 	"dovecot")
 	  echo -n "Installing dovecot..";
 	  apt-get -qqy install dovecot-imapd dovecot-pop3d dovecot-sieve dovecot-mysql 2>&1
-	  echo "done!"
+	  echo -e "${green}done!${NC}"
 	  ;;
   esac
 }
@@ -212,7 +217,7 @@ InstallAntiVirus() {
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
   freshclam
   /etc/init.d/clamav-daemon restart
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -252,7 +257,7 @@ InstallApachePHP() {
   sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
   sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
   sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -272,7 +277,7 @@ InstallFTP() {
   chmod 600 /etc/ssl/private/pure-ftpd.pem
   service openbsd-inetd restart > /dev/null 2>&1
   service pure-ftpd-mysql restart > /dev/null 2>&1
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -291,7 +296,7 @@ InstallQuota() {
 	quotacheck -avugm > /dev/null 2>&1
 	quotaon -avug > /dev/null 2>&1
   fi
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -303,7 +308,7 @@ InstallQuota() {
 InstallBind() {
   echo -n "Installing bind..";
   apt-get -y install bind9 dnsutils > /dev/null 2>&1
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -316,7 +321,7 @@ InstallWebStats() {
   echo -n "Installing stats..";
   apt-get -y install vlogger webalizer awstats > /dev/null 2>&1
   sed -i 's/^/#/' /etc/cron.d/awstats
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -336,7 +341,7 @@ InstallJailkit() {
   cd ..
   dpkg -i jailkit_2.14-1_*.deb > /dev/null 2>&1
   rm -rf jailkit-2.14*
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -448,7 +453,7 @@ failregex = .*pure-ftpd: \(.*@<HOST>\) \[WARNING\] Authentication failed for use
 ignoreregex =
 EOF
   service fail2ban restart > /dev/null 2>&1
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
@@ -503,7 +508,7 @@ InstallWebmail() {
 	  ;;
   esac
   service apache2 restart > /dev/null 2>&1
-  echo "done!"
+  echo -e "${green}done!${NC}"
 }
 
 
