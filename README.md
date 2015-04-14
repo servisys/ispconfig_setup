@@ -9,7 +9,7 @@ This is a system to automate the installation of ISPConfig 3
 control Panel ( http://www.ispconfig.org/page/home.html ).
 
 Tested on:
-- Debian 7
+- Debian 7 (VmWare Esxi, Amazon AWS, Virtualbox)
 - ISPConfig 3.0.5.4p5
 
 For now it is tested and developed only on Debian systems.
