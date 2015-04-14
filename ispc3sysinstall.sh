@@ -545,8 +545,7 @@ InstallWebmail() {
 		echo "                   deny all;" >> /etc/nginx/roundcube.conf
 		echo "           }" >> /etc/nginx/roundcube.conf
 		echo "          }" >> /etc/nginx/roundcube.conf
-		sed -i "1,5d" /etc/nginx/sites-enabled/default
-		sed -i "s/server {/server {\\`echo -e '\n\r'`include \/etc\/nginx\/roundcube.conf/" /etc/nginx/sites-enabled/default
+		sed -i "s/server_name localhost;/server_name localhost; include \/etc\/nginx\/roundcube.conf;/" /etc/nginx/sites-enabled/default
 	  fi
 	;;
 	"squirrelmail")
