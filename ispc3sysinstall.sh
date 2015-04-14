@@ -26,6 +26,7 @@ WT_BACKTITLE="ISPConfig 3 System Installer from Temporini Matteo"
 # Function: PreInstallCheck
 #    Do some pre-install checks
 #---------------------------------------------------------------------
+clear
 PreInstallCheck() {
   echo -n "Checking internet connection.."
   ping -q -c 3 www.ispconfig.org > /dev/null 2>&1
