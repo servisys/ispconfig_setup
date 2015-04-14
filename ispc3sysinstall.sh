@@ -5,7 +5,7 @@
 # ISPConfig 3 system installer
 #
 # Script: ispc3sysinstall.sh
-# Version: 1.0
+# Version: 1.0.4
 # Author: Mark Stunnenberg <mark@e-rave.nl>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
@@ -34,6 +34,19 @@ PreInstallCheck() {
 	echo "ERROR: Couldn't reach www.ispconfig.org, please check your internet connection!"
 	exit 1;
   fi
+  contrib=$(cat /etc/apt/sources.list | grep contrib | grep -v "cdrom")
+  nonfree=$(cat /etc/apt/sources.list | grep non-free | grep -v "cdrom")
+  if [ -z "$contrib" ]; then
+        if [ -z "$nonfree" ]; then
+                sed -i 's/main/main contrib non-free/' /etc/apt/sources.list;
+        else
+                sed -i 's/main/main contrib/' /etc/apt/sources.list;
+        fi
+  else
+        if [ -z "$nonfree" ]; then
+                sed -i 's/main/main non-free/' /etc/apt/sources.list;
+        fi
+  fi
   echo "OK!"
 }
 
@@ -44,34 +57,47 @@ PreInstallCheck() {
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
-  echo "Installing pre-required packages"
-  [ -f /bin/whiptail ] && echo "whiptail found: OK"  || apt-get -y install whiptail
-  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
-  do
-	CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
-  done
+	  echo "Installing pre-required packages"
+	  [ -f /bin/whiptail ] && echo "whiptail found: OK"  || apt-get -y install whiptail
+	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
+	  do
+		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
+	  done
+	
+	  while [ "x$CFG_MTA" == "x" ]
+	  do
+		CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "courier" "(default)" ON "dovecot" "" OFF 3>&1 1>&2 2>&3)
+	  done
+	
+	  if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
+		CFG_QUOTA=y
+	  else
+		CFG_QUOTA=n
+	  fi
+	
+	  if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit?" 10 50) then
+		CFG_JKIT=y
+	  else
+		CFG_JKIT=n
+	  fi
 
-  while [ "x$CFG_MTA" == "x" ]
-  do
-	CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "courier" "(default)" ON "dovecot" "" OFF 3>&1 1>&2 2>&3)
-  done
+	  if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DKIM configuration for Amavis?" 10 50) then
+		CFG_DKIM=y
+	  else
+		CFG_DKIM=n
+	  fi
+	  
+	  while [ "x$CFG_WEBMAIL" == "x" ]
+	  do
+		CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select your webmail client" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
+	  done
 
-  if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
-	CFG_QUOTA=y
-  else
-	CFG_QUOTA=n
-  fi
+          SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country (ex. EN)" --nocancel 10 50 3>&1 1>&2 2>&3)
+          SSL_STATE=$(whiptail --title "SSL State" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - STATE (ex. Italy)" --nocancel 10 50 3>&1 1>&2 2>&3)
+          SSL_LOCALITY=$(whiptail --title "SSL Locality" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Locality (ex. Udine)" --nocancel 10 50 3>&1 1>&2 2>&3)
+          SSL_ORGANIZATION=$(whiptail --title "SSL Organization" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Organization (ex. Company L.t.d.)" --nocancel 10 50 3>&1 1>&2 2>&3)
+          SSL_ORGUNIT=$(whiptail --title "SSL Organization Unit" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Organization Unit (ex. IT Department)" --nocancel 10 50 3>&1 1>&2 2>&3)
 
-  if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit?" 10 50) then
-	CFG_JKIT=y
-  else
-	CFG_JKIT=n
-  fi
-
-  while [ "x$CFG_WEBMAIL" == "x" ]
-  do
-	CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select your webmail client" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
-  done
 }
 
 
@@ -87,7 +113,7 @@ InstallBasics() {
   echo "done!"
 
   echo -n "Installing basic packages.."
-  apt-get -y install ssh openssh-server vim-nox ntp ntpdate debconf-utils binutils sudo > /dev/null 2>&1
+  apt-get -y install ssh openssh-server vim-nox ntp ntpdate debconf-utils binutils sudo git > /dev/null 2>&1
 
   echo "dash dash/sh boolean false" | debconf-set-selections
   dpkg-reconfigure -f noninteractive dash > /dev/null 2>&1
@@ -105,6 +131,17 @@ InstallPostfix() {
   echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
   echo "postfix postfix/mailname string $CFG_HOSTNAME_FQDN" | debconf-set-selections
   apt-get -y install postfix postfix-mysql postfix-doc getmail4 > /dev/null 2>&1
+  sed -i "s/#submission inet n       -       -       -       -       smtpd/submission inet n       -       -       -       -       smtpd/" /etc/postfix/master.cf
+  sed -i "s/#  -o syslog_name=postfix\/submission/  -o syslog_name=postfix\/submission/" /etc/postfix/master.cf
+  sed -i "s/#  -o smtpd_tls_security_level=encrypt/  -o smtpd_tls_security_level=encrypt/" /etc/postfix/master.cf
+  sed -i "s/#  -o smtpd_sasl_auth_enable=yes/  -o smtpd_sasl_auth_enable=yes/" /etc/postfix/master.cf
+  sed -i "s/#  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/" /etc/postfix/master.cf
+  sed -i "s/#smtps     inet  n       -       -       -       -       smtpd/smtps     inet  n       -       -       -       -       smtpd/" /etc/postfix/master.cf
+  sed -i "s/#  -o syslog_name=postfix\/smtps/  -o syslog_name=postfix\/smtps/" /etc/postfix/master.cf
+  sed -i "s/#  -o smtpd_tls_wrappermode=yes/  -o smtpd_tls_wrappermode=yes/" /etc/postfix/master.cf
+  sed -i "s/#  -o smtpd_sasl_auth_enable=yes/  -o smtpd_sasl_auth_enable=yes/" /etc/postfix/master.cf
+  sed -i "s/#  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/" /etc/postfix/master.cf
+  /etc/init.d/postfix restart
   echo "done!"
 }
 
@@ -172,6 +209,8 @@ InstallMTA() {
 InstallAntiVirus() {
   echo -n "Installing anti-virus utilities.."
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
+  freshclam
+  /etc/init.d/clamav-daemon restart
   echo "done!"
 }
 
@@ -195,8 +234,23 @@ InstallApachePHP() {
   echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
   apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec php-pear php-auth php5-fpm php5-mcrypt mcrypt php5-imagick imagemagick libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python php5-curl php5-intl php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached curl > /dev/null 2>&1  
   apt-get -qqy install phpmyadmin
-  a2enmod suexec rewrite ssl actions include dav_fs dav auth_digest fastcgi alias > /dev/null 2>&1
+  a2enmod suexec > /dev/null 2>&1
+  a2enmod rewrite > /dev/null 2>&1
+  a2enmod ssl > /dev/null 2>&1
+  a2enmod actions > /dev/null 2>&1
+  a2enmod include > /dev/null 2>&1
+  a2enmod dav_fs > /dev/null 2>&1
+  a2enmod dav > /dev/null 2>&1
+  a2enmod auth_digest > /dev/null 2>&1
+  a2enmod fastcgi > /dev/null 2>&1
+  a2enmod alias > /dev/null 2>&1
+  a2enmod fcgid > /dev/null 2>&1
   service apache2 restart > /dev/null 2>&1
+  sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
+  sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
+  sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
+  sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
+  sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
   echo "done!"
 }
 
@@ -213,13 +267,7 @@ InstallFTP() {
   sed -i 's/ftp/\#ftp/' /etc/inetd.conf
   echo 1 > /etc/pure-ftpd/conf/TLS
   mkdir -p /etc/ssl/private/
-  echo "==========================================================================================="
-  echo "The following questions can be left as default (just press enter), but when"
-  echo "asked for 'Common Name', enter your FQDN hostname ($CFG_HOSTNAME_FQDN)."
-  echo "==========================================================================================="
-  echo "Press ENTER to continue.."
-  read DUMMY
-  openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem
+  openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem -subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCALITY/O=$SSL_ORGANIZATION/OU=$SSL_ORGUNIT/CN=$CFG_HOSTNAME_FQDN"
   chmod 600 /etc/ssl/private/pure-ftpd.pem
   service openbsd-inetd restart > /dev/null 2>&1
   service pure-ftpd-mysql restart > /dev/null 2>&1
@@ -421,17 +469,8 @@ InstallWebmail() {
 	  echo "roundcube-core roundcube/app-password-confirm password $RANDPWD" | debconf-set-selections
 	  apt-get -y install roundcube roundcube-mysql git > /dev/null 2>&1
 	  sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
+	  sed -i "/Options +FollowSymLinks/a\\`echo -e '\n\r'`  DirectoryIndex index.php\\`echo -e '\n\r'`\\`echo -e '\n\r'`  <IfModule mod_php5.c>\\`echo -e '\n\r'`        AddType application/x-httpd-php .php\\`echo -e '\n\r'`\\`echo -e '\n\r'`        php_flag magic_quotes_gpc Off\\`echo -e '\n\r'`        php_flag track_vars On\\`echo -e '\n\r'`        php_flag register_globals Off\\`echo -e '\n\r'`        php_value include_path .:/usr/share/php\\`echo -e '\n\r'`  </IfModule>" /etc/roundcube/apache.conf
 	  sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
-	  cd /tmp
-      git clone https://github.com/w2c/ispconfig3_roundcube.git
-      cd /tmp/ispconfig3_roundcube/
-      mv ispconfig3_* /var/lib/roundcube/plugins
-      cd /var/lib/roundcube/plugins
-      mv ispconfig3_account/config/config.inc.php.dist ispconfig3_account/config/config.inc.php
-      read -p "If you heaven't done yet add roundcube remtoe user in ISPConfig, with the following permission: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
-      wget http://repo.temporini.net/ispconfig_install/roundcube/roundcube.apache -O /etc/apache2/conf.d/roundcube
-      wget http://repo.temporini.net/ispconfig_install/roundcube/main.inc.php.txt -O /etc/roundcube/main.inc.php
-      nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
 	;;
 	"squirrelmail")
 	  echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
@@ -473,38 +512,91 @@ InstallWebmail() {
 #---------------------------------------------------------------------
 InstallISPConfig() {
   echo "Installing ISPConfig3.."
-  echo "=================================================================================="
-  echo "As a reminder, the following information is needed for the ISPConfig installation:"
-  echo "- Full qualified hostname (FQDN) of the server: $CFG_HOSTNAME_FQDN"
-  echo "- MySQL root password: $CFG_MYSQL_ROOT_PWD"
-  echo "- Common Name (eg, YOUR name): $CFG_HOSTNAME_FQDN"
-  echo "=================================================================================="
-  echo ""
-  echo "Press ENTER to start the installation.."
-  read DUMMY
   cd /tmp
   wget http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
   tar xfz ISPConfig-3-stable.tar.gz
   cd ispconfig3_install/install/
-  php -q install.php
+  echo "Create INI file"
+  touch autoinstall.ini
+  echo "[install]" > autoinstall.ini
+  echo "language=en" >> autoinstall.ini
+  echo "install_mode=standard" >> autoinstall.ini
+  echo "hostname=$CFG_HOSTNAME_FQDN" >> autoinstall.ini
+  echo "mysql_hostname=localhost" >> autoinstall.ini
+  echo "mysql_root_user=root" >> autoinstall.ini
+  echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
+  echo "mysql_database=dbispconfig" >> autoinstall.ini
+  echo "mysql_charset=utf8" >> autoinstall.ini
+  echo "http_server=apache" >> autoinstall.ini
+  echo "ispconfig_port=8080" >> autoinstall.ini
+  echo "ispconfig_use_ssl=y" >> autoinstall.ini
+  echo
+  echo "[ssl_cert]" >> autoinstall.ini
+  echo "ssl_cert_country=IT" >> autoinstall.ini
+  echo "ssl_cert_state=Italy" >> autoinstall.ini
+  echo "ssl_cert_locality=Udine" >> autoinstall.ini
+  echo "ssl_cert_organisation=Servisys di Temporini Matteo" >> autoinstall.ini
+  echo "ssl_cert_organisation_unit=IT department" >> autoinstall.ini
+  echo "ssl_cert_common_name=$CFG_HOSTNAME_FQDN" >> autoinstall.ini
+  echo
+  echo "[expert]" >> autoinstall.ini
+  echo "mysql_ispconfig_user=ispconfig" >> autoinstall.ini
+  echo "mysql_ispconfig_password=afStEratXBsgatRtsa42CadwhQ" >> autoinstall.ini
+  echo "join_multiserver_setup=n" >> autoinstall.ini
+  echo "mysql_master_hostname=master.example.com" >> autoinstall.ini
+  echo "mysql_master_root_user=root" >> autoinstall.ini
+  echo "mysql_master_root_password=ispconfig" >> autoinstall.ini
+  echo "mysql_master_database=dbispconfig" >> autoinstall.ini
+  echo "configure_mail=y" >> autoinstall.ini
+  echo "configure_jailkit=$CFG_JKIT" >> autoinstall.ini
+  echo "configure_ftp=y" >> autoinstall.ini
+  echo "configure_dns=y" >> autoinstall.ini
+  echo "configure_apache=y" >> autoinstall.ini
+  echo "configure_nginx=n" >> autoinstall.ini
+  echo "configure_firewall=y" >> autoinstall.ini
+  echo "install_ispconfig_web_interface=y" >> autoinstall.ini
+  echo
+  echo "[update]" >> autoinstall.ini
+  echo "do_backup=yes" >> autoinstall.ini
+  echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
+  echo "mysql_master_hostname=master.example.com" >> autoinstall.ini
+  echo "mysql_master_root_user=root" >> autoinstall.ini
+  echo "mysql_master_root_password=ispconfig" >> autoinstall.ini
+  echo "mysql_master_database=dbispconfig" >> autoinstall.ini
+  echo "reconfigure_permissions_in_master_database=no" >> autoinstall.ini
+  echo "reconfigure_services=yes" >> autoinstall.ini
+  echo "ispconfig_port=8080" >> autoinstall.ini
+  echo "create_new_ispconfig_ssl_cert=no" >> autoinstall.ini
+  echo "reconfigure_crontab=yes" >> autoinstall.ini
+  php -q install.php --autoinstall=autoinstall.ini
 }
 
-#---------------------------------------------------------------------
-# Function: InstallFix
-#	Start bugfix patch
-#---------------------------------------------------------------------
-InstallFix() {
-  echo "=================================================================================="
-  echo "We are now apply some post-install bugfix.."
-  echo "=================================================================================="
-  echo ""
-  echo "Press ENTER to start the installation.." 
-  read DUMMY
-  wget http://repo.temporini.net/ispconfig_install/apache2/suphp.conf.txt -O /etc/apache2/mods-available/suphp.conf
-  /etc/init.d/apache2 reload
-  wget http://repo.temporini.net/ispconfig_install/postfix/master.cf -O /etc/postfix/master.cf
-  /etc/init.d/postfix restart
-  echo "All bugfix are now fixed and all should be working fine"
+InstallFix(){
+  if [ $CFG_WEBMAIL == "roundcube" ]; then
+  	echo "Installing roundcube fix..."
+	cd /tmp
+	git clone https://github.com/w2c/ispconfig3_roundcube.git
+	cd /tmp/ispconfig3_roundcube/
+	mv ispconfig3_* /var/lib/roundcube/plugins
+	cd /var/lib/roundcube/plugins
+	mv ispconfig3_account/config/config.inc.php.dist ispconfig3_account/config/config.inc.php
+	read -p "If you heaven't done yet add roundcube remtoe user in ISPConfig, with the following permission: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
+	sed -i "s/\$rcmail_config\['plugins'\] = array();/\$rcmail_config\['plugins'\] = array(\"jqueryui\", \"ispconfig3_account\", \"ispconfig3_autoreply\", \"ispconfig3_pass\", \"ispconfig3_spam\", \"ispconfig3_fetchmail\", \"ispconfig3_filter\");/" /etc/roundcube/main.inc.php
+	sed -i "s/\$rcmail_config\['skin'\] = 'default';/\$rcmail_config\['skin'\] = 'classic';/" /etc/roundcube/main.inc.php
+	nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
+  fi
+  if [ $CFG_DKIM == "n" ]; then
+	mkdir -p /var/db/dkim/
+	amavisd-new genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
+	sed -i 's/$enable_dkim_verification = 0; #disabled to prevent warning/#$enable_dkim_verification = 0; #disabled to prevent warning/' /etc/amavis/conf.d/20-debian_defaults
+	echo "\$enable_dkim_verification = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
+	echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
+	MYNET=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
+	echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
+	/etc/init.d/amavisd-new restart
+  fi  
 }
 
 #---------------------------------------------------------------------
@@ -528,26 +620,30 @@ echo "If you're all set, press ENTER to continue or CTRL-C to cancel.."
 read DUMMY
 
 if [ -f /etc/debian_version ]; then
-#  PreInstallCheck
-  AskQuestions
-  InstallBasics
-  InstallPostfix
-  InstallMysql
-  InstallMTA
-  InstallAntiVirus
-  InstallApachePHP
-  InstallFTP
+  PreInstallCheck 2> /var/log/ispconfig_setup.log
+  AskQuestions 
+  InstallBasics 2>> /var/log/ispconfig_setup.log
+  InstallPostfix 2>> /var/log/ispconfig_setup.log
+  InstallMysql 2>> /var/log/ispconfig_setup.log
+  InstallMTA 2>> /var/log/ispconfig_setup.log
+  InstallAntiVirus 2>> /var/log/ispconfig_setup.log
+  InstallApachePHP 2>> /var/log/ispconfig_setup.log
+  InstallFTP 2>> /var/log/ispconfig_setup.log
   if [ $CFG_QUOTA == "y" ]; then
-	InstallQuota
+	InstallQuota 2>> /var/log/ispconfig_setup.log
   fi
-  InstallBind
-  InstallWebStats
+  InstallBind 2>> /var/log/ispconfig_setup.log
+  InstallWebStats 2>> /var/log/ispconfig_setup.log
   if [ $CFG_JKIT == "y" ]; then
-	InstallJailkit
+	InstallJailkit 2>> /var/log/ispconfig_setup.log
   fi
-  InstallFail2ban
-  InstallWebmail
-  InstallISPConfig
+  InstallFail2ban 2>> /var/log/ispconfig_setup.log
+  InstallWebmail 2>> /var/log/ispconfig_setup.log
+  InstallISPConfig 2>> /var/log/ispconfig_setup.log
+  InstallFix
+  echo "Well done ISPConfig installed and configured correctly!! :D"
+  echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
+  echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
 else
   echo "Unsupported linux distribution."
 fi
