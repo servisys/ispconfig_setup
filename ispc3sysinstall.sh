@@ -263,15 +263,16 @@ InstallWebServer() {
 	apt-get -y install nginx
 	/etc/init.d/nginx start
 	apt-get -y install php5-fpm php5-mysqlnd php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached php-apc
-	apt-get -qqy install phpmyadmin
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
+	sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
 	/etc/init.d/php5-fpm reload
 	apt-get -y install fcgiwrap
-    echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
-    # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-    echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-    echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
+        # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
+    	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+	apt-get -qqy install phpmyadmin
+    	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
   fi
   echo "done!"
 }
@@ -308,10 +309,13 @@ InstallQuota() {
 
   if [ `cat /etc/fstab | grep ',usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0' | wc -l` -eq 0 ]; then
 	sed -i 's/errors=remount-ro/errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0/' /etc/fstab
-	mount -o remount /
-	quotacheck -avugm > /dev/null 2>&1
-	quotaon -avug > /dev/null 2>&1
   fi
+  if [ `cat /etc/fstab | grep 'defaults' | wc -l` -eq 0 ]; then
+	sed -i 's/defaults/defaults,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0' /etc/fstab
+  fi
+  mount -o remount /
+  quotacheck -avugm > /dev/null 2>&1
+  quotaon -avug > /dev/null 2>&1
   echo "done!"
 }
 
