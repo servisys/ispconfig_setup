@@ -500,7 +500,7 @@ InstallWebmail() {
 	  	sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
 	  else
 		cp conf/roundcube.conf.nginx /etc/nginx/roundcube.conf
-		sed -i "s/server {/server {\\`echo -e '\n\r'`        include \/etc\/nginx\/roundcube.conf/" /etc/nginx/site-enabled/default
+		sed -i "s/server {/server {\\`echo -e '\n\r'`        include \/etc\/nginx\/roundcube.conf/" /etc/nginx/sites-enabled/default
 	  fi
 	;;
 	"squirrelmail")
