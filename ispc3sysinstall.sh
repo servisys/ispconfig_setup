@@ -116,7 +116,7 @@ InstallBasics() {
   echo -n "Updating apt and upgrading currently installed packages.."
   apt-get -qq update
   apt-get -qqy upgrade
-  echo -e "&{green}done!${NC}"
+  echo -e "${green}done!${NC}"
 
   echo -n "Installing basic packages.."
   apt-get -y install ssh openssh-server vim-nox ntp ntpdate debconf-utils binutils sudo git > /dev/null 2>&1
