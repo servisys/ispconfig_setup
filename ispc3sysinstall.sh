@@ -625,7 +625,11 @@ InstallFix(){
 	echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
 	MYNET=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
 	echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
-	/etc/init.d/amavisd-new restart
+	if [ -f /etc/init.d/amavisd-new ]; then
+		/etc/init.d/amavisd-new restart
+	else
+		/etc/init.d/amavis restart
+	fi
   fi  
 }
 
