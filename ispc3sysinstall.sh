@@ -26,12 +26,22 @@ red='\033[0;31m'
 green='\033[0;32m'
 NC='\033[0m' # No Color
 
+#Program Versions
+JKV="2.17"  #Jailkit Version -> Maybe this can be automated
+
 
 #---------------------------------------------------------------------
 # Function: PreInstallCheck
 #    Do some pre-install checks
 #---------------------------------------------------------------------
 clear
+
+# Check if user is root
+if [ $(id -u) != "0" ]; then
+    echo "${red}Error:${red} You must be root to run this script. Please switch to root user to install ispconfig3 and needed software."
+    exit 1
+fi
+
 PreInstallCheck() {
   echo -n "Checking internet connection.."
   ping -q -c 3 www.ispconfig.org > /dev/null 2>&1
@@ -40,6 +50,8 @@ PreInstallCheck() {
 	echo -e "${red}ERROR: Couldn't reach www.ispconfig.org, please check your internet connection${NC}"
 	exit 1;
   fi
+  
+  # Check source.list
   contrib=$(cat /etc/apt/sources.list | grep contrib | grep -v "cdrom")
   nonfree=$(cat /etc/apt/sources.list | grep non-free | grep -v "cdrom")
   if [ -z "$contrib" ]; then
@@ -55,7 +67,6 @@ PreInstallCheck() {
   fi
   echo "${green}OK!${NC}\n"
 }
-
 
 
 #---------------------------------------------------------------------
@@ -118,12 +129,12 @@ AskQuestions() {
 #    Install basic packages
 #---------------------------------------------------------------------
 InstallBasics() {
-  echo -n "Updating apt and upgrading currently installed packages..\n"
+  echo -n "Updating apt and upgrading currently installed packages... "
   apt-get -qq update
   apt-get -qqy upgrade
   echo -e "${green}done!${NC}\n"
 
-  echo -n "Installing basic packages..\n"
+  echo -n "Installing basic packages... "
   apt-get -y install ssh openssh-server vim-nox ntp ntpdate debconf-utils binutils sudo git > /dev/null 2>&1
 
   echo "dash dash/sh boolean false" | debconf-set-selections
@@ -131,14 +142,12 @@ InstallBasics() {
   echo -e "${green}done!${NC}\n"
 }
 
-
-
 #---------------------------------------------------------------------
 # Function: Install Postfix
 #    Install and configure postfix
 #---------------------------------------------------------------------
 InstallPostfix() {
-  echo -n "Installing postfix.."
+  echo -n "Installing postfix... "
   echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
   echo "postfix postfix/mailname string $CFG_HOSTNAME_FQDN" | debconf-set-selections
   apt-get -y install postfix postfix-mysql postfix-doc getmail4 > /dev/null 2>&1
@@ -152,27 +161,23 @@ InstallPostfix() {
   sed -i "s/#  -o smtpd_tls_wrappermode=yes/  -o smtpd_tls_wrappermode=yes/" /etc/postfix/master.cf
   sed -i "s/#  -o smtpd_sasl_auth_enable=yes/  -o smtpd_sasl_auth_enable=yes/" /etc/postfix/master.cf
   sed -i "s/#  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/" /etc/postfix/master.cf
-  /etc/init.d/postfix restart
-  echo -e "${green}done!${NC}"
+  service postfix restart
+  echo -e "${green}done!${NC}\n"
 }
-
-
 
 #---------------------------------------------------------------------
 # Function: InstallMysql
 #    Install and configure mysql
 #---------------------------------------------------------------------
 InstallMysql() {
-  echo -n "Installing mysql.."
+  echo -n "Installing mysql... "
   echo "mysql-server-5.1 mysql-server/root_password password $CFG_MYSQL_ROOT_PWD" | debconf-set-selections
   echo "mysql-server-5.1 mysql-server/root_password_again password $CFG_MYSQL_ROOT_PWD" | debconf-set-selections
   apt-get -y install mysql-client mysql-server > /dev/null 2>&1
   sed -i 's/bind-address		= 127.0.0.1/#bind-address		= 127.0.0.1/' /etc/mysql/my.cnf
   service mysql restart > /dev/null
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 }
-
-
 
 #---------------------------------------------------------------------
 # Function: InstallMTA
@@ -181,7 +186,7 @@ InstallMysql() {
 InstallMTA() {
   case $CFG_MTA in
 	"courier")
-	  echo -n "Installing courier..";
+	  echo -n "Installing courier... ";
 	  echo "courier-base courier-base/webadmin-configmode boolean false" | debconf-set-selections
 	  echo "courier-ssl courier-ssl/certnotice note" | debconf-set-selections
 	  apt-get -y install courier-authdaemon courier-authlib-mysql courier-pop courier-pop-ssl courier-imap courier-imap-ssl libsasl2-2 libsasl2-modules libsasl2-modules-sql sasl2-bin libpam-mysql courier-maildrop > /dev/null 2>&1
@@ -201,30 +206,27 @@ InstallMTA() {
 	  service courier-pop-ssl restart > /dev/null
 	  service courier-authdaemon restart > /dev/null
 	  service saslauthd restart > /dev/null
-	  echo -e "${green}done!${NC}"
+	  echo -e "${green}done!${NC}\n"
 	  ;;
 	"dovecot")
-	  echo -n "Installing dovecot..";
+	  echo -n "Installing dovecot... ";
 	  apt-get -qqy install dovecot-imapd dovecot-pop3d dovecot-sieve dovecot-mysql 2>&1
-	  echo -e "${green}done!${NC}"
+	  echo -e "${green}done!${NC}\n"
 	  ;;
   esac
 }
-
-
 
 #---------------------------------------------------------------------
 # Function: InstallAntiVirus
 #    Install Amavisd, Spamassassin, ClamAV
 #---------------------------------------------------------------------
 InstallAntiVirus() {
-  echo -n "Installing anti-virus utilities.."
+  echo -n "Installing Anti-Virus utilities... "
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
   freshclam
-  /etc/init.d/clamav-daemon restart
-  echo -e "${green}done!${NC}"
+  service clamav-daemon restart
+  echo -e "${green}done!${NC}\n"
 }
-
 
 
 #---------------------------------------------------------------------
@@ -236,21 +238,25 @@ InstallWebServer() {
   echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
   echo "Due to a bug in dbconfig-common, this can't be automated."
   echo "==========================================================================================="
-  echo "Press ENTER to continue.."
+  echo "Press ENTER to continue... "
   read DUMMY
 
   if [ $CFG_WEBSERVER == "apache" ]; then
-	echo "Installing Apache and Modules.."
+	echo "Installing Apache and Modules... "
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
 	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
 	apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python > /dev/null 2>&1  
-	echo "Installing PHP and Modules.."
-	apt-get -y install php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcache php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1 
-	echo "Installing Needed Programs.."
-	apt-get -y install mcrypt imagemagick memcached curl > /dev/null 2>&1 
-	echo "Installing phpMyAdmin.."
+	echo -e "${green}done!${NC}\n"
+	echo "Installing PHP and Modules... "
+	apt-get -y install php5 php5-common php5-dev php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1 
+	echo -e "${green}done!${NC}\n"
+	echo "Installing needed Programs for PHP and Apache... "
+	apt-get -y install mcrypt imagemagick memcached curl tidy> /dev/null 2>&1
+    echo -e "${green}done!${NC}\n"	
+	echo "Installing phpMyAdmin... "
 	apt-get -qqy install phpmyadmin
+	echo -e "${green}done!${NC}\n"
 	a2enmod suexec > /dev/null 2>&1
 	a2enmod rewrite > /dev/null 2>&1
 	a2enmod ssl > /dev/null 2>&1
@@ -268,17 +274,17 @@ InstallWebServer() {
 	sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
 	sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
 	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini # Removed, because not longer present in php 5.6
-	echo -e "${green}done!${NC}"
+	echo -e "${green}done!${NC}\n"
   else
-	/etc/init.d/apache2 stop
+	service apache2 stop
 	update-rc.d -f apache2 remove
 	apt-get -y install nginx
-	/etc/init.d/nginx start
+	service nginx start
 	apt-get -y install php5-fpm php5-mysqlnd php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached php-apc
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
-	sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
-	/etc/init.d/php5-fpm reload
+	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
+	service php5-fpm reload
 	apt-get -y install fcgiwrap
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
         # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
@@ -286,9 +292,8 @@ InstallWebServer() {
 	apt-get -qqy install phpmyadmin
     	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
   fi
-  echo "done!"
+  echo -e "${green}done!${NC}\n"
 }
-
 
 
 #---------------------------------------------------------------------
@@ -296,7 +301,7 @@ InstallWebServer() {
 #    Install and configure PureFTPd
 #---------------------------------------------------------------------
 InstallFTP() {
-  echo "Installing pureftpd.."
+  echo "Installing pureftpd... "
   echo "pure-ftpd-common pure-ftpd/virtualchroot boolean true" | debconf-set-selections
   apt-get -y install pure-ftpd-common pure-ftpd-mysql > /dev/null 2>&1
   sed -i 's/ftp/\#ftp/' /etc/inetd.conf
@@ -306,9 +311,8 @@ InstallFTP() {
   chmod 600 /etc/ssl/private/pure-ftpd.pem
   service openbsd-inetd restart > /dev/null 2>&1
   service pure-ftpd-mysql restart > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 }
-
 
 
 #---------------------------------------------------------------------
@@ -316,7 +320,7 @@ InstallFTP() {
 #    Install and configure of disk quota
 #---------------------------------------------------------------------
 InstallQuota() {
-  echo -n "Installing and initializing quota (this might take while).."
+  echo -n "Installing and initializing quota (this might take while)... "
   apt-get -qqy install quota quotatool > /dev/null 2>&1
 
   if [ `cat /etc/fstab | grep ',usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0' | wc -l` -eq 0 ]; then
@@ -328,9 +332,8 @@ InstallQuota() {
   mount -o remount /
   quotacheck -avugm > /dev/null 2>&1
   quotaon -avug > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 }
-
 
 
 #---------------------------------------------------------------------
@@ -338,11 +341,10 @@ InstallQuota() {
 #    Install bind DNS server
 #---------------------------------------------------------------------
 InstallBind() {
-  echo -n "Installing bind..";
+  echo -n "Installing bind... ";
   apt-get -y install bind9 dnsutils > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 }
-
 
 
 #---------------------------------------------------------------------
@@ -350,12 +352,11 @@ InstallBind() {
 #    Install and configure web stats
 #---------------------------------------------------------------------
 InstallWebStats() {
-  echo -n "Installing stats..";
+  echo -n "Installing stats... ";
   apt-get -y install vlogger webalizer awstats > /dev/null 2>&1
   sed -i 's/^/#/' /etc/cron.d/awstats
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 }
-
 
 
 #---------------------------------------------------------------------
@@ -363,17 +364,17 @@ InstallWebStats() {
 #    Install Jailkit
 #---------------------------------------------------------------------
 InstallJailkit() {
-  echo -n "Installing jailkit.."
+  echo -n "Installing Jailkit... "
   apt-get -y install build-essential autoconf automake1.9 libtool flex bison debhelper > /dev/null 2>&1
   cd /tmp
-  wget -q http://olivier.sessink.nl/jailkit/jailkit-2.14.tar.gz
-  tar xfz jailkit-2.14.tar.gz
-  cd jailkit-2.14
+  wget -q http://olivier.sessink.nl/jailkit/jailkit-$JKV.tar.gz
+  tar xfz jailkit-$JKV.tar.gz
+  cd jailkit-$JKV
   ./debian/rules binary > /dev/null 2>&1
   cd ..
-  dpkg -i jailkit_2.14-1_*.deb > /dev/null 2>&1
-  rm -rf jailkit-2.14*
-  echo -e "${green}done!${NC}"
+  dpkg -i jailkit_$JKV-1_*.deb > /dev/null 2>&1
+  rm -rf jailkit-$JKV
+  echo -e "${green}done!${NC}\n"
 }
 
 
@@ -383,7 +384,7 @@ InstallJailkit() {
 #    Install and configure fail2ban
 #---------------------------------------------------------------------
 InstallFail2ban() {
-  echo -n "Installing fail2ban.."
+  echo -n "Installing fail2ban... "
   apt-get -y install fail2ban > /dev/null 2>&1
 
 
@@ -485,7 +486,7 @@ failregex = .*pure-ftpd: \(.*@<HOST>\) \[WARNING\] Authentication failed for use
 ignoreregex =
 EOF
   service fail2ban restart > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 }
 
 
@@ -495,7 +496,7 @@ EOF
 #    Install the chosen webmail client. Squirrelmail or Roundcube
 #---------------------------------------------------------------------
 InstallWebmail() {
-  echo -n "Installing webmail client ($CFG_WEBMAIL).."
+  echo -n "Installing webmail client ($CFG_WEBMAIL)... "
   case $CFG_WEBMAIL in
 	"roundcube")
 	  RANDPWD=`date +%N%s | md5sum`
@@ -590,7 +591,7 @@ InstallWebmail() {
 	  ;;
   esac
   service apache2 restart > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 }
 
 
@@ -599,7 +600,7 @@ InstallWebmail() {
 #    Start the ISPConfig3 intallation script
 #---------------------------------------------------------------------
 InstallISPConfig() {
-  echo "Installing ISPConfig3.."
+  echo "Installing ISPConfig3... "
   cd /tmp
   wget http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
   tar xfz ISPConfig-3-stable.tar.gz
@@ -665,7 +666,7 @@ InstallISPConfig() {
 
 InstallFix(){
   if [ $CFG_WEBMAIL == "roundcube" ]; then
-  	echo "Installing roundcube fix..."
+  	echo "Installing roundcube fix... "
 	cd /tmp
 	git clone https://github.com/w2c/ispconfig3_roundcube.git
 	cd /tmp/ispconfig3_roundcube/
@@ -675,7 +676,7 @@ InstallFix(){
 	read -p "If you heaven't done yet add roundcube remtoe user in ISPConfig, with the following permission: Server functions - Client functions - Mail user functions - Mail alias functions - Mail spamfilter user functions - Mail spamfilter policy functions - Mail fetchmail functions - Mail spamfilter whitelist functions - Mail spamfilter blacklist functions - Mail user filter functions"
 	sed -i "s/\$rcmail_config\['plugins'\] = array();/\$rcmail_config\['plugins'\] = array(\"jqueryui\", \"ispconfig3_account\", \"ispconfig3_autoreply\", \"ispconfig3_pass\", \"ispconfig3_spam\", \"ispconfig3_fetchmail\", \"ispconfig3_filter\");/" /etc/roundcube/main.inc.php
 	sed -i "s/\$rcmail_config\['skin'\] = 'default';/\$rcmail_config\['skin'\] = 'classic';/" /etc/roundcube/main.inc.php
-	nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php
+	#nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php #  <---- This should not be a Part of Installer. Every Admi can add this after Installation
   fi
   if [ $CFG_DKIM == "n" ]; then
 	mkdir -p /var/db/dkim/
@@ -688,9 +689,9 @@ InstallFix(){
 	MYNET=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
 	echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
 	if [ -f /etc/init.d/amavisd-new ]; then
-		/etc/init.d/amavisd-new restart
+		service amavisd-new restart
 	else
-		/etc/init.d/amavis restart
+		service amavis restart
 	fi
   fi  
 }
