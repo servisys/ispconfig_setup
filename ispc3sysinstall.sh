@@ -5,7 +5,7 @@
 # ISPConfig 3 system installer
 #
 # Script: ispc3sysinstall.sh
-# Version: 1.0.4
+# Version: 1.0.5
 # Author: Mark Stunnenberg <mark@e-rave.nl>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
@@ -69,6 +69,11 @@ AskQuestions() {
 	  do
 		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
 	  done
+
+	  while [ "x$CFG_WEBSERVER" == "x" ]
+          do
+                CFG_WEBSERVER=$(whiptail --title "WEBSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select webserver type" 10 50 2 "apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
+          done
 	
 	  while [ "x$CFG_MTA" == "x" ]
 	  do
@@ -223,10 +228,10 @@ InstallAntiVirus() {
 
 
 #---------------------------------------------------------------------
-# Function: InstallApachePHP
+# Function: InstallWebServer
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
-InstallApachePHP() {
+InstallWebServer() {
   echo "==========================================================================================="
   echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
   echo "Due to a bug in dbconfig-common, this can't be automated."
@@ -234,35 +239,54 @@ InstallApachePHP() {
   echo "Press ENTER to continue.."
   read DUMMY
 
-  echo "Installing Apache and Modules.."
-  echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
-# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-  echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-  apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python > /dev/null 2>&1  
-  echo "Installing PHP and Modules.."
-  apt-get -y install php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcache php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1 
-  echo "Installing Needed Programs.."
-  apt-get -y install mcrypt imagemagick memcached curl > /dev/null 2>&1 
-  echo "Installing phpMyAdmin.."
-  apt-get -qqy install phpmyadmin
-  a2enmod suexec > /dev/null 2>&1
-  a2enmod rewrite > /dev/null 2>&1
-  a2enmod ssl > /dev/null 2>&1
-  a2enmod actions > /dev/null 2>&1
-  a2enmod include > /dev/null 2>&1
-  a2enmod dav_fs > /dev/null 2>&1
-  a2enmod dav > /dev/null 2>&1
-  a2enmod auth_digest > /dev/null 2>&1
-  a2enmod fastcgi > /dev/null 2>&1
-  a2enmod alias > /dev/null 2>&1
-  a2enmod fcgid > /dev/null 2>&1
-  service apache2 restart > /dev/null 2>&1
-  sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
-  #sed -i "s/#/;/" /etc/php5/conf.d/ming.ini # Removed, because not longer present in php 5.6
-  echo -e "${green}done!${NC}"
+  if [ $CFG_WEBSERVER == "apache" ]; then
+	echo "Installing Apache and Modules.."
+	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
+	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
+	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+	apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python > /dev/null 2>&1  
+	echo "Installing PHP and Modules.."
+	apt-get -y install php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcache php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1 
+	echo "Installing Needed Programs.."
+	apt-get -y install mcrypt imagemagick memcached curl > /dev/null 2>&1 
+	echo "Installing phpMyAdmin.."
+	apt-get -qqy install phpmyadmin
+	a2enmod suexec > /dev/null 2>&1
+	a2enmod rewrite > /dev/null 2>&1
+	a2enmod ssl > /dev/null 2>&1
+	a2enmod actions > /dev/null 2>&1
+	a2enmod include > /dev/null 2>&1
+	a2enmod dav_fs > /dev/null 2>&1
+	a2enmod dav > /dev/null 2>&1
+	a2enmod auth_digest > /dev/null 2>&1
+	a2enmod fastcgi > /dev/null 2>&1
+	a2enmod alias > /dev/null 2>&1
+	a2enmod fcgid > /dev/null 2>&1
+	service apache2 restart > /dev/null 2>&1
+	sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
+	sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
+	sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
+	sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
+	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini # Removed, because not longer present in php 5.6
+	echo -e "${green}done!${NC}"
+  else
+	/etc/init.d/apache2 stop
+	update-rc.d -f apache2 remove
+	apt-get -y install nginx
+	/etc/init.d/nginx start
+	apt-get -y install php5-fpm php5-mysqlnd php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached php-apc
+	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
+	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
+	sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
+	/etc/init.d/php5-fpm reload
+	apt-get -y install fcgiwrap
+	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
+        # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
+    	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+	apt-get -qqy install phpmyadmin
+    	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+  fi
+  echo "done!"
 }
 
 
@@ -297,10 +321,13 @@ InstallQuota() {
 
   if [ `cat /etc/fstab | grep ',usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0' | wc -l` -eq 0 ]; then
 	sed -i 's/errors=remount-ro/errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0/' /etc/fstab
-	mount -o remount /
-	quotacheck -avugm > /dev/null 2>&1
-	quotaon -avug > /dev/null 2>&1
   fi
+  if [ `cat /etc/fstab | grep 'defaults' | wc -l` -ne 0 ]; then
+        sed -i 's/defaults/defaults,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0/' /etc/fstab
+  fi
+  mount -o remount /
+  quotacheck -avugm > /dev/null 2>&1
+  quotaon -avug > /dev/null 2>&1
   echo -e "${green}done!${NC}"
 }
 
@@ -479,9 +506,59 @@ InstallWebmail() {
 	  echo "roundcube-core roundcube/mysql/app-pass password $RANDOMPWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/app-password-confirm password $RANDPWD" | debconf-set-selections
 	  apt-get -y install roundcube roundcube-mysql git > /dev/null 2>&1
-	  sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
-	  sed -i "/Options +FollowSymLinks/a\\`echo -e '\n\r'`  DirectoryIndex index.php\\`echo -e '\n\r'`\\`echo -e '\n\r'`  <IfModule mod_php5.c>\\`echo -e '\n\r'`        AddType application/x-httpd-php .php\\`echo -e '\n\r'`\\`echo -e '\n\r'`        php_flag magic_quotes_gpc Off\\`echo -e '\n\r'`        php_flag track_vars On\\`echo -e '\n\r'`        php_flag register_globals Off\\`echo -e '\n\r'`        php_value include_path .:/usr/share/php\\`echo -e '\n\r'`  </IfModule>" /etc/roundcube/apache.conf
-	  sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
+	  if [ $CFG_WEBSERVER == "apache" ]; then
+	  	sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
+	  	sed -i "/Options +FollowSymLinks/a\\`echo -e '\n\r'`  DirectoryIndex index.php\\`echo -e '\n\r'`\\`echo -e '\n\r'`  <IfModule mod_php5.c>\\`echo -e '\n\r'`        AddType application/x-httpd-php .php\\`echo -e '\n\r'`\\`echo -e '\n\r'`        php_flag magic_quotes_gpc Off\\`echo -e '\n\r'`        php_flag track_vars On\\`echo -e '\n\r'`        php_flag register_globals Off\\`echo -e '\n\r'`        php_value include_path .:/usr/share/php\\`echo -e '\n\r'`  </IfModule>" /etc/roundcube/apache.conf
+	  	sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
+	  else
+		echo "  location /roundcube {" > /etc/nginx/roundcube.conf
+		echo "          root /var/lib/;" >> /etc/nginx/roundcube.conf
+		echo "           index index.php index.html index.htm;" >> /etc/nginx/roundcube.conf
+		echo "           location ~ ^/roundcube/(.+\.php)\$ {" >> /etc/nginx/roundcube.conf
+		echo "                   try_files \$uri =404;" >> /etc/nginx/roundcube.conf
+		echo "                   root /var/lib/;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   QUERY_STRING            \$query_string;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   REQUEST_METHOD          \$request_method;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   CONTENT_TYPE            \$content_type;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   CONTENT_LENGTH          \$content_length;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   SCRIPT_FILENAME         \$request_filename;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   SCRIPT_NAME             \$fastcgi_script_name;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   REQUEST_URI             \$request_uri;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   DOCUMENT_URI            \$document_uri;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   DOCUMENT_ROOT           \$document_root;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   SERVER_PROTOCOL         \$server_protocol;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   GATEWAY_INTERFACE       CGI/1.1;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   SERVER_SOFTWARE         nginx/\$nginx_version;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   REMOTE_ADDR             \$remote_addr;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   REMOTE_PORT             \$remote_port;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   SERVER_ADDR             \$server_addr;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   SERVER_PORT             \$server_port;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   SERVER_NAME             \$server_name;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   HTTPS                   \$https;" >> /etc/nginx/roundcube.conf
+		echo "                   # PHP only, required if PHP was built with --enable-force-cgi-redirect" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param   REDIRECT_STATUS         200;" >> /etc/nginx/roundcube.conf
+		echo "                   # To access SquirrelMail, the default user (like www-data on Debian/Ubuntu) mu\$" >> /etc/nginx/roundcube.conf
+		echo "                   #fastcgi_pass 127.0.0.1:9000;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_pass unix:/var/run/php5-fpm.sock;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_index index.php;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_buffer_size 128k;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_buffers 256 4k;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_busy_buffers_size 256k;" >> /etc/nginx/roundcube.conf
+		echo "                   fastcgi_temp_file_write_size 256k;" >> /etc/nginx/roundcube.conf
+		echo "           }" >> /etc/nginx/roundcube.conf
+		echo "           location ~* ^/roundcube/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))\$ {" >> /etc/nginx/roundcube.conf
+		echo "                   root /var/lib/;" >> /etc/nginx/roundcube.conf
+		echo "           }" >> /etc/nginx/roundcube.conf
+		echo "           location ~* /.svn/ {" >> /etc/nginx/roundcube.conf
+		echo "                   deny all;" >> /etc/nginx/roundcube.conf
+		echo "           }" >> /etc/nginx/roundcube.conf
+		echo "           location ~* /README|INSTALL|LICENSE|SQL|bin|CHANGELOG\$ {" >> /etc/nginx/roundcube.conf
+		echo "                   deny all;" >> /etc/nginx/roundcube.conf
+		echo "           }" >> /etc/nginx/roundcube.conf
+		echo "          }" >> /etc/nginx/roundcube.conf
+		sed -i "s/server_name localhost;/server_name localhost; include \/etc\/nginx\/roundcube.conf;/" /etc/nginx/sites-enabled/default
+	  fi
 	;;
 	"squirrelmail")
 	  echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
@@ -538,7 +615,11 @@ InstallISPConfig() {
   echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
   echo "mysql_database=dbispconfig" >> autoinstall.ini
   echo "mysql_charset=utf8" >> autoinstall.ini
-  echo "http_server=apache" >> autoinstall.ini
+  if [ $CFG_WEBSERVER == "apache" ]; then
+	echo "http_server=apache" >> autoinstall.ini
+  else
+	echo "http_server=nginx" >> autoinstall.ini
+  fi
   echo "ispconfig_port=8080" >> autoinstall.ini
   echo "ispconfig_use_ssl=y" >> autoinstall.ini
   echo
@@ -606,7 +687,11 @@ InstallFix(){
 	echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
 	MYNET=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
 	echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
-	/etc/init.d/amavisd-new restart
+	if [ -f /etc/init.d/amavisd-new ]; then
+		/etc/init.d/amavisd-new restart
+	else
+		/etc/init.d/amavis restart
+	fi
   fi  
 }
 
@@ -638,7 +723,7 @@ if [ -f /etc/debian_version ]; then
   InstallMysql 2>> /var/log/ispconfig_setup.log
   InstallMTA 2>> /var/log/ispconfig_setup.log
   InstallAntiVirus 2>> /var/log/ispconfig_setup.log
-  InstallApachePHP 2>> /var/log/ispconfig_setup.log
+  InstallWebServer 2>> /var/log/ispconfig_setup.log
   InstallFTP 2>> /var/log/ispconfig_setup.log
   if [ $CFG_QUOTA == "y" ]; then
 	InstallQuota 2>> /var/log/ispconfig_setup.log
@@ -655,6 +740,10 @@ if [ -f /etc/debian_version ]; then
   echo "Well done ISPConfig installed and configured correctly!! :D"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
+  if [ $CFG_WEBSERVER == "nginx" ]; then
+  	echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
+	echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";
+  fi
 else
   echo "Unsupported linux distribution."
 fi
