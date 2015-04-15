@@ -27,7 +27,7 @@ green='\033[0;32m'
 NC='\033[0m' # No Color
 
 #Program Versions
-$jkv=2.17  #Jailkit Version -> Maybe this can be automated
+JKV="2.17"  #Jailkit Version -> Maybe this can be automated
 
 
 #---------------------------------------------------------------------
@@ -296,7 +296,6 @@ InstallWebServer() {
 }
 
 
-
 #---------------------------------------------------------------------
 # Function: InstallFTP
 #    Install and configure PureFTPd
@@ -348,7 +347,6 @@ InstallBind() {
 }
 
 
-
 #---------------------------------------------------------------------
 # Function: InstallWebStats
 #    Install and configure web stats
@@ -361,22 +359,21 @@ InstallWebStats() {
 }
 
 
-
 #---------------------------------------------------------------------
 # Function: InstallJailkit
 #    Install Jailkit
 #---------------------------------------------------------------------
 InstallJailkit() {
-  echo -n "Installing jailkit... "
+  echo -n "Installing Jailkit... "
   apt-get -y install build-essential autoconf automake1.9 libtool flex bison debhelper > /dev/null 2>&1
   cd /tmp
-  wget -q http://olivier.sessink.nl/jailkit/jailkit-$jkv.tar.gz
-  tar xfz jailkit-$jkv.tar.gz
-  cd jailkit-$jkv
+  wget -q http://olivier.sessink.nl/jailkit/jailkit-$JKV.tar.gz
+  tar xfz jailkit-$JKV.tar.gz
+  cd jailkit-$JKV
   ./debian/rules binary > /dev/null 2>&1
   cd ..
-  dpkg -i jailkit_$jkv-1_*.deb > /dev/null 2>&1
-  rm -rf jailkit-$jkv
+  dpkg -i jailkit_$JKV-1_*.deb > /dev/null 2>&1
+  rm -rf jailkit-$JKV
   echo -e "${green}done!${NC}\n"
 }
 
