@@ -32,6 +32,13 @@ NC='\033[0m' # No Color
 #    Do some pre-install checks
 #---------------------------------------------------------------------
 clear
+
+# Check if user is root
+if [ $(id -u) != "0" ]; then
+    echo "${red}Error:${red} You must be root to run this script. Please switch to root user to install ispconfig3 and needed software."
+    exit 1
+fi
+
 PreInstallCheck() {
   echo -n "Checking internet connection.."
   ping -q -c 3 www.ispconfig.org > /dev/null 2>&1
@@ -40,6 +47,8 @@ PreInstallCheck() {
 	echo -e "${red}ERROR: Couldn't reach www.ispconfig.org, please check your internet connection${NC}"
 	exit 1;
   fi
+  
+  # Check source.list
   contrib=$(cat /etc/apt/sources.list | grep contrib | grep -v "cdrom")
   nonfree=$(cat /etc/apt/sources.list | grep non-free | grep -v "cdrom")
   if [ -z "$contrib" ]; then
@@ -55,7 +64,6 @@ PreInstallCheck() {
   fi
   echo "${green}OK!${NC}\n"
 }
-
 
 
 #---------------------------------------------------------------------
