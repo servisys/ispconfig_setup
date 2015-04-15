@@ -53,7 +53,7 @@ PreInstallCheck() {
                 sed -i 's/main/main non-free/' /etc/apt/sources.list;
         fi
   fi
-  echo "OK!"
+  echo "${green}OK!${NC}\n"
 }
 
 
@@ -64,7 +64,7 @@ PreInstallCheck() {
 #---------------------------------------------------------------------
 AskQuestions() {
 	  echo "Installing pre-required packages"
-	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}"  || apt-get -y install whiptail
+	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail
 	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
 	  do
 		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
@@ -113,17 +113,17 @@ AskQuestions() {
 #    Install basic packages
 #---------------------------------------------------------------------
 InstallBasics() {
-  echo -n "Updating apt and upgrading currently installed packages.."
+  echo -n "Updating apt and upgrading currently installed packages..\n"
   apt-get -qq update
   apt-get -qqy upgrade
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 
-  echo -n "Installing basic packages.."
+  echo -n "Installing basic packages..\n"
   apt-get -y install ssh openssh-server vim-nox ntp ntpdate debconf-utils binutils sudo git > /dev/null 2>&1
 
   echo "dash dash/sh boolean false" | debconf-set-selections
   dpkg-reconfigure -f noninteractive dash > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done!${NC}\n"
 }
 
 
@@ -234,11 +234,16 @@ InstallApachePHP() {
   echo "Press ENTER to continue.."
   read DUMMY
 
-  echo -n "Installing apache.."
+  echo "Installing Apache and Modules.."
   echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
   echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-  apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec php-pear php-auth php5-fpm php5-mcrypt mcrypt php5-imagick imagemagick libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python php5-curl php5-intl php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached curl > /dev/null 2>&1  
+  apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python > /dev/null 2>&1  
+  echo "Installing PHP and Modules.."
+  apt-get -y install php5 php5-common php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcache php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1 
+  echo "Installing Needed Programs.."
+  apt-get -y install mcrypt imagemagick memcached curl > /dev/null 2>&1 
+  echo "Installing phpMyAdmin.."
   apt-get -qqy install phpmyadmin
   a2enmod suexec > /dev/null 2>&1
   a2enmod rewrite > /dev/null 2>&1
@@ -256,7 +261,7 @@ InstallApachePHP() {
   sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
   sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
   sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
-  sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
+  #sed -i "s/#/;/" /etc/php5/conf.d/ming.ini # Removed, because not longer present in php 5.6
   echo -e "${green}done!${NC}"
 }
 
