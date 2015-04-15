@@ -120,7 +120,7 @@ InstallBasics() {
 #    Install and configure postfix
 #---------------------------------------------------------------------
 InstallPostfix() {
-  echo -n "Installing postfix... "
+  echo -e "Installing postfix... \n"
   echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
   echo "postfix postfix/mailname string $CFG_HOSTNAME_FQDN" | debconf-set-selections
   apt-get -y install postfix postfix-mysql postfix-doc getmail4 > /dev/null 2>&1
