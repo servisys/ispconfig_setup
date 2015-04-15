@@ -1,8 +1,12 @@
+v.1.0.5
+- Adding support for nGinx
+
 v.1.0.4
 - Adding log errors to /var/log/ispconfig_setup.log 
 - Added a2enmod fcgid, who caused panel not to work
 - Added DKIM support in amavisd-new (disabled by default)
 - Fixed issue in /etc/php5/conf.d/ming.ini changin comment from # to ;
+- Added some color and clear screen after installation is started
 
 v.1.0.2
 - Added support for inserit SSL data only one time, and then used all the time SSL is needed
