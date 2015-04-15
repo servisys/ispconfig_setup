@@ -24,7 +24,7 @@ of installation of ISPConfig 3 control panel.
 
 For now it's composed of two main scritps
 
-- ispc3sysinstall.sh = is the main scritps wich will do a default install
+- install.sh = is the main scritps wich will do a default install
 		       based on the https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
                        and to fix some issue on normal installation files, provided by debian repository
 
@@ -54,7 +54,7 @@ apt-get -y install unzip
 wget https://github.com/servisys/ispconfig_setup/archive/master.zip
 unzip master.zip
 cd ispconfig_setup-master
-./ispc3sysinstall.sh
+./install.sh
 ```
 
 Follow the instruction on the screen
