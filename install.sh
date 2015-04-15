@@ -1,12 +1,12 @@
 #!/bin/bash
 #---------------------------------------------------------------------
-# ispc3sysinstall.sh
+# install.sh
 #
 # ISPConfig 3 system installer
 #
-# Script: ispc3sysinstall.sh
+# Script: install.sh
 # Version: 1.0.5
-# Author: Mark Stunnenberg <mark@e-rave.nl>
+# Author: Matteo Temporini <temporini.matteo@gmail.com>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
 #
