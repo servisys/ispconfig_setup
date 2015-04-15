@@ -53,7 +53,7 @@ PreInstallCheck() {
                 sed -i 's/main/main non-free/' /etc/apt/sources.list;
         fi
   fi
-  echo "${green}OK!${NC}\n"
+  echo -e "${green}OK${NC}\n"
 }
 
 
@@ -118,17 +118,17 @@ AskQuestions() {
 #    Install basic packages
 #---------------------------------------------------------------------
 InstallBasics() {
-  echo -n "Updating apt and upgrading currently installed packages..\n"
+  echo -n "Updating apt and upgrading currently installed packages.."
   apt-get -qq update
   apt-get -qqy upgrade
-  echo -e "${green}done!${NC}\n"
+  echo -e "${green}done${NC}"
 
-  echo -n "Installing basic packages..\n"
+  echo -n "Installing basic packages.."
   apt-get -y install ssh openssh-server vim-nox ntp ntpdate debconf-utils binutils sudo git > /dev/null 2>&1
 
   echo "dash dash/sh boolean false" | debconf-set-selections
   dpkg-reconfigure -f noninteractive dash > /dev/null 2>&1
-  echo -e "${green}done!${NC}\n"
+  echo -e "Reconfigure dash ${green}done${NC}\n"
 }
 
 
@@ -153,7 +153,7 @@ InstallPostfix() {
   sed -i "s/#  -o smtpd_sasl_auth_enable=yes/  -o smtpd_sasl_auth_enable=yes/" /etc/postfix/master.cf
   sed -i "s/#  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/" /etc/postfix/master.cf
   /etc/init.d/postfix restart
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -169,7 +169,7 @@ InstallMysql() {
   apt-get -y install mysql-client mysql-server > /dev/null 2>&1
   sed -i 's/bind-address		= 127.0.0.1/#bind-address		= 127.0.0.1/' /etc/mysql/my.cnf
   service mysql restart > /dev/null
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -201,12 +201,12 @@ InstallMTA() {
 	  service courier-pop-ssl restart > /dev/null
 	  service courier-authdaemon restart > /dev/null
 	  service saslauthd restart > /dev/null
-	  echo -e "${green}done!${NC}"
+	  echo -e "${green}done${NC}"
 	  ;;
 	"dovecot")
 	  echo -n "Installing dovecot..";
 	  apt-get -qqy install dovecot-imapd dovecot-pop3d dovecot-sieve dovecot-mysql 2>&1
-	  echo -e "${green}done!${NC}"
+	  echo -e "${green}done${NC}"
 	  ;;
   esac
 }
@@ -222,7 +222,7 @@ InstallAntiVirus() {
   apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl > /dev/null 2>&1
   freshclam
   /etc/init.d/clamav-daemon restart
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -268,7 +268,7 @@ InstallWebServer() {
 	sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
 	sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
 	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini # Removed, because not longer present in php 5.6
-	echo -e "${green}done!${NC}"
+	echo -e "${green}done${NC}"
   else
 	/etc/init.d/apache2 stop
 	update-rc.d -f apache2 remove
@@ -286,7 +286,7 @@ InstallWebServer() {
 	apt-get -qqy install phpmyadmin
     	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
   fi
-  echo "done!"
+  echo "done"
 }
 
 
@@ -306,7 +306,7 @@ InstallFTP() {
   chmod 600 /etc/ssl/private/pure-ftpd.pem
   service openbsd-inetd restart > /dev/null 2>&1
   service pure-ftpd-mysql restart > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -328,7 +328,7 @@ InstallQuota() {
   mount -o remount /
   quotacheck -avugm > /dev/null 2>&1
   quotaon -avug > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -340,7 +340,7 @@ InstallQuota() {
 InstallBind() {
   echo -n "Installing bind..";
   apt-get -y install bind9 dnsutils > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -353,7 +353,7 @@ InstallWebStats() {
   echo -n "Installing stats..";
   apt-get -y install vlogger webalizer awstats > /dev/null 2>&1
   sed -i 's/^/#/' /etc/cron.d/awstats
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -373,7 +373,7 @@ InstallJailkit() {
   cd ..
   dpkg -i jailkit_2.14-1_*.deb > /dev/null 2>&1
   rm -rf jailkit-2.14*
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -485,7 +485,7 @@ failregex = .*pure-ftpd: \(.*@<HOST>\) \[WARNING\] Authentication failed for use
 ignoreregex =
 EOF
   service fail2ban restart > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -590,7 +590,7 @@ InstallWebmail() {
 	  ;;
   esac
   service apache2 restart > /dev/null 2>&1
-  echo -e "${green}done!${NC}"
+  echo -e "${green}done${NC}"
 }
 
 
@@ -737,7 +737,7 @@ if [ -f /etc/debian_version ]; then
   InstallWebmail 2>> /var/log/ispconfig_setup.log
   InstallISPConfig 2>> /var/log/ispconfig_setup.log
   InstallFix
-  echo "Well done ISPConfig installed and configured correctly!! :D"
+  echo -e "${green}Well done ISPConfig installed and configured correctly :D${NC}"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
   if [ $CFG_WEBSERVER == "nginx" ]; then
@@ -745,7 +745,7 @@ if [ -f /etc/debian_version ]; then
 	echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";
   fi
 else
-  echo "Unsupported linux distribution."
+  echo "${red}Unsupported linux distribution.${NC}"
 fi
 
 exit 0
