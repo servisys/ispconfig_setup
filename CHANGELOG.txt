@@ -1,3 +1,6 @@
+v.1.0.6
+- Starting modular system for better managment and integration
+
 v.1.0.5
 - Adding support for nGinx
 

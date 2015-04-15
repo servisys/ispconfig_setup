@@ -3,7 +3,7 @@
 [![PayPayl donate button](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TB4Q3UJDC5JDJ "Help US support this project using Paypal")
 
 # Version #
-v.1.0.5
+v.1.0.6
 
 This is a system to automate the installation of ISPConfig 3 
 control Panel ( http://www.ispconfig.org/page/home.html ).
@@ -29,6 +29,7 @@ For now it's composed of two main scritps
                        and to fix some issue on normal installation files, provided by debian repository
 
 You can Choose during install:
+- Apache / Nginx
 - Dovecot or Courier
 - Quota On/Off
 - Jailkit On/Off
