@@ -27,3 +27,34 @@ PreInstallCheck() {
   fi
   echo -e "${green}OK${NC}\n"
 }
+
+# Detect currect Linux Version
+
+# Debian Wheezy Detection
+if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
+		DISTRO=wheezy
+	fi
+fi
+
+# Debian Wheezy Detection
+if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
+		DISTRO=jessie
+	fi
+fi
+
+# Ubuntu Detection
+if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
+		DISTRO=ubuntu
+	fi
+fi
+
+echo "Your Distro is:" --->>> $DISTRO
+read -p "Is this correct? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    exit 1
+fi

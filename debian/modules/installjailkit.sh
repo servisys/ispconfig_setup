@@ -2,6 +2,10 @@
 # Function: InstallJailkit
 #    Install Jailkit
 #---------------------------------------------------------------------
+
+#Program Versions
+JKV="2.17"  #Jailkit Version -> Maybe this can be automated
+
 InstallJailkit() {
   echo -n "Installing Jailkit... "
   apt-get -y install build-essential autoconf automake1.9 libtool flex bison debhelper > /dev/null 2>&1

@@ -26,8 +26,6 @@ red='\033[0;31m'
 green='\033[0;32m'
 NC='\033[0m' # No Color
 
-#Program Versions
-JKV="2.17"  #Jailkit Version -> Maybe this can be automated
 
 #Saving current directory
 PWD=$(pwd);
@@ -40,9 +38,14 @@ if [ $(id -u) != "0" ]; then
     exit 1
 fi
 
+#---------------------------------------------------------------------
+# Load needed Modules
+#---------------------------------------------------------------------
+
+
+include $PWD/debian/modules/installbasics.sh
 include $PWD/debian/modules/preinstallcheck.sh
 include $PWD/debian/modules/askquestions.sh
-include $PWD/debian/modules/installbasics.sh
 include $PWD/debian/modules/installpostfix.sh
 include $PWD/debian/modules/installmysql.sh
 include $PWD/debian/modules/installmta.sh
