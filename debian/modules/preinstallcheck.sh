@@ -32,14 +32,14 @@ PreInstallCheck() {
 
 # Debian Wheezy Detection
 if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "Debian GNU/Linux 7.8"; then
+	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
 		DISTRO=wheezy
 	fi
 fi
 
 # Debian Wheezy Detection
 if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "Debian GNU/Linux 8.0"; then
+	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
 		DISTRO=jessie
 	fi
 fi
