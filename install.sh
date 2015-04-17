@@ -40,9 +40,9 @@ if [ $(id -u) != "0" ]; then
     exit 1
 fi
 
+include $PWD/debian/modules/installbasics.sh
 include $PWD/debian/modules/preinstallcheck.sh
 include $PWD/debian/modules/askquestions.sh
-include $PWD/debian/modules/installbasics.sh
 include $PWD/debian/modules/installpostfix.sh
 include $PWD/debian/modules/installmysql.sh
 include $PWD/debian/modules/installmta.sh

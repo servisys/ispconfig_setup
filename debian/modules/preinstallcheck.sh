@@ -27,3 +27,21 @@ PreInstallCheck() {
   fi
   echo -e "${green}OK${NC}\n"
 }
+
+# Functions For Detecting Current Distribution
+
+# Debian Detection (LSB Release)
+if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "debian"; then
+		# Set Distribution To Debian
+		DISTRIBUTION=debian
+	fi
+fi
+
+# Ubuntu Detection (LSB Release)
+if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
+		# Set Distribution To Ubuntu
+		DISTRIBUTION=ubuntu
+	fi
+fi
