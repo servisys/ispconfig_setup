@@ -28,20 +28,33 @@ PreInstallCheck() {
   echo -e "${green}OK${NC}\n"
 }
 
-# Functions For Detecting Current Distribution
+# Detect currect Linux Version
 
-# Debian Detection (LSB Release)
+# Debian Wheezy Detection
 if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "debian"; then
-		# Set Distribution To Debian
-		DISTRIBUTION=debian
+	if lsb_release -a 2> /dev/null | grep -iq "Debian GNU/Linux 7.8"; then
+		DISTRO=wheezy
 	fi
 fi
 
-# Ubuntu Detection (LSB Release)
+# Debian Wheezy Detection
+if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "Debian GNU/Linux 8.0"; then
+		DISTRO=jessie
+	fi
+fi
+
+# Ubuntu Detection
 if command -v lsb_release &> /dev/null; then
 	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
-		# Set Distribution To Ubuntu
-		DISTRIBUTION=ubuntu
+		DISTRO=ubuntu
 	fi
+fi
+
+echo "Your Distro is:" --->>> $DISTRO
+read -p "Is this correct? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Nn]$ ]]
+then
+    exit 1
 fi
