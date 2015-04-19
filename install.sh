@@ -43,23 +43,23 @@ fi
 #---------------------------------------------------------------------
 
 
-include $PWD/debian/modules/installbasics.sh
-include $PWD/debian/modules/preinstallcheck.sh
-include $PWD/debian/modules/askquestions.sh
-include $PWD/debian/modules/installpostfix.sh
-include $PWD/debian/modules/installmysql.sh
-include $PWD/debian/modules/installmta.sh
-include $PWD/debian/modules/installantivirus.sh
-include $PWD/debian/modules/installwebserver.sh
-include $PWD/debian/modules/installftp.sh
-include $PWD/debian/modules/installquota.sh
-include $PWD/debian/modules/installbind.sh
-include $PWD/debian/modules/installwebstats.sh
-include $PWD/debian/modules/installjailkit.sh
-include $PWD/debian/modules/installfail2ban.sh
-include $PWD/debian/modules/installwebmail.sh
-include $PWD/debian/modules/installispconfig.sh
-include $PWD/debian/modules/installfix.sh
+source $PWD/debian/modules/installbasics.sh
+source $PWD/debian/modules/preinstallcheck.sh
+source $PWD/debian/modules/askquestions.sh
+source $PWD/debian/modules/installpostfix.sh
+source $PWD/debian/modules/installmysql.sh
+source $PWD/debian/modules/installmta.sh
+source $PWD/debian/modules/installantivirus.sh
+source $PWD/debian/modules/installwebserver.sh
+source $PWD/debian/modules/installftp.sh
+source $PWD/debian/modules/installquota.sh
+source $PWD/debian/modules/installbind.sh
+source $PWD/debian/modules/installwebstats.sh
+source $PWD/debian/modules/installjailkit.sh
+source $PWD/debian/modules/installfail2ban.sh
+source $PWD/debian/modules/installwebmail.sh
+source $PWD/debian/modules/installispconfig.sh
+source $PWD/debian/modules/installfix.sh
 
 #---------------------------------------------------------------------
 # Main program [ main() ]
