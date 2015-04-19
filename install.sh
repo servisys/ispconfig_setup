@@ -32,12 +32,6 @@ PWD=$(pwd);
 
 clear
 
-# Check if user is root
-if [ $(id -u) != "0" ]; then
-    echo "${red}Error:${red} You must be root to run this script. Please switch to root user to install ispconfig3 and needed software."
-    exit 1
-fi
-
 #---------------------------------------------------------------------
 # Load needed Modules
 #---------------------------------------------------------------------
