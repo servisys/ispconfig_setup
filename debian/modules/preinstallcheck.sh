@@ -10,6 +10,7 @@ PreInstallCheck() {
   fi
   
   # Check connectivity
+  echo -e "Checking internet connection..."
   ping -q -c 3 www.ispconfig.org > /dev/null 2>&1
 
   if [ ! "$?" -eq 0 ]; then
@@ -39,6 +40,7 @@ PreInstallCheck() {
 	fi
   fi
 
+  echo -e "Your Distro is: " $DISTRO
   read -p "Is this correct? (y/n)" -n 1 -r
   echo    # (optional) move to a new line
   if [[ ! $REPLY =~ ^[Yy]$ ]]
