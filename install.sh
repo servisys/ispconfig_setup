@@ -76,7 +76,7 @@ echo "If you're all set, press ENTER to continue or CTRL-C to cancel.."
 read DUMMY
 
 if [ -f /etc/debian_version ]; then
-  PreInstallCheck 2> /var/log/ispconfig_setup.log
+  PreInstallCheck
   AskQuestions 
   InstallBasics 2>> /var/log/ispconfig_setup.log
   InstallPostfix 2>> /var/log/ispconfig_setup.log
