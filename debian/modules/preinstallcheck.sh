@@ -51,8 +51,8 @@ if command -v lsb_release &> /dev/null; then
 	fi
 fi
 
-echo "Your Distro is:" --->>> $DISTRO
-read -p "Is this correct? " -n 1 -r
+echo "Your Distro is: " $DISTRO
+read -p "Is this correct? (y/n)" -n 1 -r
 echo    # (optional) move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
