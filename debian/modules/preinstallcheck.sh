@@ -5,12 +5,11 @@
 PreInstallCheck() {
   # Check if user is root
   if [ $(id -u) != "0" ]; then
-    echo "Error: You must be root to run this script, please use the root user to install the software."
+    echo -n "Error: You must be root to run this script, please use the root user to install the software."
     exit 1
   fi
   
   # Check connectivity
-  echo -n "Checking internet connection.."
   ping -q -c 3 www.ispconfig.org > /dev/null 2>&1
 
   if [ ! "$?" -eq 0 ]; then
@@ -40,7 +39,6 @@ PreInstallCheck() {
 	fi
   fi
 
-  echo "Your Distro is: " $DISTRO
   read -p "Is this correct? (y/n)" -n 1 -r
   echo    # (optional) move to a new line
   if [[ ! $REPLY =~ ^[Yy]$ ]]
