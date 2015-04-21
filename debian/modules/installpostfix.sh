@@ -4,6 +4,12 @@
 #---------------------------------------------------------------------
 InstallPostfix() {
   echo -e "Installing postfix... \n"
+  echo -e "Cheking and disabling sendmail...\n"
+  if [ -f /etc/init.d/sendmail ]; then
+	service sendmail stop
+	update-rc.d -f sendmail remove
+	apt-get -y remove sendmail
+  fi
   echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
   echo "postfix postfix/mailname string $CFG_HOSTNAME_FQDN" | debconf-set-selections
   apt-get -y install postfix postfix-mysql postfix-doc getmail4 > /dev/null 2>&1
