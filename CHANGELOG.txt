@@ -1,3 +1,14 @@
+v.1.0.6
+- Starting modular system for better managment and integration
+- Added more presintall check
+- Added check for different distribution (Ubuntu, Debian Wheezy end Debian Jessie)
+- Little fix and improvments
+- Added check for sendmail installation and removal
+- Added rkhunter
+- Added jailkit version through simple editable variable
+- Changed dovect as default mta
+- Skip quota adding for tmpfs fylesystem
+
 v.1.0.5
 - Adding support for nGinx
 
