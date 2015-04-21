@@ -33,27 +33,63 @@ PWD=$(pwd);
 clear
 
 #---------------------------------------------------------------------
+# DEtect Linux Version
+#---------------------------------------------------------------------
+	apt-get -yqq install lsb-release
+
+  # Debian Wheezy Detection
+  if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
+		DISTRO=debian7
+	fi
+  fi
+
+  # Debian Wheezy Detection
+  if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
+		DISTRO=debian8
+	fi
+  fi
+
+  # Ubuntu Detection
+  if command -v lsb_release &> /dev/null; then
+	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
+		DISTRO=ubuntu
+	fi
+  fi
+
+  # ONLY for Debug..... :)
+  echo -e "Your Distro is: " $DISTRO
+  read -p "Is this correct? (y/n)" -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+    exit 1
+  fi
+
+
+#---------------------------------------------------------------------
 # Load needed Modules
 #---------------------------------------------------------------------
 
 
-source $PWD/debian/modules/installbasics.sh
-source $PWD/debian/modules/preinstallcheck.sh
-source $PWD/debian/modules/askquestions.sh
-source $PWD/debian/modules/installpostfix.sh
-source $PWD/debian/modules/installmysql.sh
-source $PWD/debian/modules/installmta.sh
-source $PWD/debian/modules/installantivirus.sh
-source $PWD/debian/modules/installwebserver.sh
-source $PWD/debian/modules/installftp.sh
-source $PWD/debian/modules/installquota.sh
-source $PWD/debian/modules/installbind.sh
-source $PWD/debian/modules/installwebstats.sh
-source $PWD/debian/modules/installjailkit.sh
-source $PWD/debian/modules/installfail2ban.sh
-source $PWD/debian/modules/installwebmail.sh
-source $PWD/debian/modules/installispconfig.sh
-source $PWD/debian/modules/installfix.sh
+source $PWD/distros/$DISTRO/install_basics.sh
+source $PWD/distros/$DISTRO/preinstallcheck.sh
+source $PWD/distros/$DISTRO/askquestions.sh
+source $PWD/distros/$DISTRO/install_postfix.sh
+source $PWD/distros/$DISTRO/install_mysql.sh
+source $PWD/distros/$DISTRO/install_mta.sh
+source $PWD/distros/$DISTRO/install_antivirus.sh
+source $PWD/distros/$DISTRO/install_webserver.sh
+source $PWD/distros/$DISTRO/install_ftp.sh
+source $PWD/distros/$DISTRO/install_quota.sh
+source $PWD/distros/$DISTRO/install_bind.sh
+source $PWD/distros/$DISTRO/install_webstats.sh
+source $PWD/distros/$DISTRO/install_jailkit.sh
+source $PWD/distros/$DISTRO/install_fail2ban.sh
+source $PWD/distros/$DISTRO/install_webmail.sh
+source $PWD/distros/$DISTRO/install_ispconfig.sh
+source $PWD/distros/$DISTRO/install_fix.sh
 
 #---------------------------------------------------------------------
 # Main program [ main() ]
