@@ -32,10 +32,10 @@ PWD=$(pwd);
 
 clear
 
-
 #---------------------------------------------------------------------
 # DEtect Linux Version
 #---------------------------------------------------------------------
+	apt-get -yqq install lsb-release
 
   # Debian Wheezy Detection
   if command -v lsb_release &> /dev/null; then
