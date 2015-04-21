@@ -13,7 +13,7 @@ InstallWebmail() {
 	  echo "roundcube-core roundcube/db/dbname string roundcube" | debconf-set-selections
 	  echo "roundcube-core roundcube/mysql/app-pass password $RANDOMPWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/app-password-confirm password $RANDPWD" | debconf-set-selections
-	  apt-get -y install roundcube roundcube-mysql git > /dev/null 2>&1
+	  apt-get -yqq install roundcube roundcube-mysql git > /dev/null 2>&1
 	  if [ $CFG_WEBSERVER == "apache" ]; then
 	  	sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
 	  	sed -i "/Options +FollowSymLinks/a\\`echo -e '\n\r'`  DirectoryIndex index.php\\`echo -e '\n\r'`\\`echo -e '\n\r'`  <IfModule mod_php5.c>\\`echo -e '\n\r'`        AddType application/x-httpd-php .php\\`echo -e '\n\r'`\\`echo -e '\n\r'`        php_flag magic_quotes_gpc Off\\`echo -e '\n\r'`        php_flag track_vars On\\`echo -e '\n\r'`        php_flag register_globals Off\\`echo -e '\n\r'`        php_value include_path .:/usr/share/php\\`echo -e '\n\r'`  </IfModule>" /etc/roundcube/apache.conf
@@ -70,7 +70,7 @@ InstallWebmail() {
 	;;
 	"squirrelmail")
 	  echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
-	  apt-get -y install squirrelmail wamerican > /dev/null 2>&1
+	  apt-get -yqq install squirrelmail wamerican > /dev/null 2>&1
 	  ln -s /etc/squirrelmail/apache.conf /etc/apache2/conf.d/squirrelmail
 	  sed -i 1d /etc/squirrelmail/apache.conf
 	  sed -i '1iAlias /webmail /usr/share/squirrelmail' /etc/squirrelmail/apache.conf

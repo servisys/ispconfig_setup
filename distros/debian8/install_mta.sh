@@ -8,7 +8,7 @@ InstallMTA() {
 	  echo -n "Installing courier... ";
 	  echo "courier-base courier-base/webadmin-configmode boolean false" | debconf-set-selections
 	  echo "courier-ssl courier-ssl/certnotice note" | debconf-set-selections
-	  apt-get -y install courier-authdaemon courier-authlib-mysql courier-pop courier-pop-ssl courier-imap courier-imap-ssl libsasl2-2 libsasl2-modules libsasl2-modules-sql sasl2-bin libpam-mysql courier-maildrop > /dev/null 2>&1
+	  apt-get -yqq install courier-authdaemon courier-authlib-mysql courier-pop courier-pop-ssl courier-imap courier-imap-ssl libsasl2-2 libsasl2-modules libsasl2-modules-sql sasl2-bin libpam-mysql courier-maildrop > /dev/null 2>&1
 	  sed -i 's/START=no/START=yes/' /etc/default/saslauthd
 	  cd /etc/courier
 	  rm -f /etc/courier/imapd.pem
@@ -29,7 +29,7 @@ InstallMTA() {
 	  ;;
 	"dovecot")
 	  echo -n "Installing dovecot... ";
-	  apt-get -qqy install dovecot-imapd dovecot-pop3d dovecot-sieve dovecot-mysql > /dev/null 2>&1
+	  apt-get -qqy install dovecot-imapd dovecot-pop3d dovecot-sieve dovecot-mysql dovecot-lmtpd > /dev/null 2>&1
 	  echo -e "${green}done! ${NC}\n"
 	  ;;
   esac
