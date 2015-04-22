@@ -33,45 +33,16 @@ PWD=$(pwd);
 clear
 
 #---------------------------------------------------------------------
-# DEtect Linux Version
+# Load needed functions
 #---------------------------------------------------------------------
-	apt-get -yqq install lsb-release
 
-  # Debian Wheezy Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
-		DISTRO=debian7
-	fi
-  fi
+source $PWD/functions/check_linux.sh
 
-  # Debian Wheezy Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
-		DISTRO=debian8
-	fi
-  fi
-
-  # Ubuntu Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
-		DISTRO=ubuntu
-	fi
-  fi
-
-  # ONLY for Debug..... :)
-  echo -e "Your Distro is: " $DISTRO
-  read -p "Is this correct? (y/n)" -n 1 -r
-  echo    # (optional) move to a new line
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
-  then
-    exit 1
-  fi
-
+CheckLinux 2>> /var/log/ispconfig_setup.log
 
 #---------------------------------------------------------------------
 # Load needed Modules
 #---------------------------------------------------------------------
-
 
 source $PWD/distros/$DISTRO/install_basics.sh
 source $PWD/distros/$DISTRO/preinstallcheck.sh
