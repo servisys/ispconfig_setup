@@ -38,7 +38,7 @@ clear
 
 source $PWD/functions/check_linux.sh
 
-CheckLinux 2>> /var/log/ispconfig_setup.log
+CheckLinux
 
 #---------------------------------------------------------------------
 # Load needed Modules
