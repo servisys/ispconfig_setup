@@ -10,13 +10,6 @@ InstallFail2ban() {
   case $CFG_MTA in
 	"courier")
 cat > /etc/fail2ban/jail.local <<EOF
-[sasl]
-enabled = true
-port = smtp
-filter = sasl
-logpath = /var/log/mail.log
-maxretry = 5
-
 [courierpop3]
 enabled = true
 port = pop3
@@ -97,6 +90,14 @@ port = ftp
 filter = pureftpd
 logpath = /var/log/syslog
 maxretry = 3
+
+[postfix-sasl]
+enabled = true
+port = smtp
+filter = postfix-sasl
+logpath = /var/log/mail.log
+maxretry = 5
+
 EOF
 
 cat > /etc/fail2ban/filter.d/pureftpd.conf <<EOF
@@ -104,6 +105,9 @@ cat > /etc/fail2ban/filter.d/pureftpd.conf <<EOF
 failregex = .*pure-ftpd: \(.*@<HOST>\) \[WARNING\] Authentication failed for user.*
 ignoreregex =
 EOF
+
+echo "ignoreregex =" >> /etc/fail2ban/filter.d/postfix-sasl.conf
+
   service fail2ban restart > /dev/null 2>&1
   echo -e "${green}done! ${NC}\n"
 }

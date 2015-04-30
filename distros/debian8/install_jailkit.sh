@@ -8,7 +8,7 @@ JKV="2.17"  #Jailkit Version -> Maybe this can be automated
 
 InstallJailkit() {
   echo -n "Installing Jailkit... "
-  apt-get -y install build-essential autoconf automake1.9 libtool flex bison debhelper > /dev/null 2>&1
+  apt-get -y install build-essential autoconf automake libtool flex bison debhelper binutils > /dev/null 2>&1
   cd /tmp
   wget -q http://olivier.sessink.nl/jailkit/jailkit-$JKV.tar.gz
   tar xfz jailkit-$JKV.tar.gz
