@@ -33,27 +33,34 @@ PWD=$(pwd);
 clear
 
 #---------------------------------------------------------------------
+# Load needed functions
+#---------------------------------------------------------------------
+
+source $PWD/functions/check_linux.sh
+
+CheckLinux
+
+#---------------------------------------------------------------------
 # Load needed Modules
 #---------------------------------------------------------------------
 
-
-source $PWD/debian/modules/installbasics.sh
-source $PWD/debian/modules/preinstallcheck.sh
-source $PWD/debian/modules/askquestions.sh
-source $PWD/debian/modules/installpostfix.sh
-source $PWD/debian/modules/installmysql.sh
-source $PWD/debian/modules/installmta.sh
-source $PWD/debian/modules/installantivirus.sh
-source $PWD/debian/modules/installwebserver.sh
-source $PWD/debian/modules/installftp.sh
-source $PWD/debian/modules/installquota.sh
-source $PWD/debian/modules/installbind.sh
-source $PWD/debian/modules/installwebstats.sh
-source $PWD/debian/modules/installjailkit.sh
-source $PWD/debian/modules/installfail2ban.sh
-source $PWD/debian/modules/installwebmail.sh
-source $PWD/debian/modules/installispconfig.sh
-source $PWD/debian/modules/installfix.sh
+source $PWD/distros/$DISTRO/install_basics.sh
+source $PWD/distros/$DISTRO/preinstallcheck.sh
+source $PWD/distros/$DISTRO/askquestions.sh
+source $PWD/distros/$DISTRO/install_postfix.sh
+source $PWD/distros/$DISTRO/install_mysql.sh
+source $PWD/distros/$DISTRO/install_mta.sh
+source $PWD/distros/$DISTRO/install_antivirus.sh
+source $PWD/distros/$DISTRO/install_webserver.sh
+source $PWD/distros/$DISTRO/install_ftp.sh
+source $PWD/distros/$DISTRO/install_quota.sh
+source $PWD/distros/$DISTRO/install_bind.sh
+source $PWD/distros/$DISTRO/install_webstats.sh
+source $PWD/distros/$DISTRO/install_jailkit.sh
+source $PWD/distros/$DISTRO/install_fail2ban.sh
+source $PWD/distros/$DISTRO/install_webmail.sh
+source $PWD/distros/$DISTRO/install_ispconfig.sh
+source $PWD/distros/$DISTRO/install_fix.sh
 
 #---------------------------------------------------------------------
 # Main program [ main() ]
