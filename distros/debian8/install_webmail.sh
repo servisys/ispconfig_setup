@@ -95,6 +95,8 @@ InstallWebmail() {
 		  sed -i 's/$delete_folder                  = false;/$delete_folder                  = true;/' /etc/squirrelmail/config.php
 		  ;;
 	  esac
+	  mkdir /var/lib/squirrelmail/tmp
+      chown www-data /var/lib/squirrelmail/tmp
 	  ;;
   esac
   service apache2 restart > /dev/null 2>&1
