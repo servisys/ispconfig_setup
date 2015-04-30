@@ -18,7 +18,7 @@ InstallWebServer() {
 	apt-get -qqy install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-passenger libapache2-mod-python libexpat1 ssl-cert libruby > /dev/null 2>&1  
 	echo -e "${green}done!${NC}\n"
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php5 php5-common php5-dev php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1 
+	apt-get -yqq install php5 php5-common php5 php5-common php5-dev php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcached php5-memcache php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1
 	echo -e "${green}done!${NC}\n"
 	echo -n "Installing needed Programs for PHP and Apache... "
 	apt-get -qqy install mcrypt imagemagick memcached curl tidy > /dev/null 2>&1
