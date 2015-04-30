@@ -25,6 +25,7 @@ if [ -f /etc/debian_version ]; then
   if command -v lsb_release &> /dev/null; then
 	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
 		DISTRO=debian8
+		echo -e "Attention: if you distro is debian Jessie, only Squirrelmail will be supported as Webmail"
 	fi
   fi
 
