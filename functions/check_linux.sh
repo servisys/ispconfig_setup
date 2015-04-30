@@ -6,7 +6,7 @@
 CheckLinux() {
 if [ -f /etc/debian_version ]; then
   apt-get -y install lsb-release
-  echo -n "Checking your installed Linux Version... "
+  echo -e "Checking your installed Linux Version... "
  
   #---------------------------------------------------------------------
   #    Debian 7 Wheezy
