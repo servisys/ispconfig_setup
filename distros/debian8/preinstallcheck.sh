@@ -10,7 +10,7 @@ PreInstallCheck() {
   fi
   
   # Check connectivity
-  echo -e "Checking internet connection..."
+  echo -n "Checking internet connection... "
   ping -q -c 3 www.ispconfig.org > /dev/null 2>&1
 
   if [ ! "$?" -eq 0 ]; then
@@ -38,7 +38,7 @@ PreInstallCheck() {
                 sed -i 's/main/main non-free/' /etc/apt/sources.list;
         fi
   fi
-  echo -e "${green}OK${NC}\n"
+  echo -e "${green} OK${NC}\n"
 }
 
 

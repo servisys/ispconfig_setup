@@ -38,8 +38,6 @@ clear
 
 source $PWD/functions/check_linux.sh
 
-CheckLinux
-
 #---------------------------------------------------------------------
 # Load needed Modules
 #---------------------------------------------------------------------
@@ -81,6 +79,8 @@ echo "- Internet connection is working properly";
 echo
 echo "If you're all set, press ENTER to continue or CTRL-C to cancel.."
 read DUMMY
+
+CheckLinux
 
 if [ -f /etc/debian_version ]; then
   PreInstallCheck

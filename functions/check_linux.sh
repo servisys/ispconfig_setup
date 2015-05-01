@@ -15,6 +15,7 @@ if [ -f /etc/debian_version ]; then
   if command -v lsb_release &> /dev/null; then
 	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
 		DISTRO=debian7
+		echo -e "Attention: Debian Wheezy is OldStable. Please Upgrade to Latest Debian Version with dist-upgrade !!!"
 	fi
   fi
 
