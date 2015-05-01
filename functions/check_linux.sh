@@ -5,7 +5,7 @@
 
 CheckLinux() {
 if [ -f /etc/debian_version ]; then
-  apt-get -y install lsb-release
+  apt-get -yqq install lsb-release
   echo -e "Checking your installed Linux Version... "
  
   #---------------------------------------------------------------------
