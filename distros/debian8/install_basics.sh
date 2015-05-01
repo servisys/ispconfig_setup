@@ -13,6 +13,7 @@ InstallBasics() {
 
   echo "dash dash/sh boolean false" | debconf-set-selections
   dpkg-reconfigure -f noninteractive dash > /dev/null 2>&1
-  echo -e "Reconfigure dash ${green}done${NC}\n"
+  echo -n "Reconfigure dash... "
+  echo -e "${green}done${NC}\n"
 }
 
