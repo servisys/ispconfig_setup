@@ -4,7 +4,7 @@
 #---------------------------------------------------------------------
 AskQuestions() {
 	  echo "Installing pre-required packages"
-	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail
+	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail > /dev/null 2>&1
 	  
 	  while [ "x$CFG_MYSQLSERVER" == "x" ]
           do

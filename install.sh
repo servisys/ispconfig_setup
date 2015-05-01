@@ -87,7 +87,7 @@ if [ -f /etc/debian_version ]; then
   AskQuestions 
   InstallBasics 2>> /var/log/ispconfig_setup.log
   InstallPostfix 2>> /var/log/ispconfig_setup.log
-  InstallMysql 2>> /var/log/ispconfig_setup.log
+  InstallSQLServer 2>> /var/log/ispconfig_setup.log
   InstallMTA 2>> /var/log/ispconfig_setup.log
   InstallAntiVirus 2>> /var/log/ispconfig_setup.log
   InstallWebServer 2>> /var/log/ispconfig_setup.log

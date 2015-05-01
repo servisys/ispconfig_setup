@@ -4,8 +4,8 @@
 #---------------------------------------------------------------------
 InstallBasics() {
   echo -n "Updating apt and upgrading currently installed packages... "
-  apt-get -qq update
-  apt-get -qqy upgrade
+  apt-get -qq update > /dev/null 2>&1
+  apt-get -qqy upgrade > /dev/null 2>&1
   echo -e "${green}done${NC}"
 
   echo -n "Installing basic packages... "
