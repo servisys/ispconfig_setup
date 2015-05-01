@@ -3,7 +3,7 @@
 #    Install and configure postfix
 #---------------------------------------------------------------------
 InstallPostfix() {
-  echo -n "Installing Postfix... "
+  echo "Installing Postfix... "
   echo -n "Checking and disabling Sendmail... "
   if [ -f /etc/init.d/sendmail ]; then
 	service sendmail stop > /dev/null 2>&1
