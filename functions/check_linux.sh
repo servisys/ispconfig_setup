@@ -38,11 +38,15 @@ if [ -f /etc/debian_version ]; then
 		DISTRO=ubuntu
 	fi
   fi
-fi
 
-if [ -f /etc/centos-release ]; then
-  if [ `cat /etc/centos-release | grep 7.0 | wc -l` -ne 0 ]; then
+  #---------------------------------------------------------------------
+  #    CentOS
+  #---------------------------------------------------------------------
+
+  if [ -f /etc/centos-release ]; then
+    if [ `cat /etc/centos-release | grep 7.0 | wc -l` -ne 0 ]; then
         DISTRO=centos7
+    fi
   fi
 fi
 
