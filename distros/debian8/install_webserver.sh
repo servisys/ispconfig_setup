@@ -15,16 +15,16 @@ InstallWebServer() {
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
 	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt-get -qqy install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-passenger libapache2-mod-python libexpat1 ssl-cert libruby > /dev/null 2>&1  
+	apt-get -yqq install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-passenger libapache2-mod-python libexpat1 ssl-cert libruby > /dev/null 2>&1  
 	echo -e "${green}done!${NC}\n"
 	echo -n "Installing PHP and Modules... "
 	apt-get -yqq install php5 php5-common php5 php5-common php5-dev php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-xcache > /dev/null 2>&1
 	echo -e "${green}done!${NC}\n"
 	echo -n "Installing needed Programs for PHP and Apache... "
-	apt-get -qqy install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
+	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
     echo -e "${green}done!${NC}\n"	
 	echo -n "Installing phpMyAdmin... "
-	apt-get -qqy install phpmyadmin > /dev/null 2>&1
+	apt-get -yqq install phpmyadmin > /dev/null 2>&1
 	echo -e "${green}done!${NC}\n"
 	a2enmod suexec > /dev/null 2>&1
 	a2enmod rewrite > /dev/null 2>&1
