@@ -22,4 +22,5 @@ InstallSQLServer() {
   sed -i 's/bind-address		= 127.0.0.1/#bind-address		= 127.0.0.1/' /etc/mysql/my.cnf
   service mysql restart > /dev/null
   echo -e "${green}done! ${NC}\n"
-}
+
+  }
