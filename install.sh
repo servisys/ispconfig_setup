@@ -37,7 +37,7 @@ clear
 #---------------------------------------------------------------------
 
 source $PWD/functions/check_linux.sh
-
+CheckLinux
 #---------------------------------------------------------------------
 # Load needed Modules
 #---------------------------------------------------------------------
@@ -77,10 +77,14 @@ echo
 echo "- This is a clean / standard debian installation";
 echo "- Internet connection is working properly";
 echo
-echo "If you're all set, press ENTER to continue or CTRL-C to cancel.."
-read DUMMY
+echo -e "Your Distro is: " $DISTRO
+read -p "Is this correct? (y/n)" -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+	then
+	exit 1
+fi
 
-CheckLinux
 
 if [ -f /etc/debian_version ]; then
   PreInstallCheck
