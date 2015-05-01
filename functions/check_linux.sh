@@ -6,7 +6,7 @@
 CheckLinux() {
 if [ -f /etc/debian_version ]; then
   apt-get -yqq install lsb-release
-  echo -e "Checking your installed Linux Version... "
+  #echo -e "Checking your installed Linux Version... "
  
   #---------------------------------------------------------------------
   #    Debian 7 Wheezy
@@ -15,7 +15,7 @@ if [ -f /etc/debian_version ]; then
   if command -v lsb_release &> /dev/null; then
 	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
 		DISTRO=debian7
-		echo -e "Attention: Debian Wheezy is OldStable. Please Upgrade to Latest Debian Version with dist-upgrade !!!"
+		#echo -e "Attention: Debian Wheezy is OldStable. Please Upgrade to Latest Debian Version with dist-upgrade !!!"
 	fi
   fi
 
@@ -26,7 +26,7 @@ if [ -f /etc/debian_version ]; then
   if command -v lsb_release &> /dev/null; then
 	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
 		DISTRO=debian8
-		echo -e "Attention: if you distro is debian Jessie, only Squirrelmail will be supported as Webmail"
+		#echo -e "Attention: if you distro is debian Jessie, only Squirrelmail will be supported as Webmail"
 	fi
   fi
 
