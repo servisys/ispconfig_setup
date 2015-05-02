@@ -3,15 +3,15 @@
 [![PayPayl donate button](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TB4Q3UJDC5JDJ "Help US support this project using Paypal")
 
 # Version #
-v.1.0.6
+v.1.0.8
 
-This is a system to automate the installation of ISPConfig 3 
-control Panel ( http://www.ispconfig.org/page/home.html ).
+This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
 Tested on:
-- Debian 7 (VmWare Esxi, Amazon AWS, Virtualbox)
-- ISPConfig 3.0.5.4p5
 
+Debian 8 Jessie (VmWare Esxi, Virtualbox)
+Debian 7 Wheezy (VmWare Esxi, Amazon AWS, Virtualbox)
+ISPConfig 3.0.5.4p5
 For now it is tested and developed only on Debian systems.
 
 Maybe it works well also on Ubuntu systems.
