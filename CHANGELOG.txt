@@ -1,3 +1,13 @@
+v.1.0.9
+- Added support for MariaDB
+- Smallfix installazion
+
+v.1.0.8
+- Added support for debian Jessie
+- Added Module for all
+- Fix minor issue
+- Remove Roundcube support for debian Jessie installation
+
 v.1.0.6
 - Starting modular system for better managment and integration
 - Added more presintall check
