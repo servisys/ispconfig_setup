@@ -3,7 +3,7 @@
 #    Install and configure of disk quota
 #---------------------------------------------------------------------
 InstallQuota() {
-  echo -n "Installing and initializing quota (this might take while)... "
+  echo -n "Installing and initializing Quota (this might take while)... "
   apt-get -qqy install quota quotatool > /dev/null 2>&1
 
   if [ `cat /etc/fstab | grep ',usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0' | wc -l` -eq 0 ]; then

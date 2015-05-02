@@ -4,7 +4,13 @@
 #---------------------------------------------------------------------
 AskQuestions() {
 	  echo "Installing pre-required packages"
-	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail
+	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail > /dev/null 2>&1
+	  
+	  while [ "x$CFG_SQLSERVER" == "x" ]
+          do
+                CFG_SQLSERVER=$(whiptail --title "SQLSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select SQL Server type" 10 50 2 "MySQL" "(default)" ON "MariaDB" "" OFF 3>&1 1>&2 2>&3)
+          done
+		  
 	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
 	  do
 		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
