@@ -1,5 +1,6 @@
 v.1.0.9
 - Added support for MariaDB 
+- Added fix for Nginx on Jessie
 - Smallfix installazion
 
 v.1.0.8
