@@ -18,37 +18,7 @@ PreInstallCheck() {
         exit 1;
   fi
   
-  # Detect currect Linux Version
-  # Debian Wheezy Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
-		DISTRO=debian7
-	fi
-  fi
-
-  # Debian Wheezy Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
-		DISTRO=debian8
-	fi
-  fi
-
-  # Ubuntu Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
-		DISTRO=ubuntu
-	fi
-  fi
-
-  echo -e "Your Distro is: " $DISTRO
-  read -p "Is this correct? (y/n)" -n 1 -r
-  echo    # (optional) move to a new line
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
-  then
-    exit 1
-  fi
-
-  # Check for already isntalled ispconfig version
+   # Check for already isntalled ispconfig version
   if [ -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
     echo "ISPConfig is already installed, can't go on."
 	exit 1

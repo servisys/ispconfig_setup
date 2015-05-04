@@ -37,9 +37,7 @@ clear
 #---------------------------------------------------------------------
 
 source $PWD/functions/check_linux.sh
-
 CheckLinux
-
 #---------------------------------------------------------------------
 # Load needed Modules
 #---------------------------------------------------------------------
@@ -79,15 +77,23 @@ echo
 echo "- This is a clean / standard debian installation";
 echo "- Internet connection is working properly";
 echo
-echo "If you're all set, press ENTER to continue or CTRL-C to cancel.."
-read DUMMY
+echo
+echo -e "The detected Linux Distribution is: " $DISTRO
+echo
+read -p "Is this correct? (y/n)" -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+	then
+	exit 1
+fi
+
 
 if [ -f /etc/debian_version ]; then
   PreInstallCheck
   AskQuestions 
   InstallBasics 2>> /var/log/ispconfig_setup.log
   InstallPostfix 2>> /var/log/ispconfig_setup.log
-  InstallMysql 2>> /var/log/ispconfig_setup.log
+  InstallSQLServer 2>> /var/log/ispconfig_setup.log
   InstallMTA 2>> /var/log/ispconfig_setup.log
   InstallAntiVirus 2>> /var/log/ispconfig_setup.log
   InstallWebServer 2>> /var/log/ispconfig_setup.log
@@ -104,7 +110,7 @@ if [ -f /etc/debian_version ]; then
   InstallWebmail 2>> /var/log/ispconfig_setup.log
   InstallISPConfig 2>> /var/log/ispconfig_setup.log
   InstallFix
-  echo -e "${green}Well done ISPConfig installed and configured correctly :D${NC}"
+  echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
   if [ $CFG_WEBSERVER == "nginx" ]; then
