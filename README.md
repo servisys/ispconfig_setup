@@ -9,9 +9,10 @@ This is a system to automate the installation of ISPConfig 3 control Panel ( htt
 
 Tested on:
 
-Debian 8 Jessie (VmWare Esxi, Virtualbox)
-Debian 7 Wheezy (VmWare Esxi, Amazon AWS, Virtualbox)
-ISPConfig 3.0.5.4p5
+- Debian 8 Jessie (VmWare Esxi, Virtualbox)
+- Debian 7 Wheezy (VmWare Esxi, Amazon AWS, Virtualbox)
+- ISPConfig 3.0.5.4p5
+
 For now it is tested and developed only on Debian systems.
 
 Maybe it works well also on Ubuntu systems.
