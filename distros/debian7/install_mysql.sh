@@ -1,8 +1,8 @@
 #---------------------------------------------------------------------
-# Function: InstallMysql
-#    Install and configure mysql
+# Function: InstallSQLServer
+#    Install and configure SQL Server
 #---------------------------------------------------------------------
-InstallMysql() {
+InstallSQLServer() {
   echo -n "Installing mysql... "
   echo "mysql-server-5.1 mysql-server/root_password password $CFG_MYSQL_ROOT_PWD" | debconf-set-selections
   echo "mysql-server-5.1 mysql-server/root_password_again password $CFG_MYSQL_ROOT_PWD" | debconf-set-selections

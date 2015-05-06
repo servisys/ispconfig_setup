@@ -108,7 +108,7 @@ if [ -f /etc/debian_version ]; then
   fi
   InstallFail2ban 2>> /var/log/ispconfig_setup.log
   InstallWebmail 2>> /var/log/ispconfig_setup.log
-  InstallISPConfig 2>> /var/log/ispconfig_setup.log
+  InstallISPConfig
   InstallFix
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
   echo "No you can connect to your ISPConfig installation ad https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
