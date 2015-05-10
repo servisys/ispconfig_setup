@@ -3,13 +3,7 @@
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
-  echo "==========================================================================================="
-  echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-  echo "Due to a bug in dbconfig-common, this can't be automated."
-  echo "==========================================================================================="
-  echo "Press ENTER to continue... "
-  read DUMMY
-
+  
   if [ $CFG_WEBSERVER == "apache" ]; then
 	echo -n "Installing Apache and Modules... "
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
@@ -23,9 +17,18 @@ InstallWebServer() {
 	echo -n "Installing needed Programs for PHP and Apache... "
 	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
     echo -e "[${green}DONE${NC}]\n"
+	
+  if [ $CFG_PHPMYADMIN == "yes" ]; then
+	echo "==========================================================================================="
+	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
+	echo "Due to a bug in dbconfig-common, this can't be automated."
+	echo "==========================================================================================="
+	echo "Press ENTER to continue... "
+	read DUMMY
 	echo -n "Installing phpMyAdmin... "
 	apt-get -yqq install phpmyadmin > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
+  fi
 	
   if [ $CFG_XCACHE == "yes" ]; then
 	echo -n "Installing XCache... "
