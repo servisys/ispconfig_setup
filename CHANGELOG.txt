@@ -1,3 +1,6 @@
+v.1.0.11
+-
+
 v.1.0.10
 - Adding support for ISPConfig expert mode setup
 - Fix problem in debian 7 for install MySQL
