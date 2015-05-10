@@ -33,6 +33,6 @@ InstallWebmail() {
   mkdir /var/lib/squirrelmail/tmp
   chown www-data /var/lib/squirrelmail/tmp
   service apache2 restart > /dev/null 2>&1
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }
 

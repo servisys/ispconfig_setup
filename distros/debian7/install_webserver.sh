@@ -26,6 +26,13 @@ InstallWebServer() {
 	echo "Installing phpMyAdmin... "
 	apt-get -qqy install phpmyadmin
 	echo -e "${green}done!${NC}\n"
+	
+	if [ $CFG_XCACHE == "yes" ]; then
+	  echo -n "Installing XCache... "
+	  apt-get -yqq install php5-xcache > /dev/null 2>&1
+	  echo -e "[${green}DONE${NC}]\n"
+    fi
+	
 	a2enmod suexec > /dev/null 2>&1
 	a2enmod rewrite > /dev/null 2>&1
 	a2enmod ssl > /dev/null 2>&1

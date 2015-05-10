@@ -109,6 +109,6 @@ EOF
 echo "ignoreregex =" >> /etc/fail2ban/filter.d/postfix-sasl.conf
 
   service fail2ban restart > /dev/null 2>&1
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }
 

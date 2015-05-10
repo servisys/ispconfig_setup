@@ -3,13 +3,14 @@
 #    Install and configure postfix
 #---------------------------------------------------------------------
 InstallPostfix() {
-  echo "Installing Postfix... "
   echo -n "Checking and disabling Sendmail... "
   if [ -f /etc/init.d/sendmail ]; then
 	service sendmail stop > /dev/null 2>&1
 	update-rc.d -f sendmail remove > /dev/null 2>&1
 	apt-get -y remove sendmail > /dev/null 2>&1
   fi
+  
+  echo "Installing Postfix... "
   echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
   echo "postfix postfix/mailname string $CFG_HOSTNAME_FQDN" | debconf-set-selections
   apt-get -y install postfix postfix-mysql postfix-doc getmail4 > /dev/null 2>&1
@@ -22,5 +23,5 @@ InstallPostfix() {
   sed -i "s/#  -o smtpd_tls_wrappermode=yes/  -o smtpd_tls_wrappermode=yes/" /etc/postfix/master.cf
   sed -i "s/#  -o smtpd_sasl_auth_enable=yes/  -o smtpd_sasl_auth_enable=yes\\`echo -e '\n\r'`  -o smtpd_client_restrictions=permit_sasl_authenticated,reject/" /etc/postfix/master.cf
   service postfix restart > /dev/null 2>&1
-  echo -e "${green}done${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }

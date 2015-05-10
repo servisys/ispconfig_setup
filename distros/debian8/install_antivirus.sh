@@ -8,15 +8,15 @@ InstallAntiVirus() {
   sed -i "s/AllowSupplementaryGroups false/AllowSupplementaryGroups true/" /etc/clamav/clamd.conf
   echo -n "Stopping Spamassassin ... "
   service spamassassin stop
-  echo -e " [${green}done${NC}]\n"
+  echo -e "[${green}DONE${NC}]\n"
   echo -n "Disable Spamassassin ... "
   systemctl disable spamassassin
-  echo -e " [${green}done${NC}]\n"
+  echo -e "[${green}DONE${NC}]\n"
   if [ $CFG_AVUPDATE == "yes" ]; then
 	echo -n "Updating ClamAV. Please Wait ... "
 	freshclam
   fi
   echo -n "Restarting ClamAV... "
   service clamav-daemon restart
-  echo -e " [${green}done${NC}]\n"
+  echo -e "[${green}DONE${NC}]\n"
 }

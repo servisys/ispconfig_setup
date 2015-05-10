@@ -15,5 +15,5 @@ InstallQuota() {
   mount -o remount /
   quotacheck -avugm > /dev/null 2>&1
   quotaon -avug > /dev/null 2>&1
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }
