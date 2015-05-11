@@ -1,5 +1,5 @@
 v.1.0.11
--
+- Added optional Install for phpMyAdmin & XCache (Only Debian 8)
 
 v.1.0.10
 - Adding support for ISPConfig expert mode setup
