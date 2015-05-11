@@ -26,6 +26,7 @@ InstallWebServer() {
 	echo "Installing phpMyAdmin... "
 	apt-get -qqy install phpmyadmin
 	echo -e "${green}done!${NC}\n"
+		
 	a2enmod suexec > /dev/null 2>&1
 	a2enmod rewrite > /dev/null 2>&1
 	a2enmod ssl > /dev/null 2>&1
