@@ -1,15 +1,8 @@
 #---------------------------------------------------------------------
-# Function: InstallWebServer
+# Function: InstallWebServer Debian 7
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
-  echo "==========================================================================================="
-  echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-  echo "Due to a bug in dbconfig-common, this can't be automated."
-  echo "==========================================================================================="
-  echo "Press ENTER to continue... "
-  read DUMMY
-
   if [ $CFG_WEBSERVER == "apache" ]; then
 	echo "Installing Apache and Modules... "
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
@@ -22,10 +15,25 @@ InstallWebServer() {
 	echo -e "${green}done!${NC}\n"
 	echo "Installing needed Programs for PHP and Apache... "
 	apt-get -y install mcrypt imagemagick memcached curl tidy> /dev/null 2>&1
-    echo -e "${green}done!${NC}\n"	
-	echo "Installing phpMyAdmin... "
-	apt-get -qqy install phpmyadmin
-	echo -e "${green}done!${NC}\n"
+    	echo -e "${green}done!${NC}\n"	
+
+	if [ $CFG_PHPMYADMIN == "yes" ]; then
+		echo "==========================================================================================="
+		echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
+		echo "Due to a bug in dbconfig-common, this can't be automated."
+		echo "==========================================================================================="
+		echo "Press ENTER to continue... "
+		read DUMMY
+		echo -n "Installing phpMyAdmin... "
+		apt-get -yqq install phpmyadmin > /dev/null 2>&1
+		echo -e "[${green}DONE${NC}]\n"
+	fi
+	
+  	if [ $CFG_XCACHE == "yes" ]; then
+		echo -n "Installing XCache... "
+		apt-get -yqq install php5-xcache > /dev/null 2>&1
+		echo -e "[${green}DONE${NC}]\n"
+	fi
 		
 	a2enmod suexec > /dev/null 2>&1
 	a2enmod rewrite > /dev/null 2>&1
@@ -59,8 +67,20 @@ InstallWebServer() {
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
         # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
     	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt-get -qqy install phpmyadmin
-    	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+
+	if [ $CFG_PHPMYADMIN == "yes" ]; then
+		echo "==========================================================================================="
+		echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
+		echo "Due to a bug in dbconfig-common, this can't be automated."
+		echo "==========================================================================================="
+		echo "Press ENTER to continue... "
+		read DUMMY
+		echo -n "Installing phpMyAdmin... "
+		apt-get -yqq install phpmyadmin > /dev/null 2>&1
+	   	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+		echo -e "[${green}DONE${NC}]\n"
+	fi
+
   fi
   echo -e "${green}done! ${NC}\n"
 }

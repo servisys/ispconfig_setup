@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: InstallWebServer
+# Function: InstallWebServer Debian 8
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
@@ -16,7 +16,7 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing needed Programs for PHP and Apache... "
 	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
-    echo -e "[${green}DONE${NC}]\n"
+    	echo -e "[${green}DONE${NC}]\n"
 	
   if [ $CFG_PHPMYADMIN == "yes" ]; then
 	echo "==========================================================================================="

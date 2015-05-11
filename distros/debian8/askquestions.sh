@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: AskQuestions
+# Function: AskQuestions Debian 8
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
