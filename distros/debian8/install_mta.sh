@@ -25,12 +25,12 @@ InstallMTA() {
 	  service courier-pop-ssl restart > /dev/null 2>&1
 	  service courier-authdaemon restart > /dev/null 2>&1
 	  service saslauthd restart > /dev/null 2>&1
-	  echo -e "${green}done! ${NC}\n"
+	  echo -e "[${green}DONE${NC}]\n"
 	  ;;
 	"dovecot")
 	  echo -n "Installing Dovecot... ";
 	  apt-get -qqy install dovecot-imapd dovecot-pop3d dovecot-sieve dovecot-mysql dovecot-lmtpd opendkim opendkim-tools > /dev/null 2>&1
-	  echo -e "${green}done! ${NC}\n"
+	  echo -e "[${green}DONE${NC}]\n"
 	  ;;
   esac
 }

@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: AskQuestions
+# Function: AskQuestions Debian 8
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
@@ -20,6 +20,16 @@ AskQuestions() {
           do
                 CFG_WEBSERVER=$(whiptail --title "WEBSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select webserver type" 10 50 2 "apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
           done
+	
+	  while [ "x$CFG_XCACHE" == "x" ]
+		  do
+				CFG_XCACHE=$(whiptail --title "Install XCache" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to install XCache during install? ATTENTION: If XCache is installed, Ioncube Loaders will not work !!" 20 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
+	  done
+	
+	  while [ "x$CFG_PHPMYADMIN" == "x" ]
+		  do
+				CFG_PHPMYADMIN=$(whiptail --title "Install phpMyAdmin" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to install phpMyAdmin during install?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
+	  done
 	
 	  while [ "x$CFG_MTA" == "x" ]
 	  do

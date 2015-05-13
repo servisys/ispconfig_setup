@@ -17,6 +17,6 @@ InstallJailkit() {
   cd ..
   dpkg -i jailkit_$JKV-1_*.deb > /dev/null 2>&1
   rm -rf jailkit-$JKV
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }
 

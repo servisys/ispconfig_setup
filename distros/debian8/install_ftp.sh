@@ -13,6 +13,6 @@ InstallFTP() {
   chmod 600 /etc/ssl/private/pure-ftpd.pem
   service openbsd-inetd restart > /dev/null 2>&1
   service pure-ftpd-mysql restart > /dev/null 2>&1
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }
 
