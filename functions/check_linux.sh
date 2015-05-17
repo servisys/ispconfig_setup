@@ -4,20 +4,20 @@
 #---------------------------------------------------------------------
 
 CheckLinux() {
-if [ -f /etc/debian_version ]; then
-  apt-get -yqq install lsb-release
-  #echo -e "Checking your installed Linux Version... "
- 
+
+  #Extract information on system
+  . /etc/os-release
+
+
   #---------------------------------------------------------------------
   #    Debian 7 Wheezy
   #---------------------------------------------------------------------
   
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
-		DISTRO=debian7
-		#echo -e "Attention: Debian Wheezy is OldStable. Please Upgrade to Latest Debian Version with dist-upgrade !!!"
-	fi
+  if echo $ID-$VERSION_ID | grep -iq "debian-7"; then
+	DISTRO=debian7
+	#echo -e "Attention: Debian Wheezy is OldStable. Please Upgrade to Latest Debian Version with dist-upgrade !!!"
   fi
+  
 
   #---------------------------------------------------------------------
   #    Debian 8 Jessie
@@ -49,7 +49,6 @@ if [ -f /etc/debian_version ]; then
         DISTRO=centos7
     fi
   fi
-fi
 
   # ONLY for Debug..... :)
   #echo -e "Your Distro is: " $DISTRO
