@@ -1,3 +1,7 @@
+v.1.0.12
+- Added operation system detect based on /etc/os-relase
+- Added stop installation check if no suported os detected
+
 v.1.0.11
 - Added optional Install for phpMyAdmin & XCache (Debian 7/Debian 8)
 
