@@ -97,7 +97,11 @@ InstallWebmail() {
 	  esac
 	  ;;
   esac
-  service apache2 restart > /dev/null 2>&1
+  if [ $CFG_WEBSERVER == "apache" ]; then
+	  service apache2 restart > /dev/null 2>&1
+  else
+	  service nginx restart > /dev/null 2>&1
+  fi
   echo -e "${green}done! ${NC}\n"
 }
 

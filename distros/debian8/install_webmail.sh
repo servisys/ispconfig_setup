@@ -32,7 +32,11 @@ InstallWebmail() {
 	  esac
   mkdir /var/lib/squirrelmail/tmp
   chown www-data /var/lib/squirrelmail/tmp
-  service apache2 restart > /dev/null 2>&1
+  if [ $CFG_WEBSERVER == "apache" ]; then
+	  service apache2 restart > /dev/null 2>&1
+  else
+	  service nginx restart > /dev/null 2>&1
+  fi
   echo -e "[${green}DONE${NC}]\n"
 }
 
