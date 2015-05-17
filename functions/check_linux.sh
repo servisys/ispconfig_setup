@@ -23,31 +23,25 @@ CheckLinux() {
   #    Debian 8 Jessie
   #---------------------------------------------------------------------
   
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
+  if echo $ID-$VERSION_ID | grep -iq "debian-8"; then
 		DISTRO=debian8
 		#echo -e "Attention: if you distro is debian Jessie, only Squirrelmail will be supported as Webmail"
-	fi
   fi
 
   #---------------------------------------------------------------------
-  #    Ubuntu
+  #    Ubuntu 14.04
   #---------------------------------------------------------------------
   
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
-		DISTRO=ubuntu
-	fi
+  if echo $ID-$VERSION_ID | grep -iq "ubuntu-14.04"; then
+		DISTRO=ubuntu14.04
   fi
 
   #---------------------------------------------------------------------
   #    CentOS
   #---------------------------------------------------------------------
 
-  if [ -f /etc/centos-release ]; then
-    if [ `cat /etc/centos-release | grep 7.0 | wc -l` -ne 0 ]; then
-        DISTRO=centos7
-    fi
+  if echo $ID-$VERSION_ID | grep -iq "centos-7"; then
+		DISTRO=centos7
   fi
 
   # ONLY for Debug..... :)
