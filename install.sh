@@ -78,7 +78,7 @@ echo "- This is a clean / standard debian installation";
 echo "- Internet connection is working properly";
 echo
 echo
-if [ -n "$PRETTY_NAME" ] then
+if [ -n "$PRETTY_NAME" ]; then
 	echo -e "The detected Linux Distribution is: " $PRETTY_NAME
 else
 	echo -e "The detected Linux Distribution is: " $ID-$VERSION_ID
