@@ -84,10 +84,16 @@ else
 	echo -e "The detected Linux Distribution is: " $ID-$VERSION_ID
 fi
 echo
-read -p "Is this correct? (y/n)" -n 1 -r
-echo    # (optional) move to a new line
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-	then
+if [ -n "$DISTRO" ]; then
+	read -p "Is this correct? (y/n)" -n 1 -r
+	echo    # (optional) move to a new line
+	if [[ ! $REPLY =~ ^[Yy]$ ]]
+		then
+		exit 1
+	fi
+else
+	echo -e "Sorry but your System is not supported by this script, if you want your system supported "
+	echo -e "open an issue on GitHub: https://github.com/servisys/ispconfig_setup"
 	exit 1
 fi
 

@@ -8,6 +8,8 @@ CheckLinux() {
   #Extract information on system
   . /etc/os-release
 
+  # Set DISTRO variable to null
+  DISTRO=''
 
   #---------------------------------------------------------------------
   #    Debian 7 Wheezy
