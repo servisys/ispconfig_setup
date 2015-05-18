@@ -4,52 +4,47 @@
 #---------------------------------------------------------------------
 
 CheckLinux() {
-if [ -f /etc/debian_version ]; then
-  apt-get -yqq install lsb-release
-  #echo -e "Checking your installed Linux Version... "
- 
+
+  #Extract information on system
+  . /etc/os-release
+
+  # Set DISTRO variable to null
+  DISTRO=''
+
   #---------------------------------------------------------------------
   #    Debian 7 Wheezy
   #---------------------------------------------------------------------
   
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
-		DISTRO=debian7
-		#echo -e "Attention: Debian Wheezy is OldStable. Please Upgrade to Latest Debian Version with dist-upgrade !!!"
-	fi
+  if echo $ID-$VERSION_ID | grep -iq "debian-7"; then
+	DISTRO=debian7
+	#echo -e "Attention: Debian Wheezy is OldStable. Please Upgrade to Latest Debian Version with dist-upgrade !!!"
   fi
+  
 
   #---------------------------------------------------------------------
   #    Debian 8 Jessie
   #---------------------------------------------------------------------
   
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
+  if echo $ID-$VERSION_ID | grep -iq "debian-8"; then
 		DISTRO=debian8
 		#echo -e "Attention: if you distro is debian Jessie, only Squirrelmail will be supported as Webmail"
-	fi
   fi
 
   #---------------------------------------------------------------------
-  #    Ubuntu
+  #    Ubuntu 14.04
   #---------------------------------------------------------------------
   
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
-		DISTRO=ubuntu
-	fi
+  if echo $ID-$VERSION_ID | grep -iq "ubuntu-14.04"; then
+		DISTRO=ubuntu14.04
   fi
 
   #---------------------------------------------------------------------
   #    CentOS
   #---------------------------------------------------------------------
 
-  if [ -f /etc/centos-release ]; then
-    if [ `cat /etc/centos-release | grep 7.0 | wc -l` -ne 0 ]; then
-        DISTRO=centos7
-    fi
+  if echo $ID-$VERSION_ID | grep -iq "centos-7"; then
+		DISTRO=centos7
   fi
-fi
 
   # ONLY for Debug..... :)
   #echo -e "Your Distro is: " $DISTRO

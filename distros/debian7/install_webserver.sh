@@ -65,8 +65,8 @@ InstallWebServer() {
 	service php5-fpm reload
 	apt-get -y install fcgiwrap
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
-        # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-    	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+    # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
+    echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
 
 	if [ $CFG_PHPMYADMIN == "yes" ]; then
 		echo "==========================================================================================="
@@ -80,7 +80,7 @@ InstallWebServer() {
 	   	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
 		echo -e "[${green}DONE${NC}]\n"
 	fi
-
+    service nginx restart
   fi
   echo -e "${green}done! ${NC}\n"
 }
