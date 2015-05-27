@@ -25,7 +25,7 @@ InstallWebServer() {
 		echo "Press ENTER to continue... "
 		read DUMMY
 		echo -n "Installing phpMyAdmin... "
-		apt-get -yqq install phpmyadmin
+		apt-get -y install phpmyadmin
 		echo -e "[${green}DONE${NC}]\n"
 	fi
 	
@@ -76,7 +76,7 @@ InstallWebServer() {
 		echo "Press ENTER to continue... "
 		read DUMMY
 		echo -n "Installing phpMyAdmin... "
-		apt-get -yqq install phpmyadmin
+		apt-get -y install phpmyadmin
 	   	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
 		echo -e "[${green}DONE${NC}]\n"
 	fi

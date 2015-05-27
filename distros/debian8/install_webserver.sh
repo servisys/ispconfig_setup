@@ -26,7 +26,7 @@ InstallWebServer() {
 	echo "Press ENTER to continue... "
 	read DUMMY
 	echo -n "Installing phpMyAdmin... "
-	apt-get -yqq install phpmyadmin
+	apt-get -y install phpmyadmin
 	echo -e "[${green}DONE${NC}]\n"
   fi
 	
@@ -67,7 +67,7 @@ InstallWebServer() {
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
         # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
     	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt-get -qqy install phpmyadmin
+	apt-get -y install phpmyadmin
     	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
   fi
   echo -e "[${green}DONE${NC}]\n"
