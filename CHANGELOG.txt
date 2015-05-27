@@ -1,3 +1,8 @@
+v.1.0.13
+- Fix phpmyadmin install process hangs
+- Added warning for roundcube install to modify config for rounducbe remote user and pass 
+- Disable fstab edit for quota in OpenVZ environment
+
 v.1.0.12
 - Added operation system detect based on /etc/os-relase
 - Added stop installation check if no suported os detected
