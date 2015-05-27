@@ -106,7 +106,7 @@ if [ -f /etc/debian_version ]; then
   InstallSQLServer 2>> /var/log/ispconfig_setup.log
   InstallMTA 2>> /var/log/ispconfig_setup.log
   InstallAntiVirus 2>> /var/log/ispconfig_setup.log
-  InstallWebServer 2>> /var/log/ispconfig_setup.log
+  InstallWebServer
   InstallFTP 2>> /var/log/ispconfig_setup.log
   if [ $CFG_QUOTA == "y" ]; then
 	InstallQuota 2>> /var/log/ispconfig_setup.log
