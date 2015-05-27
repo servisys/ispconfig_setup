@@ -1,3 +1,6 @@
+v.1.0.13
+- Fix phpmyadmin install process hangs
+
 v.1.0.12
 - Added operation system detect based on /etc/os-relase
 - Added stop installation check if no suported os detected
