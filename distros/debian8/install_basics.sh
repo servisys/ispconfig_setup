@@ -9,11 +9,10 @@ InstallBasics() {
   echo -e "[${green}DONE${NC}]\n"
 
   echo "Installing basic packages... "
-  apt-get -y install ssh openssh-server vim-nox ntp ntpdate debconf-utils binutils sudo git lsb-release > /dev/null 2>&1
+  apt-get -y install ssh openssh-server vim-nox php5 ntp ntpdate debconf-utils binutils sudo git lsb-release > /dev/null 2>&1
 
   echo "dash dash/sh boolean false" | debconf-set-selections
   dpkg-reconfigure -f noninteractive dash > /dev/null 2>&1
   echo -n "Reconfigure dash... "
   echo -e "[${green}DONE${NC}]\n"
 }
-
