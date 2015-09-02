@@ -51,11 +51,7 @@ to install debian as required for ISPConfig
 After you got a fresh and perfect Debian installation you had to
 
 ```shell
-apt-get -y install unzip
-wget https://github.com/servisys/ispconfig_setup/archive/master.zip
-unzip master.zip
-cd ispconfig_setup-master
-./install.sh
+cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
 ```
 
 Follow the instruction on the screen
