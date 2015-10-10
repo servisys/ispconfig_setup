@@ -130,8 +130,12 @@ if [ -f /etc/debian_version ]; then
   	echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
 	echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";
   fi
-else
-  echo "${red}Unsupported linux distribution.${NC}"
+else 
+	if [ -f /etc/centos-release ]; then
+		echo "Ok Centos Release, ready on next relases"
+	else
+		echo "${red}Unsupported linux distribution.${NC}"
+	fi
 fi
 
 exit 0
