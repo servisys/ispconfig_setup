@@ -4,8 +4,7 @@
 #---------------------------------------------------------------------
 InstallWebStats() {
   echo -n "Installing stats... ";
-  apt-get -y install vlogger webalizer awstats > /dev/null 2>&1
-  sed -i 's/^/#/' /etc/cron.d/awstats
+  yum -y install webalizer awstats perl-DateTime-Format-HTTP perl-DateTime-Format-Builder > /dev/null 2>&1
   echo -e "${green}done! ${NC}\n"
 }
 

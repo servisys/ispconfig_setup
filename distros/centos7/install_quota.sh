@@ -4,7 +4,7 @@
 #---------------------------------------------------------------------
 InstallQuota() {
   echo -n "Installing and initializing quota (this might take while)... "
-  apt-get -qqy install quota quotatool > /dev/null 2>&1
+  yum -y install quota > /dev/null 2>&1
 
 
   if ! [ -f /proc/user_beancounters ]; then

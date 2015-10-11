@@ -3,64 +3,94 @@
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
-  echo "==========================================================================================="
-  echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-  echo "Due to a bug in dbconfig-common, this can't be automated."
-  echo "==========================================================================================="
-  echo "Press ENTER to continue... "
-  read DUMMY
 
   if [ $CFG_WEBSERVER == "apache" ]; then
-	echo "Installing Apache and Modules... "
-	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
-	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt-get -y install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libexpat1 ssl-cert libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-suphp libruby libapache2-mod-ruby libapache2-mod-python > /dev/null 2>&1  
+    echo "Installing Apache and..."
+    yum -y install httpd
 	echo -e "${green}done!${NC}\n"
-	echo "Installing PHP and Modules... "
-	apt-get -y install php5 php5-common php5-dev php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1 
+	echo "Installing PHP, Python and Modules... "
+	yum -y install mod_ssl php php-mysql php-mbstring php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc  php-pecl-apc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy php-fpm > /dev/null 2>&1 
+	sed -i "s/error_reporting = E_ALL \& ~E_DEPRECATED \& ~E_STRICT/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED/" /etc/php.ini
+	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/" /etc/php.ini
+	sed -i "s/;date.timezone =/date.timezone = 'Europe\/Berlin'/" /etc/php.ini
+	cd /usr/local/src
+	wget http://suphp.org/download/suphp-0.7.2.tar.gz
+	tar zxvf suphp-0.7.2.tar.gz
+	wget -O suphp.patch https://lists.marsching.com/pipermail/suphp/attachments/20130520/74f3ac02/attachment.patch
+	patch -Np1 -d suphp-0.7.2 < suphp.patch
+	cd suphp-0.7.2
+	autoreconf -if
+	./configure --prefix=/usr/ --sysconfdir=/etc/ --with-apr=/usr/bin/apr-1-config --with-apache-user=apache --with-setid-mode=owner --with-logfile=/var/log/httpd/suphp_log
+    make
+    make install
+	echo "LoadModule suphp_module modules/mod_suphp.so" > /etc/httpd/conf.d/suphp.conf
+	echo "[global]" > /etc/suphp.conf
+	echo ";Path to logfile" >> /etc/suphp.conf 
+	echo "logfile=/var/log/httpd/suphp.log" >> /etc/suphp.conf
+	echo ";Loglevel" >> /etc/suphp.conf
+	echo "loglevel=info" >> /etc/suphp.conf
+	echo ";User Apache is running as" >> /etc/suphp.conf
+	echo "webserver_user=apache" >> /etc/suphp.conf
+	echo ";Path all scripts have to be in" >> /etc/suphp.conf
+	echo "docroot=/" >> /etc/suphp.conf
+	echo ";Path to chroot() to before executing script" >> /etc/suphp.conf
+	echo ";chroot=/mychroot" >> /etc/suphp.conf
+	echo "; Security options" >> /etc/suphp.conf
+	echo "allow_file_group_writeable=true" >> /etc/suphp.conf
+	echo "allow_file_others_writeable=false" >> /etc/suphp.conf
+	echo "allow_directory_group_writeable=true" >> /etc/suphp.conf
+	echo "allow_directory_others_writeable=false" >> /etc/suphp.conf
+	echo ";Check wheter script is within DOCUMENT_ROOT" >> /etc/suphp.conf
+	echo "check_vhost_docroot=true" >> /etc/suphp.conf
+	echo ";Send minor error messages to browser" >> /etc/suphp.conf
+	echo "errors_to_browser=false" >> /etc/suphp.conf
+	echo ";PATH environment variable" >> /etc/suphp.conf
+	echo "env_path=/bin:/usr/bin" >> /etc/suphp.conf
+	echo ";Umask to set, specify in octal notation" >> /etc/suphp.conf
+	echo "umask=0077" >> /etc/suphp.conf
+	echo "; Minimum UID" >> /etc/suphp.conf
+	echo "min_uid=100" >> /etc/suphp.conf
+	echo "; Minimum GID" >> /etc/suphp.conf
+	echo "min_gid=100" >> /etc/suphp.conf
+	echo "" >> /etc/suphp.conf
+	echo "[handlers]" >> /etc/suphp.conf
+	echo ";Handler for php-scripts" >> /etc/suphp.conf
+	echo "x-httpd-suphp="php:/usr/bin/php-cgi"" >> /etc/suphp.conf
+	echo ";Handler for CGI-scripts" >> /etc/suphp.conf
+	echo "x-suphp-cgi=\"execute:"'!'"self\"" >> /etc/suphp.conf
+	
+	sed -i '0,/<FilesMatch \\.php$>/ s/<FilesMatch \\.php$>/<Directory \/usr\/share>\n<FilesMatch \\.php$>/' /etc/httpd/conf.d/php.conf
+	sed -i '0,/<\/FilesMatch>/ s/<\/FilesMatch>/<\/FilesMatch>\n<\/Directory>/' /etc/httpd/conf.d/php.conf
+	
+	systemctl start php-fpm.service
+    systemctl enable php-fpm.service
+    systemctl enable httpd.service
+	
+	yum -y install python-devel
+	cd /usr/local/src/
+	wget http://dist.modpython.org/dist/mod_python-3.5.0.tgz
+	tar xfz mod_python-3.5.0.tgz
+	cd mod_python-3.5.0
+	./configure
+	make
+	make install
+	echo 'LoadModule python_module modules/mod_python.so' > /etc/httpd/conf.modules.d/10-python.conf
 	echo -e "${green}done!${NC}\n"
 	echo "Installing needed Programs for PHP and Apache... "
-	apt-get -y install mcrypt imagemagick memcached curl tidy> /dev/null 2>&1
-    echo -e "${green}done!${NC}\n"	
+	yum -y install curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel mod_fcgid php-cli httpd-devel > /dev/null 2>&1
+	echo -e "${green}done!${NC}\n"	
 	echo "Installing phpMyAdmin... "
-	apt-get -qqy install phpmyadmin
+	yum -y install phpmyadmin
 	echo -e "${green}done!${NC}\n"
-	a2enmod suexec > /dev/null 2>&1
-	a2enmod rewrite > /dev/null 2>&1
-	a2enmod ssl > /dev/null 2>&1
-	a2enmod actions > /dev/null 2>&1
-	a2enmod include > /dev/null 2>&1
-	a2enmod dav_fs > /dev/null 2>&1
-	a2enmod dav > /dev/null 2>&1
-	a2enmod auth_digest > /dev/null 2>&1
-	a2enmod fastcgi > /dev/null 2>&1
-	a2enmod alias > /dev/null 2>&1
-	a2enmod fcgid > /dev/null 2>&1
-	service apache2 restart > /dev/null 2>&1
-	sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
-	sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
-	sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
-	sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
-	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini # Removed, because not longer present in php 5.6
+    sed -i "s/Require ip 127.0.0.1/#Require ip 127.0.0.1/" /etc/httpd/conf.d/phpMyAdmin.conf
+    sed -i '0,/Require ip ::1/ s/Require ip ::1/#Require ip ::1\n       Require all granted/' /etc/httpd/conf.d/phpMyAdmin.conf
+	sed -i "s/'cookie'/'http'/" /etc/phpMyAdmin/config.inc.php
+	systemctl enable  httpd.service
+    systemctl restart  httpd.service
 	echo -e "${green}done! ${NC}\n"
   else
-	service apache2 stop
-	update-rc.d -f apache2 remove
-	apt-get -y install nginx
-	service nginx start
-	apt-get -y install php5-fpm php5-mysqlnd php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached php-apc
-	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
-	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
-	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
-	service php5-fpm reload
-	apt-get -y install fcgiwrap
-	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
-    # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-    echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt-get -qqy install phpmyadmin
-	service nginx restart
-    echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+    echo "Sorry Nginx not implemented Yet"
+	read DUMMY
   fi
   echo -e "${green}done! ${NC}\n"
 }
