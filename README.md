@@ -47,7 +47,7 @@ https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-isp
 
 to install debian as required for ISPConfig
 
-* Configuration for Debian 7 / 8
+* Configuration for Debian 7 / 8 / Centos 7
 
 After you got a fresh and perfect Debian installation you had to
 
@@ -55,13 +55,8 @@ After you got a fresh and perfect Debian installation you had to
 cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
 ```
 
-* Configuration for Centos 7
-
-After you got a minimal and perfect Centos 7 installation you had to
-
-```shell
-cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
-```
+Centos 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
+Some feature are missing for now, only implemented Apache and Dovecot, no webmail.
 
 Follow the instruction on the screen
 

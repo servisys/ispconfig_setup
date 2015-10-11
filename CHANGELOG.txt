@@ -1,5 +1,16 @@
 v.1.0.14
-- Starting developing for cento 7
+- Starting developing for centos 7
+- Added implementation for Apache con Centos 7
+- Added implementation for Postfix con Centos 7
+- Added implementation for MySQL con Centos 7
+- Added implementation for Amavis con Centos 7
+
+Known missing part
+- No webmail installed
+- no courier support
+- no nginx support
+- no quota support
+- use with caution for now and don't use on production systems.
 
 v.1.0.13
 - Fix phpmyadmin install process hangs
