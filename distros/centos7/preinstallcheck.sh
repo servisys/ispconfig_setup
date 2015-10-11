@@ -19,25 +19,10 @@ PreInstallCheck() {
   fi
   
   # Detect currect Linux Version
-  # Debian Wheezy Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "wheezy"; then
-		DISTRO=debian7
-	fi
-  fi
-
-  # Debian Wheezy Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "jessie"; then
-		DISTRO=debian8
-	fi
-  fi
-
-  # Ubuntu Detection
-  if command -v lsb_release &> /dev/null; then
-	if lsb_release -a 2> /dev/null | grep -iq "ubuntu"; then
-		DISTRO=ubuntu
-	fi
+  # Centos 7 Detection
+  . /etc/os-release
+  if echo $ID-$VERSION_ID | grep -iq "centos-7"; then
+		DISTRO=centos7
   fi
 
   echo -e "Your Distro is: " $DISTRO
@@ -48,26 +33,21 @@ PreInstallCheck() {
     exit 1
   fi
 
-  # Check for already isntalled ispconfig version
+  # Check for already installed ispconfig version
   if [ -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
     echo "ISPConfig is already installed, can't go on."
 	exit 1
   fi
   
-  # Check source.list
-  contrib=$(cat /etc/apt/sources.list | grep contrib | grep -v "cdrom")
-  nonfree=$(cat /etc/apt/sources.list | grep non-free | grep -v "cdrom")
-  if [ -z "$contrib" ]; then
-        if [ -z "$nonfree" ]; then
-                sed -i 's/main/main contrib non-free/' /etc/apt/sources.list;
-        else
-                sed -i 's/main/main contrib/' /etc/apt/sources.list;
-        fi
-  else
-        if [ -z "$nonfree" ]; then
-                sed -i 's/main/main non-free/' /etc/apt/sources.list;
-        fi
+  while [ "x$CFG_NETWORK" == "x" ]
+  do
+	CFG_NETWORK=$(whiptail --title "NETWORK" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Have you already configured Network? If not we'll invoke network configuration tool for you" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
+  done
+  
+  if [ $CFG_NETWORK == "no" ]; then
+		nmtui
   fi
+  
   echo -e "${green}OK${NC}\n"
 }
 

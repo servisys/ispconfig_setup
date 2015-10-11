@@ -4,7 +4,8 @@
 #---------------------------------------------------------------------
 AskQuestions() {
 	  echo "Installing pre-required packages"
-	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail
+	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || yum -y install newt
+
 	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
 	  do
 		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
