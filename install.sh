@@ -71,6 +71,9 @@ if [ -f /bin/figlet ]; then
 	/bin/figlet -p -f font/straight ISPConfig 3
 	/bin/figlet -p -f font/straight Setup script v.1.0.14
 fi
+echo "http://www.servisys.it http://www.temporini.net"
+echo "contact email/hangout: temporini.matteo@gmail.com"
+echo "skype: matteo.temporini"
 echo "========================================="
 echo "ISPConfig 3 System installer"
 echo "========================================="
