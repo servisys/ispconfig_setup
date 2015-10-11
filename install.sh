@@ -66,12 +66,12 @@ source $PWD/distros/$DISTRO/install_fix.sh
 #    Run the installer
 #---------------------------------------------------------------------
 clear
-if [ -f /bin/figlet ]; then
-	/bin/figlet -p -f font/straight Matteo Temporini	
-	/bin/figlet -p -f font/straight ISPConfig 3
-	/bin/figlet -p -f font/straight Setup script v.1.0.14
-fi
+echo "Welcome to ISPConfig Setup Script v.1.0.14"
+echo "This software is developed by Temporini Matteo"
+echo "with the support of the community."
+echo "You can visit my website at the followings URLS"
 echo "http://www.servisys.it http://www.temporini.net"
+echo "and contact me with the following information"
 echo "contact email/hangout: temporini.matteo@gmail.com"
 echo "skype: matteo.temporini"
 echo "========================================="
