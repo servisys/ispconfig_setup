@@ -5,7 +5,7 @@
 # ISPConfig 3 system installer
 #
 # Script: install.sh
-# Version: 1.0.5
+# Version: 1.0.14
 # Author: Matteo Temporini <temporini.matteo@gmail.com>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
@@ -37,6 +37,7 @@ clear
 #---------------------------------------------------------------------
 
 source $PWD/functions/check_linux.sh
+echo "Checking your system, please wait..."
 CheckLinux
 #---------------------------------------------------------------------
 # Load needed Modules
@@ -64,7 +65,12 @@ source $PWD/distros/$DISTRO/install_fix.sh
 # Main program [ main() ]
 #    Run the installer
 #---------------------------------------------------------------------
-
+clear
+if [ -f /bin/figlet ]; then
+	/bin/figlet -p -f font/straight Matteo Temporini	
+	/bin/figlet -p -f font/straight ISPConfig 3
+	/bin/figlet -p -f font/straight Setup script v.1.0.14
+fi
 echo "========================================="
 echo "ISPConfig 3 System installer"
 echo "========================================="

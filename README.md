@@ -11,7 +11,8 @@ Tested on:
 
 - Debian 8 Jessie (VmWare Esxi, Virtualbox, OVH VPS)
 - Debian 7 Wheezy (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- ISPConfig 3.0.5.4p5
+- Centos 7 (Vitualbox)
+- ISPConfig 3.*
 
 For now it is tested and developed only on Debian systems.
 
@@ -23,11 +24,11 @@ This repository contains some scripts for the automation
 
 of installation of ISPConfig 3 control panel.
 
-For now it's composed of two main scritps
+Before start be sure to configure your server following the following guides:
 
-- install.sh = is the main scritps wich will do a default install
-		       based on the https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
-                       and to fix some issue on normal installation files, provided by debian repository
+Debian 7: https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
+Debian 8: https://www.howtoforge.com/tutorial/debian-8-jessie-minimal-server/
+Centos 7: http://www.howtoforge.com/centos-7-server
 
 You can Choose during install:
 - Apache / Nginx
@@ -49,6 +50,14 @@ to install debian as required for ISPConfig
 * Configuration for Debian 7 / 8
 
 After you got a fresh and perfect Debian installation you had to
+
+```shell
+cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+```
+
+* Configuration for Centos 7
+
+After you got a minimal and perfect Centos 7 installation you had to
 
 ```shell
 cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
