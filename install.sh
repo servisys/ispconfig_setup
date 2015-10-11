@@ -132,7 +132,9 @@ if [ -f /etc/debian_version ]; then
   fi
 else 
 	if [ -f /etc/centos-release ]; then
-		echo "Ok Centos Release, ready on next relases"
+		PreInstallCheck
+		AskQuestions 
+		InstallBasics 2>> /var/log/ispconfig_setup.log
 	else
 		echo "${red}Unsupported linux distribution.${NC}"
 	fi
