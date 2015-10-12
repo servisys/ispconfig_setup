@@ -26,9 +26,9 @@ of installation of ISPConfig 3 control panel.
 
 Before start be sure to configure your server following the following guides:
 
-Debian 7: https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
-Debian 8: https://www.howtoforge.com/tutorial/debian-8-jessie-minimal-server/
-Centos 7: http://www.howtoforge.com/centos-7-server
+- Debian 7: https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
+- Debian 8: https://www.howtoforge.com/tutorial/debian-8-jessie-minimal-server/
+- Centos 7: http://www.howtoforge.com/centos-7-server
 
 You can Choose during install:
 - Apache / Nginx
