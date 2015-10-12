@@ -66,15 +66,16 @@ InstallWebServer() {
     systemctl enable php-fpm.service
     systemctl enable httpd.service
 	
-	yum -y install python-devel
-	cd /usr/local/src/
-	wget http://dist.modpython.org/dist/mod_python-3.5.0.tgz
-	tar xfz mod_python-3.5.0.tgz
-	cd mod_python-3.5.0
-	./configure
-	make
-	make install
-	echo 'LoadModule python_module modules/mod_python.so' > /etc/httpd/conf.modules.d/10-python.conf
+	#removed python support for now
+	#yum -y install python-devel
+	#cd /usr/local/src/
+	#wget http://dist.modpython.org/dist/mod_python-3.5.0.tgz
+	#tar xfz mod_python-3.5.0.tgz
+	#cd mod_python-3.5.0
+	#./configure
+	#make
+	#make install
+	#echo 'LoadModule python_module modules/mod_python.so' > /etc/httpd/conf.modules.d/10-python.conf
 	echo -e "${green}done!${NC}\n"
 	echo "Installing needed Programs for PHP and Apache... "
 	yum -y install curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel mod_fcgid php-cli httpd-devel > /dev/null 2>&1
