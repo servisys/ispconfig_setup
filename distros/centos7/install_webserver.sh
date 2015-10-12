@@ -8,7 +8,7 @@ InstallWebServer() {
     echo "Installing Apache and..."
     yum -y install httpd
 	echo -e "${green}done!${NC}\n"
-	echo "Installing PHP, Python and Modules... "
+	echo "Installing PHP and Modules... "
 	yum -y install mod_ssl php php-mysql php-mbstring php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc  php-pecl-apc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy php-fpm > /dev/null 2>&1 
 	sed -i "s/error_reporting = E_ALL \& ~E_DEPRECATED \& ~E_STRICT/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED/" /etc/php.ini
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/" /etc/php.ini
