@@ -17,8 +17,6 @@ CheckLinux() {
   
   if echo $ID-$VERSION_ID | grep -iq "debian-7"; then
 	DISTRO=debian7
-	apt-get -y install figlet > /dev/null
-	#echo -e "Attention: Debian Wheezy is OldStable. Please Upgrade to Latest Debian Version with dist-upgrade !!!"
   fi
   
 
@@ -28,8 +26,6 @@ CheckLinux() {
   
   if echo $ID-$VERSION_ID | grep -iq "debian-8"; then
 		DISTRO=debian8
-		apt-get -y install figlet > /dev/null
-		#echo -e "Attention: if you distro is debian Jessie, only Squirrelmail will be supported as Webmail"
   fi
 
   #---------------------------------------------------------------------
@@ -38,7 +34,6 @@ CheckLinux() {
   
   if echo $ID-$VERSION_ID | grep -iq "ubuntu-14.04"; then
 		DISTRO=ubuntu14.04
-		apt-get -y install figlet > /dev/null
   fi
 
   #---------------------------------------------------------------------
@@ -47,7 +42,6 @@ CheckLinux() {
 
   if echo $ID-$VERSION_ID | grep -iq "centos-7"; then
 		DISTRO=centos7
-		yum -y install figlet  > /dev/null
   fi
 
   # ONLY for Debug..... :)
