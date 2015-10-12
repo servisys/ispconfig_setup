@@ -36,6 +36,7 @@ You can Choose during install:
 - Quota On/Off
 - Jailkit On/Off
 - Squirrelmail / Roundcube
+- ISPConfig 3 Standard / Expert mode
 
 ### How do I get set up? ###
 
