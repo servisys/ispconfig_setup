@@ -141,7 +141,7 @@ else
 	if [ -f /etc/centos-release ]; then
 		echo "Attention pls, this is the very first version of the script for Centos 7"
 		echo "Pls use only for test pourpose for now."
-		echo "${red}Not yet implemented: courier, webmail of any kind, nginx support${NC}"
+		echo -e "${red}Not yet implemented: courier, webmail of any kind, nginx support${NC}"
 		echo "Help us to test and implement, press ENTER if you understand what i'm talinkg about..."
 		read DUMMY
 		PreInstallCheck
@@ -167,7 +167,7 @@ else
 		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
 		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
 		echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
-		echo "${red}Now webmail installed for now. Follow step 23 at https://www.howtoforge.com/perfect-server-centos-7-apache2-mysql-php-pureftpd-postfix-dovecot-and-ispconfig3-p3 ${NC}"
+		echo -e "${red}Now webmail installed for now. Follow step 23 at https://www.howtoforge.com/perfect-server-centos-7-apache2-mysql-php-pureftpd-postfix-dovecot-and-ispconfig3-p3 ${NC}"
 		else
 			echo "${red}Unsupported linux distribution.${NC}"
 		fi

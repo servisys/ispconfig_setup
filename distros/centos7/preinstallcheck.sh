@@ -18,21 +18,6 @@ PreInstallCheck() {
         exit 1;
   fi
   
-  # Detect currect Linux Version
-  # Centos 7 Detection
-  . /etc/os-release
-  if echo $ID-$VERSION_ID | grep -iq "centos-7"; then
-		DISTRO=centos7
-  fi
-
-  echo -e "Your Distro is: " $DISTRO
-  read -p "Is this correct? (y/n)" -n 1 -r
-  echo    # (optional) move to a new line
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
-  then
-    exit 1
-  fi
-
   # Check for already installed ispconfig version
   if [ -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
     echo "ISPConfig is already installed, can't go on."
