@@ -2,7 +2,7 @@
 # Function: InstallMysql
 #    Install and configure mysql
 #---------------------------------------------------------------------
-InstallMysql() {
+InstallSQLServer() {
   echo -n "Installing mysql... "
   yum -y install mariadb-server expect > /dev/null 2>&1
   systemctl enable mariadb.service > /dev/null 2>&1

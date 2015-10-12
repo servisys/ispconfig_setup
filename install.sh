@@ -163,7 +163,7 @@ else
 	    fi
 		InstallFail2ban 2>> /var/log/ispconfig_setup.log
 		InstallISPConfig
-		InstallFix
+		#InstallFix
 		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
 		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
 		echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
