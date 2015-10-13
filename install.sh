@@ -163,6 +163,7 @@ else
 			InstallJailkit 2>> /var/log/ispconfig_setup.log
 	    fi
 		InstallFail2ban 2>> /var/log/ispconfig_setup.log
+		InstallWebmail 2>> /var/log/ispconfig_setup.log
 		InstallISPConfig
 		#InstallFix
 		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
