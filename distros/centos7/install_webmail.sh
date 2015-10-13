@@ -12,7 +12,7 @@ InstallWebmail() {
 	  mysql -u root -p$CFG_MYSQL_ROOT_PWD -e 'GRANT ALL PRIVILEGES on '$ROUNDCUBE_DB'.* to '$ROUNDCUBE_USER'@localhost'
 	  mysql -u root -p$CFG_MYSQL_ROOT_PWD -e 'FLUSH PRIVILEGES;'
 	  cat /etc/roundcubemail/config.inc.php.sample | grep -v db_dsnw > /etc/roundcubemail/config.inc.php
-	  sed -i "s/$config = array();/$config = array();\\`echo \n`$config[\\'db_dsnw\\'] = \\'mysql:\/\/$ROUNDCUBE_USER:$ROUNDCUBE_PWD@localhost\/$ROUNDCUBE_DB\\';/" /etc/roundcubemail/config.inc.php
+	  sed -i "s/$config = array();/\$config = array();\\`echo \n`$config[\\'db_dsnw\\'] = \\'mysql:\/\/$ROUNDCUBE_USER:$ROUNDCUBE_PWD@localhost\/$ROUNDCUBE_DB\\';/" /etc/roundcubemail/config.inc.php
 	  if [ $CFG_WEBSERVER == "apache" ]; then
 		echo "Alias /roundcubemail /usr/share/roundcubemail" > /etc/httpd/conf.d/roundcubemail.conf
 		echo "Alias /webmail /usr/share/roundcubemail" >> /etc/httpd/conf.d/roundcubemail.conf
