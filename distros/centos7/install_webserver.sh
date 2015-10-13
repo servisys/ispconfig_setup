@@ -21,9 +21,9 @@ InstallWebServer() {
 	cd suphp-0.7.2
 	autoreconf -if
 	./configure --prefix=/usr/ --sysconfdir=/etc/ --with-apr=/usr/bin/apr-1-config --with-apache-user=apache --with-setid-mode=owner --with-logfile=/var/log/httpd/suphp_log
-    make
-    make install
-	echo "LoadModule suphp_module modules/mod_suphp.so" > /etc/httpd/conf.d/suphp.conf
+    	make
+    	make install
+	echo "LoadModule suphp_module /usr/lib64/httpd/modules/mod_suphp.so" > /etc/httpd/conf.d/suphp.conf
 	echo "[global]" > /etc/suphp.conf
 	echo ";Path to logfile" >> /etc/suphp.conf 
 	echo "logfile=/var/log/httpd/suphp.log" >> /etc/suphp.conf
