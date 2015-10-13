@@ -9,7 +9,10 @@ InstallWebServer() {
     yum -y install httpd
 	echo -e "${green}done!${NC}\n"
 	echo "Installing PHP and Modules... "
-	yum -y install mod_ssl php php-mysql php-mbstring php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc php-pecl-apc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy php-fpm > /dev/null 2>&1 
+	yum -y install mod_ssl php php-mysql php-mbstring php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc php-pecl-apc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy php-fpm httpd-devel > /dev/null 2>&1 
+	echo "Installing needed Programs for PHP and Apache... "
+	yum -y install curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel mod_fcgid php-cli > /dev/null 2>&1
+	echo -e "${green}done!${NC}\n"	
 	sed -i "s/error_reporting = E_ALL \& ~E_DEPRECATED \& ~E_STRICT/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED/" /etc/php.ini
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/" /etc/php.ini
 	sed -i "s/;date.timezone =/date.timezone = 'Europe\/Berlin'/" /etc/php.ini
@@ -89,9 +92,6 @@ InstallWebServer() {
 	#make install
 	#echo 'LoadModule python_module modules/mod_python.so' > /etc/httpd/conf.modules.d/10-python.conf
 	echo -e "${green}done!${NC}\n"
-	echo "Installing needed Programs for PHP and Apache... "
-	yum -y install curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel mod_fcgid php-cli httpd-devel > /dev/null 2>&1
-	echo -e "${green}done!${NC}\n"	
 	echo "Installing phpMyAdmin... "
 	yum -y install phpmyadmin
 	echo -e "${green}done!${NC}\n"
