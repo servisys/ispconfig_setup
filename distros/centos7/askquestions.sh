@@ -21,11 +21,11 @@ AskQuestions() {
 		CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "dovecot" "(default)" ON "dovecot" "" OFF 3>&1 1>&2 2>&3)
 	  done
 	
-	  if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
-		CFG_QUOTA=n
-	  else
-		CFG_QUOTA=n
-	  fi
+	  #if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
+	#	CFG_QUOTA=n
+	 # else
+		#CFG_QUOTA=n
+	  #fi
 	
 	  if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit?" 10 50) then
 		CFG_JKIT=y

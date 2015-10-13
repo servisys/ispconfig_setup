@@ -153,9 +153,9 @@ else
 		InstallAntiVirus 2>> /var/log/ispconfig_setup.log
 		InstallWebServer
 		InstallFTP 2>> /var/log/ispconfig_setup.log
-		if [ $CFG_QUOTA == "y" ]; then
-			InstallQuota 2>> /var/log/ispconfig_setup.log
-		fi
+		#if [ $CFG_QUOTA == "y" ]; then
+		#		InstallQuota 2>> /var/log/ispconfig_setup.log
+		#fi
 		InstallBind 2>> /var/log/ispconfig_setup.log
         InstallWebStats 2>> /var/log/ispconfig_setup.log
 	    if [ $CFG_JKIT == "y" ]; then

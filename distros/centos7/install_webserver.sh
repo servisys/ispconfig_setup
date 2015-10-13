@@ -14,15 +14,25 @@ InstallWebServer() {
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/" /etc/php.ini
 	sed -i "s/;date.timezone =/date.timezone = 'Europe\/Berlin'/" /etc/php.ini
 	cd /usr/local/src
+	echo "HIT ENTER"; read DUMMY
 	wget http://suphp.org/download/suphp-0.7.2.tar.gz
+	echo "HIT ENTER"; read DUMMY
 	tar zxvf suphp-0.7.2.tar.gz
+	echo "HIT ENTER"; read DUMMY
 	wget -O suphp.patch https://lists.marsching.com/pipermail/suphp/attachments/20130520/74f3ac02/attachment.patch
+	echo "HIT ENTER"; read DUMMY
 	patch -Np1 -d suphp-0.7.2 < suphp.patch
+	echo "HIT ENTER"; read DUMMY
 	cd suphp-0.7.2
+	echo "HIT ENTER"; read DUMMY
 	autoreconf -if
+	echo "HIT ENTER"; read DUMMY
 	./configure --prefix=/usr/ --sysconfdir=/etc/ --with-apr=/usr/bin/apr-1-config --with-apache-user=apache --with-setid-mode=owner --with-logfile=/var/log/httpd/suphp_log
-    	make
-    	make install
+	echo "HIT ENTER"; read DUMMY
+    make
+	echo "HIT ENTER"; read DUMMY
+    make install
+	echo "HIT ENTER"; read DUMMY
 	echo "LoadModule suphp_module /usr/lib64/httpd/modules/mod_suphp.so" > /etc/httpd/conf.d/suphp.conf
 	echo "[global]" > /etc/suphp.conf
 	echo ";Path to logfile" >> /etc/suphp.conf 
