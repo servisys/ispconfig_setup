@@ -23,6 +23,21 @@ PreInstallCheck() {
     echo "ISPConfig is already installed, can't go on."
 	exit 1
   fi
+
+  SELINUX=`cat /etc/selinux/config  | grep "SELINUX=disabled"`
+  if [ -z "$SELINUX" ]; then
+	
+	sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config
+	sed -i "s/SELINUX=permissive/SELINUX=disabled/" /etc/selinux/config
+
+	echo -e "${red}Attention your SELINUX was enabled, we had modified your configuration.${NC}"
+	echo -e "${red}Before restart ISPConfig setup please reboot the server.${NC}"
+	echo -e "${red}The script will exit to let you reboot the server${NC}"
+	echo "Press Enter to exit"
+	read DUMMY
+	exit 1
+  fi
+
   
   while [ "x$CFG_NETWORK" == "x" ]
   do
