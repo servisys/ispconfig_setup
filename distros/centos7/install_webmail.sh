@@ -6,18 +6,34 @@ InstallWebmail() {
   echo -n "Installing webmail client ($CFG_WEBMAIL)... "
   case $CFG_WEBMAIL in
 	"roundcube")
-	  RANDPWD=`date +%N%s | md5sum`
-	  echo "roundcube-core roundcube/dbconfig-install boolean true" | debconf-set-selections
-	  echo "roundcube-core roundcube/database-type select mysql" | debconf-set-selections
-	  echo "roundcube-core roundcube/mysql/admin-pass password $CFG_MYSQL_ROOT_PWD" | debconf-set-selections
-	  echo "roundcube-core roundcube/db/dbname string roundcube" | debconf-set-selections
-	  echo "roundcube-core roundcube/mysql/app-pass password $RANDOMPWD" | debconf-set-selections
-	  echo "roundcube-core roundcube/app-password-confirm password $RANDPWD" | debconf-set-selections
-	  apt-get -y install roundcube roundcube-mysql git > /dev/null 2>&1
+	  yum -y install roundcubemail > /dev/null 2>&1
+	  mysql -u root -p$CFG_MYSQL_ROOT_PWD -e 'CREATE DATABASE '$ROUNDCUBE_DB';'
+	  mysql -u root -p$CFG_MYSQL_ROOT_PWD -e "CREATE USER '$ROUNDCUBE_USER'@localhost IDENTIFIED BY '$ROUNDCUBE_PWD'"
+	  mysql -u root -p$CFG_MYSQL_ROOT_PWD -e 'GRANT ALL PRIVILEGES on '$ROUNDCUBE_DB'.* to '$ROUNDCUBE_USER'@localhost'
+	  mysql -u root -p$CFG_MYSQL_ROOT_PWD -e 'FLUSH PRIVILEGES;'
+	  cat /etc/roundcubemail/config.inc.php.sample | grep -v db_dsnw > /etc/roundcubemail/config.inc.php
+	  sed -i "s/$config = array();/$config = array();\\`echo \n`$config[\\'db_dsnw\\'] = \\'mysql:\/\/$ROUNDCUBE_USER:$ROUNDCUBE_PWD@localhost\/$ROUNDCUBE_DB\\';/" /etc/roundcubemail/config.inc.php
 	  if [ $CFG_WEBSERVER == "apache" ]; then
-	  	sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
-	  	sed -i "/Options +FollowSymLinks/a\\`echo -e '\n\r'`  DirectoryIndex index.php\\`echo -e '\n\r'`\\`echo -e '\n\r'`  <IfModule mod_php5.c>\\`echo -e '\n\r'`        AddType application/x-httpd-php .php\\`echo -e '\n\r'`\\`echo -e '\n\r'`        php_flag magic_quotes_gpc Off\\`echo -e '\n\r'`        php_flag track_vars On\\`echo -e '\n\r'`        php_flag register_globals Off\\`echo -e '\n\r'`        php_value include_path .:/usr/share/php\\`echo -e '\n\r'`  </IfModule>" /etc/roundcube/apache.conf
-	  	sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
+		echo "Alias /roundcubemail /usr/share/roundcubemail" > /etc/httpd/conf.d/roundcubemail.conf
+		echo "Alias /webmail /usr/share/roundcubemail" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "<Directory /usr/share/roundcubemail/>" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "        Options none" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "        AllowOverride Limit" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "        Require all granted" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "</Directory>" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "<Directory /usr/share/roundcubemail/installer>" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "        Options none" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "        AllowOverride Limit" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "        Require all granted" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "</Directory>" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "<Directory /usr/share/roundcubemail/bin/>" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "    Order Allow,Deny" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "    Deny from all" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "</Directory>" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "<Directory /usr/share/roundcubemail/plugins/enigma/home/>" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "    Order Allow,Deny" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "    Deny from all" >> /etc/httpd/conf.d/roundcubemail.conf
+		echo "</Directory>" >> /etc/httpd/conf.d/roundcubemail.conf
 	  else
 		echo "  location /roundcube {" > /etc/nginx/roundcube.conf
 		echo "          root /var/lib/;" >> /etc/nginx/roundcube.conf
@@ -98,7 +114,7 @@ InstallWebmail() {
 	  ;;
   esac
   if [ $CFG_WEBSERVER == "apache" ]; then
-	  service apache2 restart > /dev/null 2>&1
+	  systemctl restart httpd.service > /dev/null 2>&1
   else
 	  service nginx restart > /dev/null 2>&1
   fi
