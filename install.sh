@@ -141,7 +141,8 @@ else
 	if [ -f /etc/centos-release ]; then
 		echo "Attention pls, this is the very first version of the script for Centos 7"
 		echo "Pls use only for test pourpose for now."
-		echo -e "${red}Not yet implemented: courier, webmail of any kind, nginx support${NC}"
+		echo -e "${red}Not yet implemented: courier, nginx support${NC}"
+		echo -e "${green}Yet implemented: apache, mysql, bind, postfix, dovecot, roudcube webmail support${NC}"
 		echo "Help us to test and implement, press ENTER if you understand what i'm talinkg about..."
 		read DUMMY
 		PreInstallCheck
