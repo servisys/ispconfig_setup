@@ -7,6 +7,8 @@ InstallMTA() {
 	"courier")
 	  echo -n "Installing courier... ";
 	  echo -e "${red}Sorry not configured yet! ${NC}\n"
+	  echo "Press ENTER"
+	  read DUMMY
 	  ;;
 	"dovecot")
 	  echo -n "Installing dovecot... ";
