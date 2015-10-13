@@ -58,7 +58,7 @@ cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servis
 * Centos 7
 
 ```shell
-cd /tmp; yum install wget unzip; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+cd /tmp; yum install wget unzip net-tools; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
 ```
 
 Centos 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
