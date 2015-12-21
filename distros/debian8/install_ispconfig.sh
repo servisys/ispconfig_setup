@@ -29,16 +29,16 @@ InstallISPConfig() {
 	  echo "ispconfig_use_ssl=y" >> autoinstall.ini
 	  echo
 	  echo "[ssl_cert]" >> autoinstall.ini
-	  echo "ssl_cert_country=IT" >> autoinstall.ini
-	  echo "ssl_cert_state=Italy" >> autoinstall.ini
-	  echo "ssl_cert_locality=Udine" >> autoinstall.ini
-	  echo "ssl_cert_organisation=Servisys di Temporini Matteo" >> autoinstall.ini
-	  echo "ssl_cert_organisation_unit=IT department" >> autoinstall.ini
+	  echo "ssl_cert_country=$SSL_COUNTRY" >> autoinstall.ini
+	  echo "ssl_cert_state=$SSL_STATE" >> autoinstall.ini
+	  echo "ssl_cert_locality=$SSL_LOCALITY" >> autoinstall.ini
+	  echo "ssl_cert_organisation=$SSL_ORGANIZATION" >> autoinstall.ini
+	  echo "ssl_cert_organisation_unit=$SSL_ORGUNIT" >> autoinstall.ini
 	  echo "ssl_cert_common_name=$CFG_HOSTNAME_FQDN" >> autoinstall.ini
 	  echo
 	  echo "[expert]" >> autoinstall.ini
 	  echo "mysql_ispconfig_user=ispconfig" >> autoinstall.ini
-	  echo "mysql_ispconfig_password=afStEratXBsgatRtsa42CadwhQ" >> autoinstall.ini
+	  echo "mysql_ispconfig_password=$CFG_ISPCONFIG_PWD" >> autoinstall.ini
 	  echo "join_multiserver_setup=n" >> autoinstall.ini
 	  echo "mysql_master_hostname=master.example.com" >> autoinstall.ini
 	  echo "mysql_master_root_user=root" >> autoinstall.ini

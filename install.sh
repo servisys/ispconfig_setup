@@ -13,8 +13,6 @@
 #
 #---------------------------------------------------------------------
 
-
-
 #---------------------------------------------------------------------
 # Global variables
 #---------------------------------------------------------------------
@@ -29,6 +27,9 @@ NC='\033[0m' # No Color
 
 #Saving current directory
 PWD=$(pwd);
+
+# Try to load all questions answers
+[ -f $PWD/config.sh ] && source $PWD/config.sh
 
 #---------------------------------------------------------------------
 # Load needed functions
@@ -58,6 +59,7 @@ source $PWD/distros/$DISTRO/install_fail2ban.sh
 source $PWD/distros/$DISTRO/install_webmail.sh
 source $PWD/distros/$DISTRO/install_ispconfig.sh
 source $PWD/distros/$DISTRO/install_fix.sh
+source $PWD/distros/$DISTRO/install_theme.sh
 
 #---------------------------------------------------------------------
 # Main program [ main() ]
@@ -91,18 +93,18 @@ else
 	echo -e "The detected Linux Distribution is: " $ID-$VERSION_ID
 fi
 echo
-if [ -n "$DISTRO" ]; then
-	read -p "Is this correct? (y/n)" -n 1 -r
-	echo    # (optional) move to a new line
-	if [[ ! $REPLY =~ ^[Yy]$ ]]
-		then
-		exit 1
-	fi
-else
-	echo -e "Sorry but your System is not supported by this script, if you want your system supported "
-	echo -e "open an issue on GitHub: https://github.com/servisys/ispconfig_setup"
-	exit 1
-fi
+#if [ -n "$DISTRO" ]; then
+#	read -p "Is this correct? (y/n)" -n 1 -r
+#	echo    # (optional) move to a new line
+#	if [[ ! $REPLY =~ ^[Yy]$ ]]
+#		then
+#		exit 1
+#	fi
+#else
+#	echo -e "Sorry but your System is not supported by this script, if you want your system supported "
+#	echo -e "open an issue on GitHub: https://github.com/servisys/ispconfig_setup"
+#	exit 1
+#fi
 
 
 if [ -f /etc/debian_version ]; then
@@ -127,6 +129,7 @@ if [ -f /etc/debian_version ]; then
   InstallWebmail 2>> /var/log/ispconfig_setup.log
   InstallISPConfig
   InstallFix
+  InstallTheme
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
   echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
@@ -166,6 +169,7 @@ else
 		InstallWebmail 2>> /var/log/ispconfig_setup.log
 		InstallISPConfig
 		#InstallFix
+		InstallTheme
 		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
 		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
 		echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
