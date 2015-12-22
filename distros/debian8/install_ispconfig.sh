@@ -25,7 +25,7 @@ InstallISPConfig() {
 	  else
 		echo "http_server=nginx" >> autoinstall.ini
 	  fi
-	  echo "ispconfig_port=8080" >> autoinstall.ini
+	  echo "ispconfig_port=8443" >> autoinstall.ini
 	  echo "ispconfig_use_ssl=y" >> autoinstall.ini
 	  echo
 	  echo "[ssl_cert]" >> autoinstall.ini
