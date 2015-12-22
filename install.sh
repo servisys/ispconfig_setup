@@ -133,9 +133,6 @@ if [ -f /etc/debian_version ]; then
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
   echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8443 or https://IP_ADDRESS:8443"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
-  if [ $CFG_WEBMAIL == "roundcube" ]; then
-	echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roudcube user, as the one you inserted in ISPconfig ${NC}"
-  fi
   if [ $CFG_WEBSERVER == "nginx" ]; then
   	echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
 	echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";

@@ -3,10 +3,9 @@
 #    Install the chosen webmail client. Squirrelmail or Roundcube
 #---------------------------------------------------------------------
 InstallWebmail() {
-  echo -n "Installing webmail client ($CFG_WEBMAIL)... "
-  case $CFG_WEBMAIL in
-	"roundcube")
-	#!/bin/bash
+echo -n "Installing webmail client ($CFG_WEBMAIL)... "
+if [ $CFG_WEBMAIL == "roundcube" ]; then
+#!/bin/bash
 
 mkdir /opt/roundcube
 cd /opt/roundcube
@@ -144,15 +143,9 @@ Alias /webmail /opt/roundcube
 END
 
 a2enconf roundcube
-if [ $CFG_WEBSERVER == "apache" ]; then
-	  service apache2 restart > /dev/null 2>&1
-else
-  service nginx restart > /dev/null 2>&1
 fi
-echo -e "[${green}DONE${NC}]\n"
 
-  ;;
-	"squirrelmail")	
+if [ $CFG_WEBMAIL == "squirrelmail" ]; then	
   echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
   apt-get -yqq install squirrelmail wamerican > /dev/null 2>&1
   ln -s /etc/squirrelmail/apache.conf /etc/apache2/conf-enabled/squirrelmail
@@ -181,11 +174,13 @@ echo -e "[${green}DONE${NC}]\n"
 	  esac
   mkdir /var/lib/squirrelmail/tmp
   chown www-data /var/lib/squirrelmail/tmp
-  if [ $CFG_WEBSERVER == "apache" ]; then
-	  service apache2 restart > /dev/null 2>&1
-  else
-	  service nginx restart > /dev/null 2>&1
-  fi
-  echo -e "[${green}DONE${NC}]\n"
+fi
+
+if [ $CFG_WEBSERVER == "apache" ]; then
+  service apache2 restart > /dev/null 2>&1
+else
+  service nginx restart > /dev/null 2>&1
+fi
+echo -e "[${green}DONE${NC}]\n"
 }
 
