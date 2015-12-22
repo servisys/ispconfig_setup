@@ -8,38 +8,17 @@ InstallWebmail() {
 	"roundcube")
 	#!/bin/bash
 
-back_title="ISPConfig 3 Roundcube-CleanTheme Installer"
-
-while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
-do
-	MYSQL_PASSWORD=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please insert the MySQL Root Password" --nocancel 10 50 3>&1 1>&2 2>&3)
-done
-
-
-#-- INSTALL Clean theme
-cd /tmp
-wget https://github.com/dclardy64/ISPConfig_Clean-3.0.5/archive/master.zip
-unzip master.zip
-cd ISPConfig_Clean-3.0.5-master
-cp -R interface/* /usr/local/ispconfig/interface/
-
-sed -i "s|\$conf\['theme'\] = 'default'|\$conf\['theme'\] = 'ispc-clean'|" /usr/local/ispconfig/interface/lib/config.inc.php
-sed -i "s|\$conf\['logo'\] = 'themes/default|\$conf\['logo'\] = 'themes/ispc-clean|" /usr/local/ispconfig/interface/lib/config.inc.php
-
-mysql -u root -p$CFG_MYSQL_ROOT_PWD < sql/ispc-clean.sql
-
-#-- INSTALL roundbube
-
 mkdir /opt/roundcube
+cd /opt/roundcube
 
-wget https://downloads.sourceforge.net/project/roundcubemail/roundcubemail/1.1.3/roundcubemail-1.1.3-complete.tar.gz -P /opt/roundcube
-tar xfz /opt/roundcube/roundcubemail-1.1.3-complete.tar.gz
+wget https://downloads.sourceforge.net/project/roundcubemail/roundcubemail/1.1.3/roundcubemail-1.1.3-complete.tar.gz
+tar xfz roundcubemail-1.1.3-complete.tar.gz
 
-mv /opt/roundcube/roundcubemail-1.1.3/* .
-mv /opt/roundcube/roundcubemail-1.1.3/.htaccess .
+mv roundcubemail-1.1.3/* .
+mv roundcubemail-1.1.3/.htaccess .
 
-rmdir /opt/roundcube/roundcubemail-1.1.3
-rm /opt/roundcube/roundcubemail-1.1.3-complete.tar.gz
+rmdir roundcubemail-1.1.3
+rm roundcubemail-1.1.3-complete.tar.gz
 
 chown -R www-data:www-data /opt/roundcube
 
