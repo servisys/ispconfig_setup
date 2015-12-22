@@ -70,9 +70,9 @@ Alias /webmail /opt/roundcube
  php_flag display_errors Off
  php_flag log_errors On
  # php_value error_log logs/errors
- php_value upload_max_filesize 10M
- php_value post_max_size 12M
- php_value memory_limit 64M
+ php_value upload_max_filesize 50M
+ php_value post_max_size 50M
+ php_value memory_limit 128M
  php_flag zlib.output_compression Off
  php_flag magic_quotes_gpc Off
  php_flag magic_quotes_runtime Off
