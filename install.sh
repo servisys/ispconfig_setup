@@ -66,7 +66,7 @@ source $PWD/distros/$DISTRO/install_theme.sh
 #    Run the installer
 #---------------------------------------------------------------------
 clear
-echo "Welcome to ISPConfig Setup Script v.1.0.14"
+echo "Welcome to ISPConfig Setup Script v.1.0.15"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
 echo "You can visit my website at the followings URLS"
@@ -131,7 +131,7 @@ if [ -f /etc/debian_version ]; then
   InstallFix
   InstallTheme
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
-  echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
+  echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8443 or https://IP_ADDRESS:8443"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
   if [ $CFG_WEBMAIL == "roundcube" ]; then
 	echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roudcube user, as the one you inserted in ISPconfig ${NC}"
