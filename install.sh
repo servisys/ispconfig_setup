@@ -171,7 +171,7 @@ else
 		#InstallFix
 		InstallTheme
 		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
-		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
+		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8443 or https://IP_ADDRESS:8443"
 		echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
 		echo -e "${red}If you setup Roundcube webmail go to http://$CFG_HOSTNAME_FQDN/roundcubemail/installer and configure db connection${NC}"
 		echo -e "${red}After that disable access to installer in /etc/httpd/conf.d/roundcubemail.conf${NC}"
