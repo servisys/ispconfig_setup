@@ -8,7 +8,7 @@ echo "Installing pre-required packages"
 	  
 	  while [ "x$CFG_SQLSERVER" == "x" ]
           do
-                CFG_SQLSERVER=$(whiptail --title "SQLSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select SQL Server type" 10 50 2 "MySQL" "(default)" ON "MariaDB" "" OFF 3>&1 1>&2 2>&3)
+                CFG_SQLSERVER=$(whiptail --title "SQLSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select SQL Server type" 10 50 2 "MariaDB" "(default)" ON "MySQL" "" OFF 3>&1 1>&2 2>&3)
           done
 		  
 	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
