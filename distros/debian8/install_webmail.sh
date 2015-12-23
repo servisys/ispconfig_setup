@@ -5,7 +5,7 @@
 InstallWebmail() {
 	echo -n "Installing webmail client ($CFG_WEBMAIL)... "
 	
-	if [ $CFG_WEBMAIL == "roundcube" ]; then
+	if [ "$CFG_WEBMAIL" == "roundcube" ]; then
 
 		mkdir /opt/roundcube
 		cd /opt/roundcube
@@ -21,126 +21,120 @@ InstallWebmail() {
 
 		chown -R www-data:www-data /opt/roundcube
 
-		mysql --defaults-file=/etc/mysql/debian.cnf << END
+mysql --defaults-file=/etc/mysql/debian.cnf << END
+CREATE DATABASE roundcubemail;
+GRANT ALL PRIVILEGES ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$CFG_MYSQL_ROOT_PWD';
+flush privileges;
+quit
+END
 
-		CREATE DATABASE roundcubemail;
-		GRANT ALL PRIVILEGES ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$CFG_MYSQL_ROOT_PWD';
-		flush privileges;
-		quit
+mysql --defaults-file=/etc/mysql/debian.cnf roundcubemail < /opt/roundcube/SQL/mysql.initial.sql
 
-		END
+cat > /opt/roundcube/config/config.inc.php << END
+<?php
 
-		mysql --defaults-file=/etc/mysql/debian.cnf roundcubemail < /opt/roundcube/SQL/mysql.initial.sql
+$config = array();
+$config['db_dsnw'] = 'mysql://roundcube:$CFG_MYSQL_ROOT_PWD@localhost/roundcubemail';
+$config['default_host'] = 'localhost';
+$config['smtp_server'] = '';
+$config['smtp_port'] = 25;
+$config['smtp_user'] = '';
+$config['smtp_pass'] = '';
+$config['support_url'] = '';
+$config['product_name'] = 'Roundcube Webmail';
+$config['des_key'] = 'rcmail-!24ByteDESkey*Str';
+$config['plugins'] = array(
+'archive',
+'zipdownload',
+);
+$config['skin'] = 'larry';
+END
 
-		cat > /opt/roundcube/config/config.inc.php << END
+cat >  /etc/apache2/conf-available/roundcube.conf << END
+Alias /roundcube /opt/roundcube
+Alias /webmail /opt/roundcube
 
-		<?php
+<Directory /opt/roundcube>
+Options +FollowSymLinks
+# AddDefaultCharset UTF-8
+AddType text/x-component .htc
 
-		$config = array();
-		$config['db_dsnw'] = 'mysql://roundcube:$CFG_MYSQL_ROOT_PWD@localhost/roundcubemail';
-		$config['default_host'] = 'localhost';
-		$config['smtp_server'] = '';
-		$config['smtp_port'] = 25;
-		$config['smtp_user'] = '';
-		$config['smtp_pass'] = '';
-		$config['support_url'] = '';
-		$config['product_name'] = 'Roundcube Webmail';
-		$config['des_key'] = 'rcmail-!24ByteDESkey*Str';
-		$config['plugins'] = array(
-		'archive',
-		'zipdownload',
-		);
-		$config['skin'] = 'larry';
+<IfModule mod_php5.c>
+AddType application/x-httpd-php .php
+php_flag display_errors Off
+php_flag log_errors On
+# php_value error_log logs/errors
+php_value upload_max_filesize 50M
+php_value post_max_size 50M
+php_value memory_limit 128M
+php_flag zlib.output_compression Off
+php_flag magic_quotes_gpc Off
+php_flag magic_quotes_runtime Off
+php_flag zend.ze1_compatibility_mode Off
+php_flag suhosin.session.encrypt Off
+#php_value session.cookie_path /
+php_flag session.auto_start Off
+php_value session.gc_maxlifetime 21600
+php_value session.gc_divisor 500
+php_value session.gc_probability 1
+</IfModule>
 
-		END
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^favicon\.ico$ skins/larry/images/favicon.ico
+# security rules:
+# - deny access to files not containing a dot or starting with a dot
+# in all locations except installer directory
+RewriteRule ^(?!installer)(\.?[^\.]+)$ - [F]
+# - deny access to some locations
+RewriteRule ^/?(\.git|\.tx|SQL|bin|config|logs|temp|tests|program\/(include|lib|localization|steps)) - [F]
+# - deny access to some documentation files
+RewriteRule /?(README\.md|composer\.json-dist|composer\.json|package\.xml)$ - [F]
+</IfModule>
 
-		cat >  /etc/apache2/conf-available/roundcube.conf << END
+<IfModule mod_deflate.c>
+SetOutputFilter DEFLATE
+</IfModule>
 
-		Alias /roundcube /opt/roundcube
-		Alias /webmail /opt/roundcube
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresDefault "access plus 1 month"
+</IfModule>
 
-		<Directory /opt/roundcube>
-		Options +FollowSymLinks
-		# AddDefaultCharset UTF-8
-		AddType text/x-component .htc
+FileETag MTime Size
 
-		<IfModule mod_php5.c>
-		AddType application/x-httpd-php .php
-		php_flag display_errors Off
-		php_flag log_errors On
-		# php_value error_log logs/errors
-		php_value upload_max_filesize 50M
-		php_value post_max_size 50M
-		php_value memory_limit 128M
-		php_flag zlib.output_compression Off
-		php_flag magic_quotes_gpc Off
-		php_flag magic_quotes_runtime Off
-		php_flag zend.ze1_compatibility_mode Off
-		php_flag suhosin.session.encrypt Off
-		#php_value session.cookie_path /
-		php_flag session.auto_start Off
-		php_value session.gc_maxlifetime 21600
-		php_value session.gc_divisor 500
-		php_value session.gc_probability 1
-		</IfModule>
+<IfModule mod_autoindex.c>
+Options -Indexes
+</ifModule>
 
-		<IfModule mod_rewrite.c>
-		RewriteEngine On
-		RewriteRule ^favicon\.ico$ skins/larry/images/favicon.ico
-		# security rules:
-		# - deny access to files not containing a dot or starting with a dot
-		# in all locations except installer directory
-		RewriteRule ^(?!installer)(\.?[^\.]+)$ - [F]
-		# - deny access to some locations
-		RewriteRule ^/?(\.git|\.tx|SQL|bin|config|logs|temp|tests|program\/(include|lib|localization|steps)) - [F]
-		# - deny access to some documentation files
-		RewriteRule /?(README\.md|composer\.json-dist|composer\.json|package\.xml)$ - [F]
-		</IfModule>
+AllowOverride None
+Require all granted
+</Directory>
 
-		<IfModule mod_deflate.c>
-		SetOutputFilter DEFLATE
-		</IfModule>
+<Directory /opt/roundcube/plugins/enigma/home>
+Options -FollowSymLinks
+AllowOverride None
+Require all denied
+</Directory>
 
-		<IfModule mod_expires.c>
-		ExpiresActive On
-		ExpiresDefault "access plus 1 month"
-		</IfModule>
+<Directory /opt/roundcube/config>
+Options -FollowSymLinks
+AllowOverride None
+Require all denied
+</Directory>
 
-		FileETag MTime Size
+<Directory /opt/roundcube/temp>
+Options -FollowSymLinks
+AllowOverride None
+Require all denied
+</Directory>
 
-		<IfModule mod_autoindex.c>
-		Options -Indexes
-		</ifModule>
-
-		AllowOverride None
-		Require all granted
-		</Directory>
-
-		<Directory /opt/roundcube/plugins/enigma/home>
-		Options -FollowSymLinks
-		AllowOverride None
-		Require all denied
-		</Directory>
-
-		<Directory /opt/roundcube/config>
-		Options -FollowSymLinks
-		AllowOverride None
-		Require all denied
-		</Directory>
-
-		<Directory /opt/roundcube/temp>
-		Options -FollowSymLinks
-		AllowOverride None
-		Require all denied
-		</Directory>
-
-		<Directory /opt/roundcube/logs>
-		Options -FollowSymLinks
-		AllowOverride None
-		Require all denied
-		</Directory>
-
-		END
+<Directory /opt/roundcube/logs>
+Options -FollowSymLinks
+AllowOverride None
+Require all denied
+</Directory>
+END
 
 		a2enconf roundcube
 	else	
@@ -174,7 +168,7 @@ InstallWebmail() {
 		chown www-data /var/lib/squirrelmail/tmp
 	fi
 
-	if [ $CFG_WEBSERVER == "apache" ]; then
+	if [ "$CFG_WEBSERVER" == "apache" ]; then
 	service apache2 restart > /dev/null 2>&1
 	else
 	service nginx restart > /dev/null 2>&1
