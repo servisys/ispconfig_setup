@@ -96,5 +96,13 @@ echo "Installing pre-required packages"
 	  do
 		SSL_ORGUNIT=$(whiptail --title "SSL Organization Unit" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Organization Unit (ex. IT Department)" --nocancel 10 50 3>&1 1>&2 2>&3)
 	  done
+	  while [ "x$CFG_THEME" == "x" ]
+          do
+            if (whiptail --title "Theme" --backtitle "$WT_BACKTITLE" --yesno "Would you like install the ISPC Clean Theme?" 10 50) then
+                	CFG_THEME=y
+            else
+                	CFG_THEME=n
+            fi
+           done
 }
 

@@ -116,7 +116,9 @@ if [ -f /etc/debian_version ]; then
   InstallWebmail 2>> /var/log/ispconfig_setup.log
   InstallISPConfig
   InstallFix
-  InstallTheme
+  if [ $CFG_THEME == "y" ]; then
+	InstallTheme
+  fi
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
   echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8443 or https://IP_ADDRESS:8443"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
@@ -153,7 +155,9 @@ else
 		InstallWebmail 2>> /var/log/ispconfig_setup.log
 		InstallISPConfig
 		#InstallFix
-		InstallTheme
+		if [ $CFG_THEME == "y" ]; then
+			InstallTheme
+		fi
 		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
 		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8443 or https://IP_ADDRESS:8443"
 		echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
