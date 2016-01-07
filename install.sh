@@ -5,15 +5,13 @@
 # ISPConfig 3 system installer
 #
 # Script: install.sh
-# Version: 1.0.14
+# Version: 1.0.15
 # Author: Matteo Temporini <temporini.matteo@gmail.com>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
 #
 #
 #---------------------------------------------------------------------
-
-
 
 #---------------------------------------------------------------------
 # Global variables
@@ -29,6 +27,9 @@ NC='\033[0m' # No Color
 
 #Saving current directory
 PWD=$(pwd);
+
+# Try to load all questions answers
+[ -f $PWD/config.sh ] && source $PWD/config.sh
 
 #---------------------------------------------------------------------
 # Load needed functions
@@ -58,13 +59,14 @@ source $PWD/distros/$DISTRO/install_fail2ban.sh
 source $PWD/distros/$DISTRO/install_webmail.sh
 source $PWD/distros/$DISTRO/install_ispconfig.sh
 source $PWD/distros/$DISTRO/install_fix.sh
+source $PWD/distros/$DISTRO/install_theme.sh
 
 #---------------------------------------------------------------------
 # Main program [ main() ]
 #    Run the installer
 #---------------------------------------------------------------------
 clear
-echo "Welcome to ISPConfig Setup Script v.1.0.14"
+echo "Welcome to ISPConfig Setup Script v.1.0.15"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
 echo "You can visit my website at the followings URLS"
@@ -91,19 +93,6 @@ else
 	echo -e "The detected Linux Distribution is: " $ID-$VERSION_ID
 fi
 echo
-if [ -n "$DISTRO" ]; then
-	read -p "Is this correct? (y/n)" -n 1 -r
-	echo    # (optional) move to a new line
-	if [[ ! $REPLY =~ ^[Yy]$ ]]
-		then
-		exit 1
-	fi
-else
-	echo -e "Sorry but your System is not supported by this script, if you want your system supported "
-	echo -e "open an issue on GitHub: https://github.com/servisys/ispconfig_setup"
-	exit 1
-fi
-
 
 if [ -f /etc/debian_version ]; then
   PreInstallCheck
@@ -127,12 +116,12 @@ if [ -f /etc/debian_version ]; then
   InstallWebmail 2>> /var/log/ispconfig_setup.log
   InstallISPConfig
   InstallFix
-  echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
-  echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
-  echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
-  if [ $CFG_WEBMAIL == "roundcube" ]; then
-	echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roudcube user, as the one you inserted in ISPconfig ${NC}"
+  if [ $CFG_THEME == "y" ]; then
+	InstallTheme
   fi
+  echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
+  echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8443 or https://IP_ADDRESS:8443"
+  echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
   if [ $CFG_WEBSERVER == "nginx" ]; then
   	echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
 	echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";
@@ -166,8 +155,11 @@ else
 		InstallWebmail 2>> /var/log/ispconfig_setup.log
 		InstallISPConfig
 		#InstallFix
+		if [ $CFG_THEME == "y" ]; then
+			InstallTheme
+		fi
 		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
-		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
+		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8443 or https://IP_ADDRESS:8443"
 		echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
 		echo -e "${red}If you setup Roundcube webmail go to http://$CFG_HOSTNAME_FQDN/roundcubemail/installer and configure db connection${NC}"
 		echo -e "${red}After that disable access to installer in /etc/httpd/conf.d/roundcubemail.conf${NC}"
@@ -177,4 +169,3 @@ else
 fi
 
 exit 0
-

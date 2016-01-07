@@ -1,18 +1,10 @@
-# README #
-
-[![PayPayl donate button](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TB4Q3UJDC5JDJ "Help US support this project using Paypal")
-
-# Version #
-v.1.0.14
+v.1.0.15
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
 Tested on:
 
 - Debian 8 Jessie (VmWare Esxi, Virtualbox, OVH VPS)
-- Debian 7 Wheezy (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Centos 7 (Vitualbox)
-- ISPConfig 3.*
 
 For now it is tested and developed only on Debian systems.
 
@@ -53,16 +45,15 @@ to install debian as required for ISPConfig
 After you got a fresh and perfect Debian installation you had to
 
 ```shell
-cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/SergiX44/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
 ```
 * Centos 7
 
 ```shell
-cd /tmp; yum install wget unzip net-tools; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+cd /tmp; yum install wget unzip net-tools; wget --no-check-certificate -O installer.tgz "https://github.com/SergiX44/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
 ```
 
 Centos 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
-Some feature are missing for now, only implemented Apache and Dovecot, no webmail.
 
 Follow the instruction on the screen
 
@@ -72,3 +63,4 @@ Follow the instruction on the screen
 * Special thanks to Torsten Widmann for contribution to the code
 * The code is based on the "Automatic Debian System Installation for ISPConfig 3" of Author: Mark Stunnenberg <mark@e-rave.nl>
 * Howtoforge community https://www.howtoforge.com/community/
+* Updated by SergiX44
