@@ -13,7 +13,7 @@
 #
 #---------------------------------------------------------------------
 
-
+# Uncomment the following line for debug porpouse
 
 #---------------------------------------------------------------------
 # Global variables
@@ -41,9 +41,9 @@ CheckLinux
 # Load needed Modules
 #---------------------------------------------------------------------
 
-source $PWD/distros/$DISTRO/install_basics.sh
 source $PWD/distros/$DISTRO/preinstallcheck.sh
 source $PWD/distros/$DISTRO/askquestions.sh
+source $PWD/distros/$DISTRO/install_basics.sh
 source $PWD/distros/$DISTRO/install_postfix.sh
 source $PWD/distros/$DISTRO/install_mysql.sh
 source $PWD/distros/$DISTRO/install_mta.sh
@@ -81,7 +81,7 @@ echo "all software needed to run ISPConfig 3."
 echo "When this script starts running, it'll keep going all the way"
 echo "So before you continue, please make sure the following checklist is ok:"
 echo
-echo "- This is a clean / standard debian installation";
+echo "- This is a clean standard clean installation for supported systems";
 echo "- Internet connection is working properly";
 echo
 echo

@@ -3,14 +3,15 @@
 [![PayPayl donate button](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TB4Q3UJDC5JDJ "Help US support this project using Paypal")
 
 # Version #
-v.1.0.14
+v.1.0.15
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
 Tested on:
 
-- Debian 8 Jessie (VmWare Esxi, Virtualbox, OVH VPS)
+- Debian 8 Jessie (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Debian 7 Wheezy (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Ubuntu 14.04 Trusty (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Centos 7 (Vitualbox)
 - ISPConfig 3.*
 
@@ -48,7 +49,7 @@ https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-isp
 
 to install debian as required for ISPConfig
 
-* Configuration for Debian 7 / 8
+* Configuration for Debian 7 / 8 - Ubuntu
 
 After you got a fresh and perfect Debian installation you had to
 
