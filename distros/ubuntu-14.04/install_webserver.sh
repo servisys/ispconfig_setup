@@ -16,7 +16,7 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing needed Programs for PHP and Apache... "
 	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
-    	echo -e "[${green}DONE${NC}]\n"
+    echo -e "[${green}DONE${NC}]\n"
 	
   if [ $CFG_PHPMYADMIN == "yes" ]; then
 	echo "==========================================================================================="
@@ -67,7 +67,7 @@ InstallWebServer() {
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
         # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
     	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt-get -y install phpmyadmin
+		apt-get -y install phpmyadmin
     	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
   fi
   echo -e "[${green}DONE${NC}]\n"
