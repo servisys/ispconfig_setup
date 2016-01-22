@@ -13,7 +13,7 @@ AskQuestionsCluster(){
 		  CFG_SETUP_MASTER=n
 	  fi
     
-    if [ $CFG_SETUP_MASTER == "n"]: then
+    if [ $CFG_SETUP_MASTER == "n"]; then
       if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Web server" 10 50) then
         CFG_SETUP_WEB=y
       else
@@ -41,7 +41,7 @@ AskQuestionsCluster(){
       CFG_SETUP_DB=n
     fi
     
-    if [ $CFG_SETUP_WEB == "y"]: then
+    if [ $CFG_SETUP_WEB == "y"]; then
       while [ "x$CFG_WEBSERVER" == "x" ]
       do
             CFG_WEBSERVER=$(whiptail --title "WEBSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select webserver type" 10 50 2 "apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
@@ -65,7 +65,7 @@ AskQuestionsCluster(){
 	    done
     fi
     
-    if [ $CFG_SETUP_MAIL == "y"]: then
+    if [ $CFG_SETUP_MAIL == "y"]; then
       while [ "x$CFG_MTA" == "x" ]
       do
         CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "dovecot" "(default)" ON "courier" "" OFF 3>&1 1>&2 2>&3)
