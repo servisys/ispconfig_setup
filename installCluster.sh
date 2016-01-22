@@ -111,7 +111,7 @@ if [ -f /etc/debian_version ]; then
   AskQuestionsCluster
   InstallBasics 2>> /var/log/ispconfig_setup.log
   InstallSQLServer 2>> /var/log/ispconfig_setup.log
-  if [ CFG_SETUP_WEB == "y"]; then
+  if [ CFG_SETUP_WEB == "y" ]; then
     InstallWebServer
     InstallFTP 2>> /var/log/ispconfig_setup.log
     if [ $CFG_QUOTA == "y" ]; then
@@ -122,12 +122,12 @@ if [ -f /etc/debian_version ]; then
     fi
     InstallWebmail 2>> /var/log/ispconfig_setup.log
   fi
-  if [ CFG_SETUP_MAIL == "y"]; then
+  if [ CFG_SETUP_MAIL == "y" ]; then
     InstallPostfix 2>> /var/log/ispconfig_setup.log
     InstallMTA 2>> /var/log/ispconfig_setup.log
     InstallAntiVirus 2>> /var/log/ispconfig_setup.log
   fi
-  if [ CFG_SETUP_NS == "y"]; then
+  if [ CFG_SETUP_NS == "y" ]; then
     InstallBind 2>> /var/log/ispconfig_setup.log
   fi
   if [ CFG_SETUP_WEB == "n" ]; then
