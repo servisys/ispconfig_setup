@@ -6,13 +6,22 @@
 AskQuestionsCluster(){
   	echo "Installing pre-required packages"
 	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail > /dev/null 2>&1
-    
-    if (whiptail --title "Setup Master" --backtitle "$WT_BACKTITLE" --yesno "Do you want too setup a Master server?" 10 50) then
+
+	  while [ "x$CFG_SQLSERVER" == "x" ]
+	  do
+		CFG_SQLSERVER=$(whiptail --title "SQLSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select SQL Server type" 10 50 2 "MySQL" "(default)" ON "MariaDB" "" OFF 3>&1 1>&2 2>&3)
+	  done
+		  
+	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
+	  do
+		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
+	  done                                                                
+	if (whiptail --title "Setup Master" --backtitle "$WT_BACKTITLE" --yesno "Do you want too setup a Master server?" 10 50) then
 		  CFG_SETUP_MASTER=y
 	  else
 		  CFG_SETUP_MASTER=n
 	  fi
-    
+
     if [ $CFG_SETUP_MASTER == "n" ]; then
       if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Web server" 10 50) then
         CFG_SETUP_WEB=y
