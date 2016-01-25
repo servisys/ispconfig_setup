@@ -11,7 +11,7 @@ AskQuestionsCluster(){
 	  do
 		CFG_SQLSERVER=$(whiptail --title "SQLSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select SQL Server type" 10 50 2 "MySQL" "(default)" ON "MariaDB" "" OFF 3>&1 1>&2 2>&3)
 	  done
-		  
+	
 	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
 	  do
 		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
@@ -23,13 +23,27 @@ AskQuestionsCluster(){
 	  fi
 
     if [ $CFG_SETUP_MASTER == "n" ]; then
+      
+      while [ "x$CFG_MASTER_FQDN" == "x" ]
+      do
+      CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the master FQDN" --nocancel 10 50 3>&1 1>&2 2>&3)
+      done
+      
+      while [ "x$CFG_MASTER_MYSQL_ROOT_PWD" == "x" ]
+      do
+      CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the master root password" --nocancel 10 50 3>&1 1>&2 2>&3)
+      done
+      
+      
       if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Web server" 10 50) then
         CFG_SETUP_WEB=y
       else
         CFG_SETUP_WEB=n
       fi
+      MULTISERVER=y
     else 
       CFG_SETUP_WEB=y
+      MULTISERVER=n
     fi
     
     if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Mail server" 10 50) then
@@ -92,7 +106,7 @@ AskQuestionsCluster(){
       fi
     fi
     
-    CFG_ISPC=expert
+    CFG_ISPC=standard
     CFG_WEBMAIL=squirrelmail
     
     SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country (ex. EN)" --nocancel 10 50 3>&1 1>&2 2>&3)
