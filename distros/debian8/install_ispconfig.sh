@@ -56,9 +56,9 @@ InstallISPConfig() {
 	  echo "[update]" >> autoinstall.ini
 	  echo "do_backup=yes" >> autoinstall.ini
 	  echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
-	  echo "mysql_master_hostname=master.example.com" >> autoinstall.ini
+    echo "mysql_master_hostname=$CFG_MASTER_FQDN" >> autoinstall.ini
 	  echo "mysql_master_root_user=root" >> autoinstall.ini
-	  echo "mysql_master_root_password=ispconfig" >> autoinstall.ini
+    echo "mysql_master_root_password=$CFG_MASTER_MYSQL_ROOT_PWD" >> autoinstall.ini
 	  echo "mysql_master_database=dbispconfig" >> autoinstall.ini
 	  echo "reconfigure_permissions_in_master_database=no" >> autoinstall.ini
 	  echo "reconfigure_services=yes" >> autoinstall.ini
