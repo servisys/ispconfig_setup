@@ -30,11 +30,7 @@ back_title="ISPConfig 3 RoundCube Installer"
     done
   fi
 
-if [ $web_server == "Apache"]; then
-  RoundCube_install_Apache
-else
-  RoundCube_install_NginX
-fi
+
 
 RoundCube_install_Apache() {
 
@@ -195,3 +191,9 @@ sed -i "s|^\(\$config\['smtp_user'\] =\).*$|\1 \'%u\';|" /var/www/roundcube/conf
 sed -i "s|^\(\$config\['smtp_pass'\] =\).*$|\1 \'%p\';|" /var/www/roundcube/config/config.inc.php
 
 rm -rf /var/www/roundcube/installer
+
+if [ $web_server == "Apache"]; then
+  RoundCube_install_Apache
+else
+  RoundCube_install_NginX
+fi
