@@ -15,20 +15,18 @@ back_title="ISPConfig 3 RoundCube Installer"
   do
     mysql_pass=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please specify a MySQL Root Password" --nocancel 10 50 3>&1 1>&2 2>&3)
   done
-  if [ $web_server == "NginX" ]; then
-    while [ "x$roundcube_db" == "x" ]
-    do
-      roundcube_db=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please specify a RoundCube Database" --nocancel 10 50 3>&1 1>&2 2>&3)
-    done
-    while [ "x$roundcube_user" == "x" ]
-    do
-      roundcube_user=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please specify a RoundCube User" --nocancel 10 50 3>&1 1>&2 2>&3)
-    done
-    while [ "x$roundcube_pass" == "x" ]
-    do
-      roundcube_pass=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please specify a RoundCube User Password" --nocancel 10 50 3>&1 1>&2 2>&3)
-    done
-  fi
+  while [ "x$roundcube_db" == "x" ]
+  do
+    roundcube_db=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please specify a RoundCube Database" --nocancel 10 50 3>&1 1>&2 2>&3)
+  done
+  while [ "x$roundcube_user" == "x" ]
+  do
+    roundcube_user=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please specify a RoundCube User" --nocancel 10 50 3>&1 1>&2 2>&3)
+  done
+  while [ "x$roundcube_pass" == "x" ]
+  do
+    roundcube_pass=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please specify a RoundCube User Password" --nocancel 10 50 3>&1 1>&2 2>&3)
+  done
 
 
 
