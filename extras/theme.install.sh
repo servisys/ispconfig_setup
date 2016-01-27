@@ -9,7 +9,7 @@
 
 back_title="ISPConfig 3 Theme Installer"
 
-theme_questions (){
+
 	while [ "x$theme" == "x" ]
 	do
 		theme=$(whiptail --title "Theme" --backtitle "$back_title" --nocancel --radiolist "Select Theme" 10 50 2 "ISPC-Clean" "(default)" ON "Other" "" OFF 3>&1 1>&2 2>&3)
@@ -18,10 +18,6 @@ theme_questions (){
 	do
 		mysql_pass=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please insert the MySQL Root Password" --nocancel 10 50 3>&1 1>&2 2>&3)
 	done
-}
-
-
-function_install_ISPC_Clean() {
 
 	# Get Theme
 	cd /tmp
@@ -35,4 +31,3 @@ function_install_ISPC_Clean() {
 
 	mysql -u root -p$mysql_pass < sql/ispc-clean.sql
 
-}

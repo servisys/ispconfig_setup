@@ -7,7 +7,6 @@
 
 back_title="ISPConfig 3 RoundCube Installer"
 
-roundcube_questions (){
   while [ "x$web_server" == "x" ]
   do
     web_server=$(whiptail --title "Web Server" --backtitle "$back_title" --nocancel --radiolist "Select Web Server Software" 10 50 2 "Apache" "(default)" ON "NginX" "" OFF 3>&1 1>&2 2>&3)
@@ -191,4 +190,3 @@ sed -i "s|^\(\$config\['smtp_user'\] =\).*$|\1 \'%u\';|" /var/www/roundcube/conf
 sed -i "s|^\(\$config\['smtp_pass'\] =\).*$|\1 \'%p\';|" /var/www/roundcube/config/config.inc.php
 
 rm -rf /var/www/roundcube/installer
-}
