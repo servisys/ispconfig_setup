@@ -29,7 +29,12 @@ back_title="ISPConfig 3 RoundCube Installer"
       roundcube_pass=$(whiptail --title "MySQL Root Password" --backtitle "$back_title" --inputbox "Please specify a RoundCube User Password" --nocancel 10 50 3>&1 1>&2 2>&3)
     done
   fi
-}
+
+if [ $web_server == "Apache"]; then
+  RoundCube_install_Apache
+else
+  RoundCube_install_NginX
+fi
 
 RoundCube_install_Apache() {
 
