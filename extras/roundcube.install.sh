@@ -191,8 +191,8 @@ sed -i "s|^\(\$config\['smtp_pass'\] =\).*$|\1 \'%p\';|" /var/www/roundcube/conf
 rm -rf /var/www/roundcube/installer
 }
 
-if [ $web_server == "Apache"]; then
-  RoundCube_install_Apache
-else
+if [ $web_server == "NginX"]; then
   RoundCube_install_NginX
+else
+  RoundCube_install_Apache
 fi
