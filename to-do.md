@@ -1,10 +1,10 @@
-Must have:
+Must have:</br>
   - [ ] Fix the script(would be nice hehe)!
   - [ ] Documentation on the cluster setup with this script...
-    </br>Nice to Have:
+    </br>Nice to Have:</br>
       - [ ] Add Users too mysql-datbase host via sh or pHp script
       - [ ] Add/include the feature to install skin on ispconfig3
       - [ ] Add roundcube with skin to the installer... 
-    </br>Maybe some day:
+    </br>Maybe some day:</br>
         - [ ] World domination?
         
