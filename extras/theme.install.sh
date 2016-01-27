@@ -21,7 +21,7 @@ back_title="ISPConfig 3 Theme Installer"
 
 	# Get Theme
 	cd /tmp
-	wget https://github.com/dclardy64/ISPConfig_Clean-3.0.5/archive/master.zip
+	wget https://github.com/dylian94/ISPConfig_Clean-3.0.5/archive/master.zip
 	unzip master.zip
 	cd ISPConfig_Clean-3.0.5-master
 	cp -R interface/* /usr/local/ispconfig/interface/
