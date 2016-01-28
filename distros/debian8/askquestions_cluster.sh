@@ -119,7 +119,7 @@ AskQuestionsCluster(){
     fi
     
     CFG_ISPC=standard
-    CFG_WEBMAIL=squirrelmail
+#    CFG_WEBMAIL=squirrelmail
     
     SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country (ex. EN)" --nocancel 10 50 3>&1 1>&2 2>&3)
     SSL_STATE=$(whiptail --title "SSL State" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - STATE (ex. Italy)" --nocancel 10 50 3>&1 1>&2 2>&3)
