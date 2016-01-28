@@ -86,6 +86,18 @@ AskQuestionsCluster(){
 		  do
 				CFG_PHPMYADMIN=$(whiptail --title "Install phpMyAdmin" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to install phpMyAdmin during install?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
 	    done
+
+      while [ "x$CFG_WEBMAIL" == "x" ]
+      do
+      CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select your webmail client" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
+      done
+
+      if [ $CFG_WEBMAIL == "roundcube" ]; then
+          roundcube_db=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database name" --nocancel 10 50 3>&1 1>&2 2>&3)
+          roundcube_user=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube user" --nocancel 10 50 3>&1 1>&2 2>&3)
+          roundcube_pass=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube user password" --nocancel 10 50 3>&1 1>&2 2>&3)
+      fi
+
     fi
     
     if [ $CFG_SETUP_MAIL == "y" ]; then
