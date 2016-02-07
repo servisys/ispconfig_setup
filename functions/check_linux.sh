@@ -16,7 +16,7 @@ CheckLinux() {
   #---------------------------------------------------------------------
   
   if echo $ID-$VERSION_ID | grep -iq "debian-7"; then
-	DISTRO=debian7
+		DISTRO=debian7
   fi
   
 
