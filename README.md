@@ -38,7 +38,7 @@ You can Choose during install:
 - Jailkit On/Off
 - Squirrelmail / Roundcube
 - ISPConfig 3 Standard / Expert mode
-- ISPConfig 3 Multiserver Setup
+- ISPConfig 3 Multiserver Setup (* Debian 8 only for now)
 
 ### How do I get set up? ###
 
