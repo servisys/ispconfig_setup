@@ -33,6 +33,21 @@ AskQuestionsCluster(){
       do
       CFG_MASTER_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the master root password" --nocancel 10 50 3>&1 1>&2 2>&3)
       done
+
+	  text="Before continue, you got to lunch the following SQL commands on your master server
+
+	  CREATE USER 'root'@'$(ping -c1 $(hostname) | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
+
+	  GRANT ALL PRIVILEGES ON * . * TO 'root'@'$(ping -c1 $(hostname) | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
+
+	  CREATE USER 'root'@'$(hostname)' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
+
+	  GRANT ALL PRIVILEGES ON * . * TO 'root'@'$(hostname)' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
+
+	  Press "OK" when done
+	  "
+
+	  whiptail --title "MySQL command on Master Server" --msgbox "$text" 25 90
       
       
       if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Web server" 10 50) then
