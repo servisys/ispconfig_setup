@@ -72,5 +72,6 @@ Follow the instruction on the screen
 
 * The scripts and instructions have been produced by Matteo Temporini ( <temporini.matteo@gmail.com> )
 * Special thanks to Torsten Widmann for contribution to the code
+* Special thankt to Michiel Kamphuis for contribution to Multiserver Setup integration
 * The code is based on the "Automatic Debian System Installation for ISPConfig 3" of Author: Mark Stunnenberg <mark@e-rave.nl>
 * Howtoforge community https://www.howtoforge.com/community/
