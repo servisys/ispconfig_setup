@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #---------------------------------------------------------------------
 # install.sh
 #
@@ -13,7 +13,9 @@
 #
 #---------------------------------------------------------------------
 
-# Uncomment the following line for debug porpouse
+#Those lines are for logging porpuses
+exec > >(tee -i /var/log/ispconfig_setup.log)
+exec 2>&1
 
 #---------------------------------------------------------------------
 # Global variables
