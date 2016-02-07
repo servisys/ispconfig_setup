@@ -121,31 +121,31 @@ if [ -f /etc/debian_version ]; then
   else
 	AskQuestionsMultiserver
   fi
-  InstallBasics 2>> /var/log/ispconfig_setup.log
-  InstallSQLServer 2>> /var/log/ispconfig_setup.log
+  InstallBasics 
+  InstallSQLServer 
   if [ $CFG_SETUP_WEB == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
     InstallWebServer
-    InstallFTP 2>> /var/log/ispconfig_setup.log
+    InstallFTP 
     if [ $CFG_QUOTA == "y" ]; then
-    InstallQuota 2>> /var/log/ispconfig_setup.log
+    InstallQuota 
     fi
     if [ $CFG_JKIT == "y" ]; then
-    InstallJailkit 2>> /var/log/ispconfig_setup.log
+    InstallJailkit 
     fi
-    InstallWebmail 2>> /var/log/ispconfig_setup.log
+    InstallWebmail 
   else
-	InstallBasePhp 2>> /var/log/ispconfig_setup.log   #to remove in feature release
+	InstallBasePhp    #to remove in feature release
   fi  
   if [ $CFG_SETUP_MAIL == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
-    InstallPostfix 2>> /var/log/ispconfig_setup.log
-    InstallMTA 2>> /var/log/ispconfig_setup.log
-    InstallAntiVirus 2>> /var/log/ispconfig_setup.log
+    InstallPostfix 
+    InstallMTA 
+    InstallAntiVirus 
   fi  
   if [ $CFG_SETUP_NS == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
-    InstallBind 2>> /var/log/ispconfig_setup.log
+    InstallBind 
   fi  
-  InstallWebStats 2>> /var/log/ispconfig_setup.log  
-  InstallFail2ban 2>> /var/log/ispconfig_setup.log
+  InstallWebStats   
+  InstallFail2ban 
   InstallISPConfig
   InstallFix
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
@@ -168,23 +168,23 @@ else
 		read DUMMY
 		PreInstallCheck
 		AskQuestions 
-		InstallBasics 2>> /var/log/ispconfig_setup.log
-		InstallPostfix 2>> /var/log/ispconfig_setup.log
-		InstallSQLServer 2>> /var/log/ispconfig_setup.log
-		InstallMTA 2>> /var/log/ispconfig_setup.log
-		InstallAntiVirus 2>> /var/log/ispconfig_setup.log
+		InstallBasics 
+		InstallPostfix 
+		InstallSQLServer 
+		InstallMTA 
+		InstallAntiVirus 
 		InstallWebServer
-		InstallFTP 2>> /var/log/ispconfig_setup.log
+		InstallFTP 
 		#if [ $CFG_QUOTA == "y" ]; then
-		#		InstallQuota 2>> /var/log/ispconfig_setup.log
+		#		InstallQuota 
 		#fi
-		InstallBind 2>> /var/log/ispconfig_setup.log
-        InstallWebStats 2>> /var/log/ispconfig_setup.log
+		InstallBind 
+        InstallWebStats 
 	    if [ $CFG_JKIT == "y" ]; then
-			InstallJailkit 2>> /var/log/ispconfig_setup.log
+			InstallJailkit 
 	    fi
-		InstallFail2ban 2>> /var/log/ispconfig_setup.log
-		InstallWebmail 2>> /var/log/ispconfig_setup.log
+		InstallFail2ban 
+		InstallWebmail 
 		InstallISPConfig
 		#InstallFix
 		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
