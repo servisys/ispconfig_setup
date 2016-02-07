@@ -43,6 +43,7 @@ CheckLinux
 
 source $PWD/distros/$DISTRO/preinstallcheck.sh
 source $PWD/distros/$DISTRO/askquestions.sh
+source $PWD/distros/$DISTRO/askquestions_multiserver.sh
 source $PWD/distros/$DISTRO/install_basics.sh
 source $PWD/distros/$DISTRO/install_postfix.sh
 source $PWD/distros/$DISTRO/install_mysql.sh
@@ -103,7 +104,6 @@ else
 	echo -e "open an issue on GitHub: https://github.com/servisys/ispconfig_setup"
 	exit 1
 fi
-if 
 
 if [ $DISTRO == "debian8" ]; then
          while [ "x$CFG_MULTISERVER" == "x" ]
@@ -117,7 +117,7 @@ if [ -f /etc/debian_version ]; then
   if [ $CFG_MULTISERVER == "no" ]; then
 	AskQuestions
   else
-	AskQuestionsCluster
+	AskQuestionsMultiserver
   fi
   InstallBasics 2>> /var/log/ispconfig_setup.log
   InstallSQLServer 2>> /var/log/ispconfig_setup.log

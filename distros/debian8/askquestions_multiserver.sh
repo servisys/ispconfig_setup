@@ -3,7 +3,7 @@
 #    Ask for all needed user input needed for the possible cluster setup
 #-----------------------------------------------------------------------------
 
-AskQuestionsCluster(){
+AskQuestionsMultiserver(){
   	echo "Installing pre-required packages"
 	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail > /dev/null 2>&1
 
