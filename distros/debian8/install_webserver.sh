@@ -5,7 +5,9 @@
 InstallWebServer() {
   
   if [ $CFG_WEBSERVER == "apache" ]; then
-	echo -n "Installing Apache and Modules... "
+  CFG_NGINX=n
+  CFG_APACHE=y
+  echo -n "Installing Apache and Modules... "
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
 	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
@@ -30,7 +32,7 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
   fi
 	
-  if [ $CFG_XCACHE == "yes" ]; then
+  if [ "$CFG_XCACHE" == "yes" ]; then
 	echo -n "Installing XCache... "
 	apt-get -yqq install php5-xcache > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
@@ -53,6 +55,8 @@ InstallWebServer() {
   
   else
 	
+  CFG_NGINX=y
+  CFG_APACHE=n
 	echo -n "Installing NGINX and Modules... "
 	service apache2 stop
 	update-rc.d -f apache2 remove
