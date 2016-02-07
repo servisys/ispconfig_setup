@@ -12,6 +12,7 @@ Tested on:
 - Debian 8 Jessie (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Debian 7 Wheezy (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Ubuntu 14.04 Trusty (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Ubuntu 15.10 Willy (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Centos 7 (Vitualbox)
 - ISPConfig 3.*
 
@@ -29,6 +30,8 @@ Before start be sure to configure your server following the following guides:
 
 - Debian 7: https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
 - Debian 8: https://www.howtoforge.com/tutorial/debian-8-jessie-minimal-server/
+- Ubuntu 14.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
+- Ubuntu 15.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Centos 7: http://www.howtoforge.com/centos-7-server
 
 You can Choose during install:
@@ -50,7 +53,7 @@ https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-isp
 
 to install debian as required for ISPConfig
 
-* Configuration for Debian 7 / 8 - Ubuntu
+* Configuration for Debian 7 / 8 - Ubuntu 14.04 / 15.10
 
 After you got a fresh and perfect Debian installation you had to
 
