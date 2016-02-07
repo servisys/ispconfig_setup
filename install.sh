@@ -121,7 +121,7 @@ if [ -f /etc/debian_version ]; then
   fi
   InstallBasics 2>> /var/log/ispconfig_setup.log
   InstallSQLServer 2>> /var/log/ispconfig_setup.log
-  if [ $CFG_SETUP_WEB == "y" || $CFG_MULTISERVER == "no"]; then
+  if [ $CFG_SETUP_WEB == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
     InstallWebServer
     InstallFTP 2>> /var/log/ispconfig_setup.log
     if [ $CFG_QUOTA == "y" ]; then
@@ -134,12 +134,12 @@ if [ -f /etc/debian_version ]; then
   else
 	InstallBasePhp 2>> /var/log/ispconfig_setup.log   #to remove in feature release
   fi  
-  if [ $CFG_SETUP_MAIL == "y" || $CFG_MULTISERVER == "no" ]; then
+  if [ $CFG_SETUP_MAIL == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
     InstallPostfix 2>> /var/log/ispconfig_setup.log
     InstallMTA 2>> /var/log/ispconfig_setup.log
     InstallAntiVirus 2>> /var/log/ispconfig_setup.log
   fi  
-  if [ $CFG_SETUP_NS == "y" || $CFG_MULTISERVER == "no" ]; then
+  if [ $CFG_SETUP_NS == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
     InstallBind 2>> /var/log/ispconfig_setup.log
   fi  
   InstallWebStats 2>> /var/log/ispconfig_setup.log  
