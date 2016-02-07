@@ -23,39 +23,52 @@ AskQuestionsMultiserver(){
 	  fi
 
     if [ $CFG_SETUP_MASTER == "n" ]; then
-      
-      while [ "x$CFG_MASTER_FQDN" == "x" ]
-      do
-      CFG_MASTER_FQDN=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the master FQDN" --nocancel 10 50 3>&1 1>&2 2>&3)
-      done
-      
-      while [ "x$CFG_MASTER_MYSQL_ROOT_PWD" == "x" ]
-      do
-      CFG_MASTER_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the master root password" --nocancel 10 50 3>&1 1>&2 2>&3)
-      done
+        while [ "x$CHECK_MASTER_CONNECTION" == "x" ]
+		do
+		  while [ "x$CFG_MASTER_FQDN" == "x" ]
+		  do
+		  CFG_MASTER_FQDN=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the master FQDN" --nocancel 10 50 3>&1 1>&2 2>&3)
+		  done
+		  
+		  while [ "x$CFG_MASTER_MYSQL_ROOT_PWD" == "x" ]
+		  do
+		  CFG_MASTER_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the master root password" --nocancel 10 50 3>&1 1>&2 2>&3)
+		  done
 
-	  text="Before continue, you got to lunch the following SQL commands on your master server
+		  text="Before continue, you got to lunch the following SQL commands on your master server
 
-	  CREATE USER 'root'@'$(ping -c1 $(hostname) | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
+		  CREATE USER 'root'@'$(ping -c1 $(hostname) | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
 
-	  GRANT ALL PRIVILEGES ON * . * TO 'root'@'$(ping -c1 $(hostname) | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
+		  GRANT ALL PRIVILEGES ON * . * TO 'root'@'$(ping -c1 $(hostname) | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
 
-	  CREATE USER 'root'@'$(hostname)' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
+		  CREATE USER 'root'@'$(hostname)' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
 
-	  GRANT ALL PRIVILEGES ON * . * TO 'root'@'$(hostname)' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
+		  GRANT ALL PRIVILEGES ON * . * TO 'root'@'$(hostname)' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
 
-	  Press "OK" when done
-	  "
+		  Press "OK" when done
+		  "
 
-	  whiptail --title "MySQL command on Master Server" --msgbox "$text" 25 90
-      
-      
-      if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Web server" 10 50) then
-        CFG_SETUP_WEB=y
-      else
-        CFG_SETUP_WEB=n
-      fi
-      MULTISERVER=y
+		  whiptail --title "MySQL command on Master Server" --msgbox "$text" 25 90
+		  
+		  if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Web server" 10 50) then
+			CFG_SETUP_WEB=y
+		  else
+			CFG_SETUP_WEB=n
+		  fi
+		  MULTISERVER=y
+		
+		  if mysql --user=root --password=$CFG_MASTER_MYSQL_ROOT_PWD --host=$CFG_MASTER_FQDN --execute="\q" ; then
+			CHECK_MASTER_CONNECTION=true		# If variable is empty, then the connection when fine, so we set true to exit from cycle
+		  else
+			text="Sorry but you cant connect to Master mysql server
+			
+			- Check to had run the mysql command to allow remote connection
+			- Check FQDN is correct
+			- Check root MySQL password is correct"
+			
+			whiptail --title "MySQL Master Connection Failed" --msgbox "$text" 25 90
+		  fi
+	    done
     else 
       CFG_SETUP_WEB=y
       MULTISERVER=n
