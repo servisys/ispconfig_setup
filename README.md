@@ -3,7 +3,7 @@
 [![PayPayl donate button](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TB4Q3UJDC5JDJ "Help US support this project using Paypal")
 
 # Version #
-v.1.0.16
+v.2.0.0
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
@@ -41,6 +41,7 @@ You can Choose during install:
 - Jailkit On/Off
 - Squirrelmail / Roundcube
 - ISPConfig 3 Standard / Expert mode
+- ISPConfig 3 Multiserver Setup (* Debian 8 only for now)
 
 ### How do I get set up? ###
 
@@ -74,5 +75,6 @@ Follow the instruction on the screen
 
 * The scripts and instructions have been produced by Matteo Temporini ( <temporini.matteo@gmail.com> )
 * Special thanks to Torsten Widmann for contribution to the code
+* Special thankt to Michiel Kamphuis for contribution to Multiserver Setup integration
 * The code is based on the "Automatic Debian System Installation for ISPConfig 3" of Author: Mark Stunnenberg <mark@e-rave.nl>
 * Howtoforge community https://www.howtoforge.com/community/

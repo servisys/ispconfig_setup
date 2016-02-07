@@ -43,6 +43,7 @@ CheckLinux
 
 source $PWD/distros/$DISTRO/preinstallcheck.sh
 source $PWD/distros/$DISTRO/askquestions.sh
+source $PWD/distros/$DISTRO/askquestions_multiserver.sh
 source $PWD/distros/$DISTRO/install_basics.sh
 source $PWD/distros/$DISTRO/install_postfix.sh
 source $PWD/distros/$DISTRO/install_mysql.sh
@@ -104,27 +105,45 @@ else
 	exit 1
 fi
 
+if [ $DISTRO == "debian8" ]; then
+         while [ "x$CFG_MULTISERVER" == "x" ]
+          do
+                CFG_MULTISERVER=$(whiptail --title "MULTISERVER SETUP" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like to install ISPConfig in a MultiServer Setup?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
+          done
+fi
 
 if [ -f /etc/debian_version ]; then
   PreInstallCheck
-  AskQuestions 
+  if [ $CFG_MULTISERVER == "no" ]; then
+	AskQuestions
+  else
+	AskQuestionsMultiserver
+  fi
   InstallBasics 2>> /var/log/ispconfig_setup.log
-  InstallPostfix 2>> /var/log/ispconfig_setup.log
   InstallSQLServer 2>> /var/log/ispconfig_setup.log
-  InstallMTA 2>> /var/log/ispconfig_setup.log
-  InstallAntiVirus 2>> /var/log/ispconfig_setup.log
-  InstallWebServer
-  InstallFTP 2>> /var/log/ispconfig_setup.log
-  if [ $CFG_QUOTA == "y" ]; then
-	InstallQuota 2>> /var/log/ispconfig_setup.log
-  fi
-  InstallBind 2>> /var/log/ispconfig_setup.log
-  InstallWebStats 2>> /var/log/ispconfig_setup.log
-  if [ $CFG_JKIT == "y" ]; then
-	InstallJailkit 2>> /var/log/ispconfig_setup.log
-  fi
+  if [ $CFG_SETUP_WEB == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+    InstallWebServer
+    InstallFTP 2>> /var/log/ispconfig_setup.log
+    if [ $CFG_QUOTA == "y" ]; then
+    InstallQuota 2>> /var/log/ispconfig_setup.log
+    fi
+    if [ $CFG_JKIT == "y" ]; then
+    InstallJailkit 2>> /var/log/ispconfig_setup.log
+    fi
+    InstallWebmail 2>> /var/log/ispconfig_setup.log
+  else
+	InstallBasePhp 2>> /var/log/ispconfig_setup.log   #to remove in feature release
+  fi  
+  if [ $CFG_SETUP_MAIL == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+    InstallPostfix 2>> /var/log/ispconfig_setup.log
+    InstallMTA 2>> /var/log/ispconfig_setup.log
+    InstallAntiVirus 2>> /var/log/ispconfig_setup.log
+  fi  
+  if [ $CFG_SETUP_NS == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+    InstallBind 2>> /var/log/ispconfig_setup.log
+  fi  
+  InstallWebStats 2>> /var/log/ispconfig_setup.log  
   InstallFail2ban 2>> /var/log/ispconfig_setup.log
-  InstallWebmail 2>> /var/log/ispconfig_setup.log
   InstallISPConfig
   InstallFix
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
