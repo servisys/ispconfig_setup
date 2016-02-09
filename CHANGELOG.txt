@@ -1,3 +1,7 @@
+v.2.0.0
+- Added multiserver setup configuration (use carfeully, and only if know what are you doing)
+- Improvment of log during install (the whole process is logged now)
+
 v.1.0.14
 - Starting developing for centos 7
 - Added implementation for Apache con Centos 7
