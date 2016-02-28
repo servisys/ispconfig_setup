@@ -1,3 +1,6 @@
+v.2.0.2
+- Small fix after merge 2.0.1
+
 v.2.0.1
 - Fixed Issue 87 (Squirrelmail related)
 
