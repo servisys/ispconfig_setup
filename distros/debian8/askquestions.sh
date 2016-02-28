@@ -53,7 +53,7 @@ AskQuestions() {
 	  while [ "x$CFG_ISPC" == "x" ]
 	  do
           	CFG_ISPC=$(whiptail --title "ISPConfig Setup" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like full unattended setup of expert mode for ISPConfig?" 10 50 2 "standard" "(default)" ON "expert" "" OFF 3>&1 1>&2 2>&3)
-          done
+      done
 
 	  if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit?" 10 50) then
 		CFG_JKIT=y
