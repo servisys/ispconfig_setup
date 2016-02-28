@@ -134,7 +134,7 @@ EOF
 	"squirrelmail")
 	  echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
 	  apt-get -y install squirrelmail wamerican > /dev/null 2>&1
-	  ln -s /etc/squirrelmail/apache.conf /etc/apache2/conf.d/squirrelmail
+	  ln -s /etc/squirrelmail/apache.conf /etc/apache2/conf-available/squirrelmail.conf
 	  sed -i 1d /etc/squirrelmail/apache.conf
 	  sed -i '1iAlias /webmail /usr/share/squirrelmail' /etc/squirrelmail/apache.conf
 

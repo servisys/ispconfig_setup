@@ -123,7 +123,7 @@ if [ -f /etc/debian_version ]; then
   fi
   InstallBasics 
   InstallSQLServer 
-  if [ $CFG_SETUP_WEB == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+  if [ $CFG_SETUP_WEB == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
     InstallWebServer
     InstallFTP 
     if [ $CFG_QUOTA == "y" ]; then
@@ -136,12 +136,12 @@ if [ -f /etc/debian_version ]; then
   else
 	InstallBasePhp    #to remove in feature release
   fi  
-  if [ $CFG_SETUP_MAIL == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+  if [ $CFG_SETUP_MAIL == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
     InstallPostfix 
     InstallMTA 
     InstallAntiVirus 
   fi  
-  if [ $CFG_SETUP_NS == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+  if [ $CFG_SETUP_NS == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
     InstallBind 
   fi  
   InstallWebStats   
