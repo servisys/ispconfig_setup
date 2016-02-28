@@ -3,6 +3,9 @@
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
+	  CFG_SETUP_WEB=y #Needed for Multiserver setup compatibility
+	  CFG_SETUP_MAIL=y #Needed for Multiserver setup compatibility
+	  CFG_SETUP_NS=y #Needed for Multiserver setup compatibility
 	  echo "Installing pre-required packages"
 	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail > /dev/null 2>&1
 	  
@@ -19,7 +22,6 @@ AskQuestions() {
 	  while [ "x$CFG_WEBSERVER" == "x" ]
           do
                 CFG_WEBSERVER=$(whiptail --title "WEBSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select webserver type" 10 50 2 "apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
-				CFG_SETUP_WEB=y #Needed for Multiserver setup compatibility
           done
 	
 	  while [ "x$CFG_XCACHE" == "x" ]
