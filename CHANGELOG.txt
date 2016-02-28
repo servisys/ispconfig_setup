@@ -1,3 +1,15 @@
+v.2.0.1
+- Fixxed Issue 87 (Squirrelmail related)
+
+v.2.0.0
+- Added support for Multiserver setup (Only Debian 8 for now)
+
+v.1.0.16
+- Added support for Support ubuntu 15.10
+
+v.1.0.15
+- Added support for ubuntu 14.04 LTS
+
 v.1.0.14
 - Starting developing for centos 7
 - Added implementation for Apache con Centos 7
