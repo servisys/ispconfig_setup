@@ -67,7 +67,7 @@ source $PWD/distros/$DISTRO/install_fix.sh
 #    Run the installer
 #---------------------------------------------------------------------
 clear
-echo "Welcome to ISPConfig Setup Script v.1.0.15"
+echo "Welcome to ISPConfig Setup Script v.2.0.1"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
 echo "You can visit my website at the followings URLS"
@@ -123,7 +123,7 @@ if [ -f /etc/debian_version ]; then
   fi
   InstallBasics 
   InstallSQLServer 
-  if [ $CFG_SETUP_WEB == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+  if [ $CFG_SETUP_WEB == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
     InstallWebServer
     InstallFTP 
     if [ $CFG_QUOTA == "y" ]; then
@@ -134,14 +134,15 @@ if [ -f /etc/debian_version ]; then
     fi
     InstallWebmail 
   else
+    source $PWD/distros/$DISTRO/install_basephp.sh #to remove in feature release
 	InstallBasePhp    #to remove in feature release
   fi  
-  if [ $CFG_SETUP_MAIL == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+  if [ $CFG_SETUP_MAIL == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
     InstallPostfix 
     InstallMTA 
     InstallAntiVirus 
   fi  
-  if [ $CFG_SETUP_NS == "y" ] || [ $CFG_MULTISERVER == "no" ]; then
+  if [ $CFG_SETUP_NS == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
     InstallBind 
   fi  
   InstallWebStats   

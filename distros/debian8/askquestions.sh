@@ -19,6 +19,7 @@ AskQuestions() {
 	  while [ "x$CFG_WEBSERVER" == "x" ]
           do
                 CFG_WEBSERVER=$(whiptail --title "WEBSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select webserver type" 10 50 2 "apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
+				CFG_SETUP_WEB=y #Needed for Multiserver setup compatibility
           done
 	
 	  while [ "x$CFG_XCACHE" == "x" ]

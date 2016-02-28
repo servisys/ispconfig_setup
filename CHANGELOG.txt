@@ -1,6 +1,15 @@
+v.2.0.1
+- Fixed Issue 87 (Squirrelmail related)
+
 v.2.0.0
-- Added multiserver setup configuration (use carfeully, and only if know what are you doing)
+- Added Multiserver setup configuration on Debian 8 (use carfeully, and only if know what are you doing)
 - Improvment of log during install (the whole process is logged now)
+
+v.1.0.16
+- Added support for Support ubuntu 15.10
+
+v.1.0.15
+- Added support for ubuntu 14.04 LTS
 
 v.1.0.14
 - Starting developing for centos 7
