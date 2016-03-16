@@ -1,3 +1,6 @@
+v.2.0.3
+- Aded support for Roundcube Webmail on Debian 8 through Backports
+
 v.2.0.2
 - Small fix after merge 2.0.1
 
