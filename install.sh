@@ -107,6 +107,7 @@ else
 	exit 1
 fi
 
+CFG_MULTISERVER=no #setup variable if we are not on debian 8
 if [ $DISTRO == "debian8" ]; then
          while [ "x$CFG_MULTISERVER" == "x" ]
           do
