@@ -159,7 +159,9 @@ if [ -f /etc/debian_version ]; then
 	fi
   fi
   if [ "$CFG_WEBSERVER" == "nginx" ]; then
-  	echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
+  	if [ "$CFG_PHPMYADMIN" == "yes" ]; then
+  		echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
+	fi
 	if [ "$DISTRO" == "debian8" ] && [ "$CFG_WEBMAIL" == "roundcube" ]; then
 		echo "Webmail is accessibile at  https://$CFG_HOSTNAME_FQDN/webmail or https://IP_ADDRESS/webmail";
 	else

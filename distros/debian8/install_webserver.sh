@@ -68,11 +68,19 @@ InstallWebServer() {
 	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
 	service php5-fpm reload
 	apt-get -yqq install fcgiwrap
-	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
-        # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-    	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+  
+  if [ $CFG_PHPMYADMIN == "yes" ]; then
+	echo "==========================================================================================="
+	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
+	echo "Due to a bug in dbconfig-common, this can't be automated."
+	echo "==========================================================================================="
+	echo "Press ENTER to continue... "
+	read DUMMY
+	echo -n "Installing phpMyAdmin... "
 	apt-get -y install phpmyadmin
-    	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+	echo -e "[${green}DONE${NC}]\n"
+  fi
+  
   fi
   echo -e "[${green}DONE${NC}]\n"
 }
