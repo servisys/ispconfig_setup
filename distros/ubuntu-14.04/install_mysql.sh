@@ -3,7 +3,7 @@
 #    Install and configure SQL Server
 #---------------------------------------------------------------------
 InstallSQLServer() {
-  if [ $CFG_SQLSERVER == "MySQL" ]; then
+  if [ "$CFG_SQLSERVER" == "MySQL" ]; then
     echo -n "Installing MySQL... "
     echo "mysql-server-5.5 mysql-server/root_password password $CFG_MYSQL_ROOT_PWD" | debconf-set-selections
     echo "mysql-server-5.5 mysql-server/root_password_again password $CFG_MYSQL_ROOT_PWD" | debconf-set-selections

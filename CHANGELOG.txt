@@ -1,3 +1,6 @@
+v.2.0.4
+- Fixed issue Ubuntu 15.10/14.04 - [: ==: unary operator expected #92 
+
 v.2.0.3
 - Aded support for Roundcube Webmail on Debian 8 through Backports
 

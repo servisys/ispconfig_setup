@@ -12,7 +12,7 @@ InstallAntiVirus() {
   echo -n "Disable Spamassassin ... "
   update-rc.d -f spamassassin remove
   echo -e "[${green}DONE${NC}]\n"
-  if [ $CFG_AVUPDATE == "yes" ]; then
+  if [ "$CFG_AVUPDATE" == "yes" ]; then
 	echo -n "Updating ClamAV. Please Wait ... "
 	freshclam
   fi
