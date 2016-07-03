@@ -4,7 +4,7 @@
 #---------------------------------------------------------------------
 InstallWebServer() {
   
-  if [ $CFG_WEBSERVER == "apache" ]; then
+  if [ "$CFG_WEBSERVER" == "apache" ]; then
 	echo -n "Installing Apache and Modules... "
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
@@ -18,7 +18,7 @@ InstallWebServer() {
 	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
     echo -e "[${green}DONE${NC}]\n"
 	
-  if [ $CFG_PHPMYADMIN == "yes" ]; then
+  if [ "$CFG_PHPMYADMIN" == "yes" ]; then
 	echo "==========================================================================================="
 	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
 	echo "Due to a bug in dbconfig-common, this can't be automated."
@@ -30,7 +30,7 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
   fi
 	
-  if [ $CFG_XCACHE == "yes" ]; then
+  if [ "$CFG_XCACHE" == "yes" ]; then
 	echo -n "Installing XCache... "
 	apt-get -yqq install php5-xcache > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"

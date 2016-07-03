@@ -8,7 +8,7 @@ InstallISPConfig() {
   wget http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
   tar xfz ISPConfig-3-stable.tar.gz
   cd ispconfig3_install/install/
-  if [ $CFG_ISPC == "standard" ]; then
+  if [ "$CFG_ISPC" == "standard" ]; then
   	  echo "Create INI file"
 	  touch autoinstall.ini
 	  echo "[install]" > autoinstall.ini
@@ -20,7 +20,7 @@ InstallISPConfig() {
 	  echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
 	  echo "mysql_database=dbispconfig" >> autoinstall.ini
 	  echo "mysql_charset=utf8" >> autoinstall.ini
-	  if [ $CFG_WEBSERVER == "apache" ]; then
+	  if [ "$CFG_WEBSERVER" == "apache" ]; then
 		echo "http_server=apache" >> autoinstall.ini
 	  else
 		echo "http_server=nginx" >> autoinstall.ini
@@ -69,7 +69,7 @@ InstallISPConfig() {
   else
 	  php -q install.php
   fi
-  if [ $CFG_WEBSERVER == "nginx" ]; then
+  if [ "$CFG_WEBSERVER" == "nginx" ]; then
         /etc/init.d/nginx restart
   else
         /etc/init.d/apache2 restart

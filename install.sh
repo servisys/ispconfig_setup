@@ -107,6 +107,7 @@ else
 	exit 1
 fi
 
+CFG_MULTISERVER=no #setup variable if we are not on debian 8
 if [ $DISTRO == "debian8" ]; then
          while [ "x$CFG_MULTISERVER" == "x" ]
           do
@@ -116,20 +117,20 @@ fi
 
 if [ -f /etc/debian_version ]; then
   PreInstallCheck
-  if [ $CFG_MULTISERVER == "no" ]; then
+  if [ "$CFG_MULTISERVER" == "no" ]; then
 	AskQuestions
   else
 	AskQuestionsMultiserver
   fi
   InstallBasics 
   InstallSQLServer 
-  if [ $CFG_SETUP_WEB == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
+  if [ "$CFG_SETUP_WEB" == "y" ] || [ "$CFG_MULTISERVER" == "n" ]; then
     InstallWebServer
     InstallFTP 
-    if [ $CFG_QUOTA == "y" ]; then
+    if [ "$CFG_QUOTA" == "y" ]; then
     InstallQuota 
     fi
-    if [ $CFG_JKIT == "y" ]; then
+    if [ "$CFG_JKIT" == "y" ]; then
     InstallJailkit 
     fi
     InstallWebmail 
@@ -137,12 +138,12 @@ if [ -f /etc/debian_version ]; then
     source $PWD/distros/$DISTRO/install_basephp.sh #to remove in feature release
 	InstallBasePhp    #to remove in feature release
   fi  
-  if [ $CFG_SETUP_MAIL == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
+  if [ "$CFG_SETUP_MAIL" == "y" ] || [ "$CFG_MULTISERVER" == "n" ]; then
     InstallPostfix 
     InstallMTA 
     InstallAntiVirus 
   fi  
-  if [ $CFG_SETUP_NS == "y" ] || [ $CFG_MULTISERVER == "n" ]; then
+  if [ "$CFG_SETUP_NS" == "y" ] || [ "$CFG_MULTISERVER" == "n" ]; then
     InstallBind 
   fi  
   InstallWebStats   
@@ -152,16 +153,16 @@ if [ -f /etc/debian_version ]; then
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
   echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
-  if [ $CFG_WEBMAIL == "roundcube" ]; then
-    if [ $DISTRO != "debian8" ]; then
+  if [ "$CFG_WEBMAIL" == "roundcube" ]; then
+    if [ "$DISTRO" != "debian8" ]; then
 		echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roudcube user, as the one you inserted in ISPconfig ${NC}"
 	fi
   fi
-  if [ $CFG_WEBSERVER == "nginx" ]; then
-  	if [ $CFG_PHPMYADMIN == "yes" ]; then
+  if [ "$CFG_WEBSERVER" == "nginx" ]; then
+  	if [ "$CFG_PHPMYADMIN" == "yes" ]; then
   		echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
 	fi
-	if [ $DISTRO == "debian8" ] && [ $CFG_WEBMAIL == "roundcube" ]; then
+	if [ "$DISTRO" == "debian8" ] && [ "$CFG_WEBMAIL" == "roundcube" ]; then
 		echo "Webmail is accessibile at  https://$CFG_HOSTNAME_FQDN/webmail or https://IP_ADDRESS/webmail";
 	else
 		echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";
@@ -189,7 +190,7 @@ else
 		#fi
 		InstallBind 
         InstallWebStats 
-	    if [ $CFG_JKIT == "y" ]; then
+	    if [ "$CFG_JKIT" == "y" ]; then
 			InstallJailkit 
 	    fi
 		InstallFail2ban 
