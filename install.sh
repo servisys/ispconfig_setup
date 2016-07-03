@@ -67,7 +67,7 @@ source $PWD/distros/$DISTRO/install_fix.sh
 #    Run the installer
 #---------------------------------------------------------------------
 clear
-echo "Welcome to ISPConfig Setup Script v.2.0.2"
+echo "Welcome to ISPConfig Setup Script v.2.0.4"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
 echo "You can visit my website at the followings URLS"
