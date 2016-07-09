@@ -107,12 +107,13 @@ else
 	exit 1
 fi
 
-CFG_MULTISERVER=no #setup variable if we are not on debian 8
 if [ $DISTRO == "debian8" ]; then
          while [ "x$CFG_MULTISERVER" == "x" ]
           do
                 CFG_MULTISERVER=$(whiptail --title "MULTISERVER SETUP" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like to install ISPConfig in a MultiServer Setup?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
           done
+else
+	CFG_MULTISERVER=no
 fi
 
 if [ -f /etc/debian_version ]; then
