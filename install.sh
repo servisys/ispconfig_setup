@@ -5,7 +5,7 @@
 # ISPConfig 3 system installer
 #
 # Script: install.sh
-# Version: 2.0.3
+# Version: 2.1.0
 # Author: Matteo Temporini <temporini.matteo@gmail.com>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
@@ -39,6 +39,7 @@ PWD=$(pwd);
 source $PWD/functions/check_linux.sh
 echo "Checking your system, please wait..."
 CheckLinux
+
 #---------------------------------------------------------------------
 # Load needed Modules
 #---------------------------------------------------------------------
@@ -67,7 +68,7 @@ source $PWD/distros/$DISTRO/install_fix.sh
 #    Run the installer
 #---------------------------------------------------------------------
 clear
-echo "Welcome to ISPConfig Setup Script v.2.0.4"
+echo "Welcome to ISPConfig Setup Script v.2.1.0"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
 echo "You can visit my website at the followings URLS"
@@ -108,6 +109,10 @@ else
 fi
 
 if [ $DISTRO == "debian8" ]; then
+	     while [ "x$CFG_ISPCVERSION" == "x" ]
+          do
+                CFG_ISPCVERSION=$(whiptail --title "ISPConfig Version" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select ISPConfig Version you want to install" 10 50 2 "Stable" "(default)" ON "Beta" "" OFF 3>&1 1>&2 2>&3)
+          done
          while [ "x$CFG_MULTISERVER" == "x" ]
           do
                 CFG_MULTISERVER=$(whiptail --title "MULTISERVER SETUP" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like to install ISPConfig in a MultiServer Setup?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
@@ -149,6 +154,10 @@ if [ -f /etc/debian_version ]; then
   fi  
   InstallWebStats   
   InstallFail2ban 
+  if [ $CFG_ISPCVERSION == "Beta" ]; then
+	source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
+	InstallISPConfigBeta
+  fi
   InstallISPConfig
   InstallFix
   echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
