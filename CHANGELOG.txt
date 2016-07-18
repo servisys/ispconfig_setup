@@ -1,3 +1,6 @@
+v.2.1.0
+- Adding support for ISPConfig 3.1 beta (Only for Debian 8 for now)
+
 v.2.0.4
 - Fixed issue Ubuntu 15.10/14.04 - [: ==: unary operator expected #92 
 
