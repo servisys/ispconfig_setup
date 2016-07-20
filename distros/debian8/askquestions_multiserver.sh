@@ -145,7 +145,7 @@ AskQuestionsMultiserver(){
         CFG_DKIM=n
       fi
     else
-      CFG_DKIM=n
+      CFG_DKIM=y
     fi
 
     
