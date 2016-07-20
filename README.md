@@ -58,12 +58,12 @@ to install debian as required for ISPConfig
 After you got a fresh and perfect Debian installation you had to
 
 ```shell
-cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/webard/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
 ```
 * Centos 7
 
 ```shell
-cd /tmp; yum install wget unzip net-tools; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+cd /tmp; yum install wget unzip net-tools; wget --no-check-certificate -O installer.tgz "https://github.com/webard/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
 ```
 
 Centos 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
