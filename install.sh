@@ -62,7 +62,7 @@ source $PWD/distros/$DISTRO/install_fail2ban.sh
 source $PWD/distros/$DISTRO/install_webmail.sh
 source $PWD/distros/$DISTRO/install_ispconfig.sh
 source $PWD/distros/$DISTRO/install_fix.sh
-
+source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
 #---------------------------------------------------------------------
 # Main program [ main() ]
 #    Run the installer
@@ -153,13 +153,9 @@ if [ -f /etc/debian_version ]; then
     InstallBind 
   fi
   InstallWebStats
-  echo $PWD;
   InstallFail2ban
-  echo $PWD;
   if [ $CFG_ISPCVERSION == "Beta" ]; then
-	source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
-	InstallISPConfigBeta
-	
+		InstallISPConfigBeta
   fi
   InstallISPConfig
   InstallFix
