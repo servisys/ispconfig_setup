@@ -151,9 +151,15 @@ if [ -f /etc/debian_version ]; then
   fi  
   if [ "$CFG_SETUP_NS" == "y" ] || [ "$CFG_MULTISERVER" == "n" ]; then
     InstallBind 
-  fi  
+  fi
+  echo "--1"
+  echo $PWD
+  echo "--1"
   InstallWebStats   
-  InstallFail2ban 
+  InstallFail2ban
+  echo "--2"
+  echo $PWD
+  echo "--2"
   if [ $CFG_ISPCVERSION == "Beta" ]; then
 	source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
 	InstallISPConfigBeta
