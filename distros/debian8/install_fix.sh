@@ -1,5 +1,5 @@
 InstallFix(){
-  if [ $CFG_DKIM == "n" ]; then
+  if [ $CFG_DKIM == "y" ]; then
 	mkdir -p /var/db/dkim/
 	amavisd-new genrsa /var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem
 	sed -i 's/$enable_dkim_verification = 0; #disabled to prevent warning/#$enable_dkim_verification = 0; #disabled to prevent warning/' /etc/amavis/conf.d/20-debian_defaults

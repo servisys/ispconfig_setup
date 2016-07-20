@@ -144,7 +144,10 @@ AskQuestionsMultiserver(){
       else
         CFG_DKIM=n
       fi
+    else
+      CFG_DKIM=n
     fi
+
     
     CFG_ISPC=standard
 #    CFG_WEBMAIL=squirrelmail
