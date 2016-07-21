@@ -127,7 +127,8 @@ AskQuestionsMultiserver(){
       else
         CFG_WEBMAIL="no";
       fi
-
+    else
+      CFG_WEBMAIL="no"
     fi
 
     if [ $CFG_SETUP_MAIL == "y" ]; then
