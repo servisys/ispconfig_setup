@@ -54,6 +54,8 @@ AskQuestionsMultiserver(){
 			CFG_SETUP_WEB=y
 		  else
 			CFG_SETUP_WEB=n
+      CFG_APACHE=n
+      CFG_NGINX=n
 		  fi
 		  MULTISERVER=y
 
