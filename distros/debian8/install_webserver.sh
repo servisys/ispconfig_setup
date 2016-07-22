@@ -65,6 +65,8 @@ InstallWebServer() {
 	apt-get -yqq install php5-fpm php5-mysqlnd php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl memcached php-apc > /dev/null 2>&1
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php5/fpm/php.ini
+	echo -n "Installing needed Programs for PHP and NGINX... "
+	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
 	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
 	service php5-fpm reload
 	apt-get -yqq install fcgiwrap
