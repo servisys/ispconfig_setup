@@ -5,7 +5,7 @@
 # ISPConfig 3 system installer
 #
 # Script: install.sh
-# Version: 2.1.0
+# Version: 2.1.1
 # Author: Matteo Temporini <temporini.matteo@gmail.com>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
