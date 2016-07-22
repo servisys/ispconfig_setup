@@ -8,8 +8,7 @@ InstallISPConfig() {
   if [ $CFG_ISPCVERSION == "Beta" ]; then
 	wget -O ISPConfig-3.1-beta.tar.gz  http://www.ispconfig.org/downloads/ISPConfig-3.1b2.tar.gz
 	tar xfz ISPConfig-3.1-beta.tar.gz
-	cd ispconfig3-stable-3.1*
-	cd install
+	cd ispconfig3_install/install
   else
 	wget http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
 	tar xfz ISPConfig-3-stable.tar.gz
@@ -29,9 +28,11 @@ InstallISPConfig() {
 	echo "mysql_charset=utf8" >> autoinstall.ini
 	if [ $CFG_WEBSERVER == "apache" ]; then
 		echo "http_server=apache" >> autoinstall.ini
-	else
+	elif [ $CFG_WEBSERVER == "nginx" ]; then
 		echo "http_server=nginx" >> autoinstall.ini
-	fi
+	else
+    echo "http_server=" >> autoinstall.ini
+  fi
 	echo "ispconfig_port=8080" >> autoinstall.ini
 	echo "ispconfig_use_ssl=y" >> autoinstall.ini
 	echo
