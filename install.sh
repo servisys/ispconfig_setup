@@ -46,7 +46,7 @@ CheckLinux
 
 source $PWD/distros/$DISTRO/preinstallcheck.sh
 source $PWD/distros/$DISTRO/askquestions.sh
-source $PWD/distros/$DISTRO/askquestions_multiserver.sh
+
 source $PWD/distros/$DISTRO/install_basics.sh
 source $PWD/distros/$DISTRO/install_postfix.sh
 source $PWD/distros/$DISTRO/install_mysql.sh
@@ -62,7 +62,7 @@ source $PWD/distros/$DISTRO/install_fail2ban.sh
 source $PWD/distros/$DISTRO/install_webmail.sh
 source $PWD/distros/$DISTRO/install_ispconfig.sh
 source $PWD/distros/$DISTRO/install_fix.sh
-source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
+
 source $PWD/distros/$DISTRO/install_basephp.sh #to remove in feature release
 #---------------------------------------------------------------------
 # Main program [ main() ]
@@ -127,6 +127,7 @@ if [ -f /etc/debian_version ]; then
   if [ "$CFG_MULTISERVER" == "no" ]; then
 	AskQuestions
   else
+    source $PWD/distros/$DISTRO/askquestions_multiserver.sh
 	AskQuestionsMultiserver
   fi
   InstallBasics 
@@ -156,6 +157,7 @@ if [ -f /etc/debian_version ]; then
   InstallWebStats
   InstallFail2ban
   if [ $CFG_ISPCVERSION == "Beta" ]; then
+		source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
 		InstallISPConfigBeta
   fi
   InstallISPConfig
