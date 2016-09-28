@@ -54,7 +54,7 @@ InstallISPConfig() {
 	echo "mysql_master_root_password=$CFG_MASTER_MYSQL_ROOT_PWD" >> autoinstall.ini
 	echo "mysql_master_database=dbispconfig" >> autoinstall.ini
 	echo "configure_mail=$CFG_SETUP_MAIL" >> autoinstall.ini
-	if [ $CFG_SETUP_WEB == "y" ]; then
+	if [ $CFG_SETUP_WEB == "yes" ]; then
       echo "configure_jailkit=$CFG_JKIT" >> autoinstall.ini
     else
       echo "configure_jailkit=n" >> autoinstall.ini
@@ -82,7 +82,7 @@ InstallISPConfig() {
   else
     php -q install.php
   fi
-  if [ $CFG_SETUP_WEB == "y" ]; then
+  if [ $CFG_SETUP_WEB == "yes" ]; then
     if [ $CFG_WEBSERVER == "nginx" ]; then
         /etc/init.d/nginx restart
      else

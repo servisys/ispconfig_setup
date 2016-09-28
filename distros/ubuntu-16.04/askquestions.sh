@@ -42,9 +42,9 @@ AskQuestions() {
 	  done
 	  
 	  if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
-		CFG_QUOTA=y
+		CFG_QUOTA=yes
 	  else
-		CFG_QUOTA=n
+		CFG_QUOTA=no
 	  fi
 	
 	  while [ "x$CFG_ISPC" == "x" ]
@@ -53,9 +53,9 @@ AskQuestions() {
           done
 
 	  if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit?" 10 50) then
-		CFG_JKIT=y
+		CFG_JKIT=yes
 	  else
-		CFG_JKIT=n
+		CFG_JKIT=no
 	  fi
 
 	  if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DKIM configuration for Amavis?" 10 50) then
