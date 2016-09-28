@@ -146,17 +146,17 @@ if [ -f /etc/debian_version ]; then
     
 	InstallBasePhp    #to remove in feature release
   fi  
-  if [ "$CFG_SETUP_MAIL" == "y" ] || [ "$CFG_MULTISERVER" == "no" ]; then
+  if [ "$CFG_SETUP_MAIL" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
     InstallPostfix 
     InstallMTA 
     InstallAntiVirus 
   fi  
-  if [ "$CFG_SETUP_NS" == "y" ] || [ "$CFG_MULTISERVER" == "no" ]; then
+  if [ "$CFG_SETUP_NS" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
     InstallBind 
   fi
   InstallWebStats
   InstallFail2ban
-  if [ $CFG_ISPCVERSION == "Beta" ]; then
+  if [ "$CFG_ISPCVERSION" == "Beta" ]; then
 		source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
 		InstallISPConfigBeta
   fi

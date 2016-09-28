@@ -4,8 +4,8 @@
 #---------------------------------------------------------------------
 AskQuestions() {
 	  CFG_SETUP_WEB=yes #Needed for Multiserver setup compatibility
-	  CFG_SETUP_MAIL=y #Needed for Multiserver setup compatibility
-	  CFG_SETUP_NS=y #Needed for Multiserver setup compatibility
+	  CFG_SETUP_MAIL=yes #Needed for Multiserver setup compatibility
+	  CFG_SETUP_NS=yes #Needed for Multiserver setup compatibility
 	  echo "Installing pre-required packages"
 	  [ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"  || apt-get -y install whiptail > /dev/null 2>&1
 	  

@@ -77,15 +77,15 @@ AskQuestionsMultiserver(){
     fi
 
     if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Mail server" 10 50) then
-      CFG_SETUP_MAIL=y
+      CFG_SETUP_MAIL=yes
     else
-      CFG_SETUP_MAIL=n
+      CFG_SETUP_MAIL=no
     fi
 
     if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Name server" 10 50) then
-      CFG_SETUP_NS=y
+      CFG_SETUP_NS=yes
     else
-      CFG_SETUP_NS=n
+      CFG_SETUP_NS=no
     fi
 
     if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Database server" 10 50) then
@@ -133,7 +133,7 @@ AskQuestionsMultiserver(){
       CFG_WEBMAIL="no"
     fi
 
-    if [ $CFG_SETUP_MAIL == "y" ]; then
+    if [ $CFG_SETUP_MAIL == "yes" ]; then
       while [ "x$CFG_MTA" == "x" ]
       do
         CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "dovecot" "(default)" ON "courier" "" OFF 3>&1 1>&2 2>&3)
