@@ -132,13 +132,13 @@ if [ -f /etc/debian_version ]; then
   fi
   InstallBasics 
   InstallSQLServer 
-  if [ "$CFG_SETUP_WEB" == "y" ] || [ "$CFG_MULTISERVER" == "n" ]; then
+  if [ "$CFG_SETUP_WEB" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
     InstallWebServer
     InstallFTP 
-    if [ "$CFG_QUOTA" == "y" ]; then
+    if [ "$CFG_QUOTA" == "yes" ]; then
     InstallQuota 
     fi
-    if [ "$CFG_JKIT" == "y" ]; then
+    if [ "$CFG_JKIT" == "yes" ]; then
     InstallJailkit 
     fi
     InstallWebmail 
@@ -146,12 +146,12 @@ if [ -f /etc/debian_version ]; then
     
 	InstallBasePhp    #to remove in feature release
   fi  
-  if [ "$CFG_SETUP_MAIL" == "y" ] || [ "$CFG_MULTISERVER" == "n" ]; then
+  if [ "$CFG_SETUP_MAIL" == "y" ] || [ "$CFG_MULTISERVER" == "no" ]; then
     InstallPostfix 
     InstallMTA 
     InstallAntiVirus 
   fi  
-  if [ "$CFG_SETUP_NS" == "y" ] || [ "$CFG_MULTISERVER" == "n" ]; then
+  if [ "$CFG_SETUP_NS" == "y" ] || [ "$CFG_MULTISERVER" == "no" ]; then
     InstallBind 
   fi
   InstallWebStats
@@ -197,12 +197,12 @@ else
 		InstallAntiVirus 
 		InstallWebServer
 		InstallFTP 
-		#if [ $CFG_QUOTA == "y" ]; then
+		#if [ $CFG_QUOTA == "yes" ]; then
 		#		InstallQuota 
 		#fi
 		InstallBind 
         InstallWebStats 
-	    if [ "$CFG_JKIT" == "y" ]; then
+	    if [ "$CFG_JKIT" == "yes" ]; then
 			InstallJailkit 
 	    fi
 		InstallFail2ban 

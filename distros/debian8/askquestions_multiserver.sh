@@ -51,9 +51,9 @@ AskQuestionsMultiserver(){
 		  whiptail --title "MySQL command on Master Server" --msgbox "$text" 25 90
 
 		  if (whiptail --title "Install server types" --backtitle "$WT_BACKTITLE" --yesno "Do you want to setup a Web server" 10 50) then
-			CFG_SETUP_WEB=y
+			CFG_SETUP_WEB=yes
 		  else
-			CFG_SETUP_WEB=n
+			CFG_SETUP_WEB=no
       CFG_APACHE=n
       CFG_NGINX=n
 		  fi
@@ -72,7 +72,7 @@ AskQuestionsMultiserver(){
 		  fi
 	    done
     else
-      CFG_SETUP_WEB=y
+      CFG_SETUP_WEB=yes
       MULTISERVER=n
     fi
 
@@ -94,22 +94,22 @@ AskQuestionsMultiserver(){
       CFG_SETUP_DB=n
     fi
 
-    if [ $CFG_SETUP_WEB == "y" ]; then
+    if [ $CFG_SETUP_WEB == "yes" ]; then
       while [ "x$CFG_WEBSERVER" == "x" ]
       do
             CFG_WEBSERVER=$(whiptail --title "WEBSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select webserver type" 10 50 2 "apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
       done
 
       if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
-        CFG_QUOTA=y
+        CFG_QUOTA=yes
       else
-        CFG_QUOTA=n
+        CFG_QUOTA=no
       fi
 
       if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit?" 10 50) then
-        CFG_JKIT=y
+        CFG_JKIT=yes
       else
-        CFG_JKIT=n
+        CFG_JKIT=no
       fi
 
       while [ "x$CFG_PHPMYADMIN" == "x" ]
