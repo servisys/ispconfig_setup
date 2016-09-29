@@ -3,18 +3,18 @@
 [![PayPayl donate button](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TB4Q3UJDC5JDJ "Help US support this project using Paypal")
 
 # Version #
-v.2.1.1
+v.2.2
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
 Tested on:
 
-- Debian 8 Jessie (Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Debian 7 Wheezy (Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Ubuntu 14.04 Trusty (Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Ubuntu 15.10 Willy (Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Ubuntu 16.04 Xenial Xerus ( Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Centos 7 (Vitualbox)
+- Debian 8 Jessie ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Debian 7 Wheezy ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Ubuntu 14.04 Trusty ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Ubuntu 15.10 Willy ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Ubuntu 16.04 Xenial Xerus ( [Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Centos 7 ([Servisys VPS](https://www.servisys.it/), Vitualbox)
 - ISPConfig 3.*
 
 For now it is tested and developed only on Debian systems.
