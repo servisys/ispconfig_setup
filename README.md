@@ -55,7 +55,7 @@ https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-isp
 
 to install debian as required for ISPConfig
 
-* Configuration for Debian 7 / 8 - Ubuntu 14.04 / 15.10
+* Configuration for Debian 7 / 8 - Ubuntu 14.04 / 15.10 / 16.04
 
 After you got a fresh and perfect Debian installation you had to
 
