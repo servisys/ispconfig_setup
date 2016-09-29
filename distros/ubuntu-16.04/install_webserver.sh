@@ -49,8 +49,20 @@ InstallWebServer() {
 	a2enmod alias > /dev/null 2>&1
 	a2enmod fcgid > /dev/null 2>&1
 	service apache2 restart > /dev/null 2>&1
+
+	echo -n "Installing Lets Encrypt... "	
+	mkdir /opt/certbot
+	cd /opt/certbot
+	wget https://dl.eff.org/certbot-auto
+	chmod a+x ./certbot-auto
+	echo "==========================================================================================="
+	echo "Attention: answer no to next Question Dialog"
+	echo "==========================================================================================="
+	echo "Press ENTER to continue... "
+	read DUMMY
+	./certbot-auto
 	echo -e "[${green}DONE${NC}]\n"
-  
+	
   else
 	
 	echo -n "Installing NGINX and Modules... "
