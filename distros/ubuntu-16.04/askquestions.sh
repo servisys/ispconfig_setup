@@ -57,12 +57,6 @@ AskQuestions() {
 	  else
 		CFG_JKIT=no
 	  fi
-
-	  if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DKIM configuration for Amavis?" 10 50) then
-		CFG_DKIM=y
-	  else
-		CFG_DKIM=n
-	  fi
 	  
 	  CFG_WEBMAIL=squirrelmail
 	  

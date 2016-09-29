@@ -9,10 +9,11 @@ This is a system to automate the installation of ISPConfig 3 control Panel ( htt
 
 Tested on:
 
-- Debian 8 Jessie (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Debian 7 Wheezy (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Ubuntu 14.04 Trusty (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
-- Ubuntu 15.10 Willy (VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Debian 8 Jessie (Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Debian 7 Wheezy (Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Ubuntu 14.04 Trusty (Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Ubuntu 15.10 Willy (Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
+- Ubuntu 16.04 Xenial Xerus ( Servisys VPS, VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Centos 7 (Vitualbox)
 - ISPConfig 3.*
 
@@ -32,6 +33,7 @@ Before start be sure to configure your server following the following guides:
 - Debian 8: https://www.howtoforge.com/tutorial/debian-8-jessie-minimal-server/
 - Ubuntu 14.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Ubuntu 15.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
+- Ubuntu 16.04: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Centos 7: http://www.howtoforge.com/centos-7-server
 
 You can Choose during install:
