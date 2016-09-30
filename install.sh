@@ -166,7 +166,7 @@ if [ -f /etc/debian_version ]; then
   echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
   if [ "$CFG_WEBMAIL" == "roundcube" ]; then
-    if [ "$DISTRO" != "debian8" ]; then
+    if [ "$DISTRO" != "debian-8" ]; then
 		echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roudcube user, as the one you inserted in ISPconfig ${NC}"
 	fi
   fi
@@ -174,7 +174,7 @@ if [ -f /etc/debian_version ]; then
   	if [ "$CFG_PHPMYADMIN" == "yes" ]; then
   		echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
 	fi
-	if [ "$DISTRO" == "debian8" ] && [ "$CFG_WEBMAIL" == "roundcube" ]; then
+	if [ "$DISTRO" == "debian-8" ] && [ "$CFG_WEBMAIL" == "roundcube" ]; then
 		echo "Webmail is accessibile at  https://$CFG_HOSTNAME_FQDN/webmail or https://IP_ADDRESS/webmail";
 	else
 		echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";
