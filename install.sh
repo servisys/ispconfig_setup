@@ -109,7 +109,7 @@ else
 	exit 1
 fi
 
-if [ $DISTRO == "debian-8" ]; then
+if [ "$DISTRO" == "debian-8" ]; then
 	     while [ "x$CFG_ISPCVERSION" == "x" ]
           do
                 CFG_ISPCVERSION=$(whiptail --title "ISPConfig Version" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select ISPConfig Version you want to install" 10 50 2 "Stable" "(default)" ON "Beta" "" OFF 3>&1 1>&2 2>&3)
