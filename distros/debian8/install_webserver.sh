@@ -52,6 +52,17 @@ InstallWebServer() {
 	a2enmod fcgid > /dev/null 2>&1
 	service apache2 restart > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
+	
+	echo -n "Installing Lets Encrypt... "	
+	apt-get -yqq install python-certbot-apache -t jessie-backports
+	echo "==========================================================================================="
+	echo "Attention: answer no to next Question Dialog"
+	echo "==========================================================================================="
+	echo "Press ENTER to continue... "
+	read DUMMY
+	echo -n "Installing Certbot-auto... "
+	certbot-auto
+	echo -e "[${green}DONE${NC}]\n"
   
   else
 	
@@ -82,6 +93,17 @@ InstallWebServer() {
 	apt-get -y install phpmyadmin
 	echo -e "[${green}DONE${NC}]\n"
   fi
+  
+  	echo -n "Installing Lets Encrypt... "	
+	apt-get -yqq install certbot -t jessie-backports
+	echo "==========================================================================================="
+	echo "Attention: answer no to next Question Dialog"
+	echo "==========================================================================================="
+	echo "Press ENTER to continue... "
+	read DUMMY
+	echo -n "Installing Certbot-auto... "
+	certbot-auto
+	echo -e "[${green}DONE${NC}]\n"
   
   fi
   echo -e "[${green}DONE${NC}]\n"
