@@ -50,17 +50,6 @@ InstallWebServer() {
 	a2enmod fcgid > /dev/null 2>&1
 	service apache2 restart > /dev/null 2>&1
 
-	echo -n "Installing Lets Encrypt... "	
-	apt-get -yqq install python-letsencrypt-apache 
-	echo "==========================================================================================="
-	echo "Attention: answer no to next Question Dialog"
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing Certbot-auto... "
-	certbot-auto
-	echo -e "[${green}DONE${NC}]\n"
-	
   else
 	
 	echo -n "Installing NGINX and Modules... "
@@ -80,17 +69,18 @@ InstallWebServer() {
 	apt-get -y install phpmyadmin
     echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
 	
-	echo -n "Installing Lets Encrypt... "	
-	apt-get -yqq install letsencrypt  
+  fi
+    echo -n "Installing Lets Encrypt... "	
+	mkdir /opt/certbot > /dev/null 2>&1
+	cd /opt/certbot > /dev/null 2>&1
+	wget https://dl.eff.org/certbot-auto  > /dev/null 2>&1
+	chmod a+x ./certbot-auto  > /dev/null 2>&1
 	echo "==========================================================================================="
 	echo "Attention: answer no to next Question Dialog"
 	echo "==========================================================================================="
 	echo "Press ENTER to continue... "
 	read DUMMY
 	echo -n "Installing Certbot-auto... "
-	certbot-auto
-	echo -e "[${green}DONE${NC}]\n"
-	
-  fi
+	./certbot-auto
   echo -e "[${green}DONE${NC}]\n"
 }
