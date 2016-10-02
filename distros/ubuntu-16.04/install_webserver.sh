@@ -51,17 +51,14 @@ InstallWebServer() {
 	service apache2 restart > /dev/null 2>&1
 
 	echo -n "Installing Lets Encrypt... "	
-	mkdir /opt/certbot > /dev/null 2>&1
-	cd /opt/certbot > /dev/null 2>&1
-	wget https://dl.eff.org/certbot-auto  > /dev/null 2>&1
-	chmod a+x ./certbot-auto  > /dev/null 2>&1
+	apt-get -yqq install python-letsencrypt-apache 
 	echo "==========================================================================================="
 	echo "Attention: answer no to next Question Dialog"
 	echo "==========================================================================================="
 	echo "Press ENTER to continue... "
 	read DUMMY
 	echo -n "Installing Certbot-auto... "
-	./certbot-auto
+	certbot-auto
 	echo -e "[${green}DONE${NC}]\n"
 	
   else
@@ -78,10 +75,22 @@ InstallWebServer() {
 	service php5-fpm reload
 	apt-get -yqq install fcgiwrap
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
-        # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
-    	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-		apt-get -y install phpmyadmin
-    	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+    # - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
+    echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
+	apt-get -y install phpmyadmin
+    echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+	
+	echo -n "Installing Lets Encrypt... "	
+	apt-get -yqq install letsencrypt  
+	echo "==========================================================================================="
+	echo "Attention: answer no to next Question Dialog"
+	echo "==========================================================================================="
+	echo "Press ENTER to continue... "
+	read DUMMY
+	echo -n "Installing Certbot-auto... "
+	certbot-auto
+	echo -e "[${green}DONE${NC}]\n"
+	
   fi
   echo -e "[${green}DONE${NC}]\n"
 }

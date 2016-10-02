@@ -46,13 +46,14 @@ InstallWebServer() {
 	a2enmod fastcgi > /dev/null 2>&1
 	a2enmod alias > /dev/null 2>&1
 	a2enmod fcgid > /dev/null 2>&1
-	service apache2 restart > /dev/null 2>&1
 	sed -i "s/<FilesMatch \"\\\.ph(p3?|tml)\$\">/#<FilesMatch \"\\\.ph(p3?|tml)\$\">/" /etc/apache2/mods-available/suphp.conf
 	sed -i "s/    SetHandler application\/x-httpd-suphp/#    SetHandler application\/x-httpd-suphp/" /etc/apache2/mods-available/suphp.conf
 	sed -i "s/<\/FilesMatch>/#<\/FilesMatch>/" /etc/apache2/mods-available/suphp.conf
 	sed -i "s/#<\/FilesMatch>/#<\/FilesMatch>\\`echo -e '\n\r'`        AddType application\/x-httpd-suphp .php .php3 .php4 .php5 .phtml/" /etc/apache2/mods-available/suphp.conf
 	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini # Removed, because not longer present in php 5.6
 	echo -e "${green}done! ${NC}\n"
+	service apache2 restart > /dev/null 2>&1
+	
   else
 	service apache2 stop
 	update-rc.d -f apache2 remove
@@ -82,5 +83,20 @@ InstallWebServer() {
 	fi
     service nginx restart
   fi
+  
+  	echo -n "Installing Lets Encrypt... "	
+	mkdir /opt/certbot > /dev/null 2>&1
+	cd /opt/certbot > /dev/null 2>&1
+	wget https://dl.eff.org/certbot-auto  > /dev/null 2>&1
+	chmod a+x ./certbot-auto  > /dev/null 2>&1
+	echo "==========================================================================================="
+	echo "Attention: answer no to next Question Dialog"
+	echo "==========================================================================================="
+	echo "Press ENTER to continue... "
+	read DUMMY
+	echo -n "Installing Certbot-auto... "
+	./certbot-auto
+
+	
   echo -e "${green}done! ${NC}\n"
 }
