@@ -3,7 +3,7 @@
 #    Install basic packages
 #---------------------------------------------------------------------
 InstallBasics() {
-  echo 'deb http://ftp.debian.org/debian jessie-backports main' > /etc/apt/sources.list
+  echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list
   echo -n "Updating apt and upgrading currently installed packages... "
   apt-get -qq update > /dev/null 2>&1
   apt-get -qqy upgrade > /dev/null 2>&1
