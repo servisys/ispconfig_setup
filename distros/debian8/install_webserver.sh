@@ -61,7 +61,7 @@ InstallWebServer() {
 	echo "Press ENTER to continue... "
 	read DUMMY
 	echo -n "Installing Certbot-auto... "
-	certbot-auto
+	certbot
 	echo -e "[${green}DONE${NC}]\n"
   
   else
