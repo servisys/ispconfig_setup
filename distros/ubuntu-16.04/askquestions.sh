@@ -35,7 +35,17 @@ AskQuestions() {
 	  do
 		CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "dovecot" "(default)" ON "courier" "" OFF 3>&1 1>&2 2>&3)
 	  done
-
+	  
+	  while [ "x$CFG_HHVMINSTALL" == "x" ]
+	  do
+		CFG_HHVMINSTALL=$(whiptail --title "Install HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+	  done
+	  
+	  while [ "x$CFG_METRONOM" == "x" ]
+	  do
+		CFG_METRONOM=$(whiptail --title "Install Metronom XMPP Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install Metronom XMPP Server?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+	  done
+	  
 	  while [ "x$CFG_AVUPDATE" == "x" ]
 	  do
 		CFG_AVUPDATE=$(whiptail --title "Update Freshclam DB" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to update Antivirus Database during install?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)

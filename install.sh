@@ -53,6 +53,7 @@ source $PWD/distros/$DISTRO/install_mysql.sh
 source $PWD/distros/$DISTRO/install_mta.sh
 source $PWD/distros/$DISTRO/install_antivirus.sh
 source $PWD/distros/$DISTRO/install_webserver.sh
+source $PWD/distros/$DISTRO/install_hhvm.sh
 source $PWD/distros/$DISTRO/install_ftp.sh
 source $PWD/distros/$DISTRO/install_quota.sh
 source $PWD/distros/$DISTRO/install_bind.sh
@@ -60,6 +61,7 @@ source $PWD/distros/$DISTRO/install_webstats.sh
 source $PWD/distros/$DISTRO/install_jailkit.sh
 source $PWD/distros/$DISTRO/install_fail2ban.sh
 source $PWD/distros/$DISTRO/install_webmail.sh
+source $PWD/distros/$DISTRO/install_metronom.sh
 source $PWD/distros/$DISTRO/install_ispconfig.sh
 source $PWD/distros/$DISTRO/install_fix.sh
 
@@ -136,15 +138,20 @@ if [ -f /etc/debian_version ]; then
     InstallWebServer
     InstallFTP 
     if [ "$CFG_QUOTA" == "yes" ]; then
-    InstallQuota 
+    	InstallQuota 
     fi
     if [ "$CFG_JKIT" == "yes" ]; then
-    InstallJailkit 
+    	InstallJailkit 
+    fi
+    if [ "$CFG_HHVM" == "yes" ]; then
+    	InstallHHVM
+    fi
+    if [ "$CFG_METRONOM" == "yes" ]; then
+    	InstallMetronom 
     fi
     InstallWebmail 
   else
-    
-	InstallBasePhp    #to remove in feature release
+    InstallBasePhp    #to remove in feature release
   fi  
   if [ "$CFG_SETUP_MAIL" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
     InstallPostfix 
