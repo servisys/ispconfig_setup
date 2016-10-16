@@ -147,7 +147,7 @@ if [ -f /etc/debian_version ]; then
     InstallHHVM
 	fi
 	if [ "$CFG_METRONOM" == "yes" ]; then
-    InstallMetronome 
+    InstallMetronom 
     InstallWebmail 
   else
     
