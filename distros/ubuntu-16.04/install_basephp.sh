@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: InstallBasePhp Debian 8
+# Function: InstallBasePhp Ubuntu 16.04
 #    Install Basic php need to run ispconfig
 #---------------------------------------------------------------------
 InstallBasePhp(){
