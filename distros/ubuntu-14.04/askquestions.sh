@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: AskQuestions Ubuntu 16.04
+# Function: AskQuestions Ubuntu 14.04
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
