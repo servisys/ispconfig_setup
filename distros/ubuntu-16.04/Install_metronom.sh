@@ -11,5 +11,6 @@ InstallMetronom() {
   cd ./metronome; ./configure --ostype=debian --prefix=/usr
   make
   make install
+  cd /etc/metronome/certs && make localhost.key && make localhost.csr && make localhost.cert && chmod 0400 localhost.key && chown metronome localhost.key
   echo -e "[${green}DONE${NC}]\n"
 }
