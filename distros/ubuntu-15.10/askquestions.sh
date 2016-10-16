@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: AskQuestions Debian 8
+# Function: AskQuestions Ubuntu 16.04
 #    Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
@@ -35,7 +35,17 @@ AskQuestions() {
 	  do
 		CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "dovecot" "(default)" ON "courier" "" OFF 3>&1 1>&2 2>&3)
 	  done
-
+	  
+	  while [ "x$CFG_HHVMINSTALL" == "x" ]
+	  do
+		CFG_HHVMINSTALL=$(whiptail --title "Install HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+	  done
+	  
+	  while [ "x$CFG_METRONOM" == "x" ]
+	  do
+		CFG_METRONOM=$(whiptail --title "Install Metronom XMPP Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install Metronom XMPP Server?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+	  done
+	  
 	  while [ "x$CFG_AVUPDATE" == "x" ]
 	  do
 		CFG_AVUPDATE=$(whiptail --title "Update Freshclam DB" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to update Antivirus Database during install?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
@@ -56,12 +66,6 @@ AskQuestions() {
 		CFG_JKIT=yes
 	  else
 		CFG_JKIT=no
-	  fi
-
-	  if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DKIM configuration for Amavis?" 10 50) then
-		CFG_DKIM=y
-	  else
-		CFG_DKIM=n
 	  fi
 	  
 	  CFG_WEBMAIL=squirrelmail
