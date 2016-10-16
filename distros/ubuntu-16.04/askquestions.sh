@@ -38,7 +38,12 @@ AskQuestions() {
 	  
 	  while [ "x$CFG_HHVMINSTALL" == "x" ]
 	  do
-		CFG_HHVMINSTALL=$(whiptail --title "Install HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want install HHVM?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+		CFG_HHVMINSTALL=$(whiptail --title "Install HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+	  done
+	  
+	  while [ "x$CFG_METRONOM" == "x" ]
+	  do
+		CFG_METRONOM=$(whiptail --title "Install Metronom XMPP Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install Metronom XMPP Server?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
 	  done
 	  
 	  while [ "x$CFG_AVUPDATE" == "x" ]
