@@ -1,10 +1,12 @@
 #---------------------------------------------------------------------
 # Function: InstallFail2ban
-#    Install and configure fail2ban
+#    Install and configure fail2ban and UFW
 #---------------------------------------------------------------------
 InstallFail2ban() {
   echo -n "Installing fail2ban... "
   apt-get -y install fail2ban > /dev/null 2>&1
+  echo -n "Installing Ubuntu Firewall... "
+  apt-get -y install ufw
 
 
   case $CFG_MTA in
