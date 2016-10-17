@@ -138,20 +138,20 @@ if [ -f /etc/debian_version ]; then
     InstallWebServer
     InstallFTP 
     if [ "$CFG_QUOTA" == "yes" ]; then
-    InstallQuota 
+    	InstallQuota 
     fi
     if [ "$CFG_JKIT" == "yes" ]; then
-    InstallJailkit 
+    	InstallJailkit 
     fi
-	if [ "$CFG_HHVM" == "yes" ]; then
-    InstallHHVM
-	fi
-	if [ "$CFG_METRONOM" == "yes" ]; then
-    InstallMetronom 
+    if [ "$CFG_HHVM" == "yes" ]; then
+    	InstallHHVM
+    fi
+    if [ "$CFG_METRONOM" == "yes" ]; then
+    	InstallMetronom 
+    fi
     InstallWebmail 
   else
-    
-	InstallBasePhp    #to remove in feature release
+    InstallBasePhp    #to remove in feature release
   fi  
   if [ "$CFG_SETUP_MAIL" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
     InstallPostfix 
