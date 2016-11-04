@@ -55,13 +55,7 @@ InstallWebServer() {
 	
 	echo -n "Installing Lets Encrypt... "	
 	apt-get -yqq install python-certbot-apache -t jessie-backports
-	echo "==========================================================================================="
-	echo "Attention: answer no to next Question Dialog"
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing Certbot-auto... "
-	certbot
+	certbot &
 	echo -e "[${green}DONE${NC}]\n"
   
   else
@@ -96,13 +90,7 @@ InstallWebServer() {
   
   	echo -n "Installing Lets Encrypt... "	
 	apt-get -yqq install certbot -t jessie-backports
-	echo "==========================================================================================="
-	echo "Attention: answer no to next Question Dialog"
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing Certbot-auto... "
-	certbot
+	certbot &
 	echo -e "[${green}DONE${NC}]\n"
   
   fi
