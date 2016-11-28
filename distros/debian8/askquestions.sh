@@ -23,6 +23,11 @@ AskQuestions() {
           do
                 CFG_WEBSERVER=$(whiptail --title "WEBSERVER" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select webserver type" 10 50 2 "apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
           done
+	  
+	  while [ "x$CFG_HHVM" == "x" ]
+          do
+                CFG_HHVM=$(whiptail --title "HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
+          done
 	
 	  while [ "x$CFG_XCACHE" == "x" ]
 		  do
