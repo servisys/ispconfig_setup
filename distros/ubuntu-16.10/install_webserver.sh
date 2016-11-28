@@ -54,8 +54,8 @@ InstallWebServer() {
   else
 	
 	echo -n "Installing NGINX and Modules... "
-	service apache2 stop
-	update-rc.d -f apache2 remove
+	service apache2 stop > /dev/null 2>&1
+	update-rc.d -f apache2 remove > /dev/null 2>&1
 	apt-get -yqq install nginx > /dev/null 2>&1
 	service nginx start 
 	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt mcrypt imagemagick libruby php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl memcached php-memcache php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-fpm php7.0-opcache php-apcu > /dev/null 2>&1

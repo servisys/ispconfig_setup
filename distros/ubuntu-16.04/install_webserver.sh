@@ -53,8 +53,8 @@ InstallWebServer() {
   else
 	
 	echo -n "Installing NGINX and Modules... "
-	service apache2 stop
-	update-rc.d -f apache2 remove
+	service apache2 stop > /dev/null 2>&1
+	update-rc.d -f apache2 remove > /dev/null 2>&1
 	apt-get -yqq install nginx > /dev/null 2>&1
 	service nginx start 
 	echo -n "Installing PHP and Modules... "
