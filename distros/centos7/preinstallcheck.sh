@@ -24,8 +24,7 @@ PreInstallCheck() {
 	exit 1
   fi
 
-  SELINUX=`cat /etc/selinux/config  | grep "SELINUX=disabled"`
-  if [ -z "$SELINUX" ]; then
+  if [ getsebool != "getsebool:  SELinux is disabled" ]; then
 	
 	sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config
 	sed -i "s/SELINUX=permissive/SELINUX=disabled/" /etc/selinux/config
