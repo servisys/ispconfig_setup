@@ -1,3 +1,7 @@
+v.2.2.2
+- Fixed php7 install on ubuntu 16.04
+- Fixed php7-fpm with nginx
+
 v.2.2.1
 - Added support for let's encrypt for ubuntu 14.04, 15.10, 16.04, debian 7 and debian 8, for both apache2 and nginx
 

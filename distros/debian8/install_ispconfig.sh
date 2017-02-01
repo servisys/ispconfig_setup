@@ -26,6 +26,7 @@ InstallISPConfig() {
 	echo "mysql_root_user=root" >> autoinstall.ini
 	echo "mysql_root_password=$CFG_MYSQL_ROOT_PWD" >> autoinstall.ini
 	echo "mysql_database=dbispconfig" >> autoinstall.ini
+	echo "mysql_port=3306" >> autoinstall.ini
 	echo "mysql_charset=utf8" >> autoinstall.ini
 	if [ $CFG_WEBSERVER == "apache" ]; then
 		echo "http_server=apache" >> autoinstall.ini
