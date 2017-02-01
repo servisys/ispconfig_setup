@@ -12,7 +12,7 @@ InstallWebServer() {
 	apt-get -yqq install apache2 apache2-doc apache2-utils libapache2-mod-php libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec-pristine libapache2-mod-python libapache2-mod-fastcgi php7.0-fpm libruby > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt  php7.0-curl curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php-memcached php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-opcache php-apcu > /dev/null 2>&1
+	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-dev php7.0-mysql php7.0-mysqlnd php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php-memcached php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-opcache php-apcu > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing needed Programs for PHP and Apache... "
 	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
@@ -57,20 +57,12 @@ InstallWebServer() {
 	update-rc.d -f apache2 remove > /dev/null 2>&1
 	apt-get -yqq install nginx > /dev/null 2>&1
 	service nginx start 
-<<<<<<< HEAD
-	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt  php7.0-curl curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php-memcached php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-opcache php-apcu > /dev/null 2>&1
-	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php7.0/fpm/php.ini
-	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php7.0/fpm/php.ini
-	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
-	service php7.0-fpm reload
-=======
 	echo -n "Installing PHP and Modules... "
 	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt mcrypt imagemagick libruby php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl memcached php-memcache php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-fpm php7.0-opcache php-apcu > /dev/null 2>&1
-	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php7/fpm/php.ini
-	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php7/fpm/php.ini
+	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php7.0/fpm/php.ini
+	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php7.0/fpm/php.ini
 	service php7-fpm reload
 	echo -e "[${green}DONE${NC}]\n"
->>>>>>> upstream/master
 	apt-get -yqq install fcgiwrap
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
     
@@ -90,16 +82,6 @@ InstallWebServer() {
 	
   fi
     echo -n "Installing Lets Encrypt... "	
-	mkdir /opt/certbot > /dev/null 2>&1
-	cd /opt/certbot > /dev/null 2>&1
-	wget https://dl.eff.org/certbot-auto  > /dev/null 2>&1
-	chmod a+x ./certbot-auto  > /dev/null 2>&1
-	echo "==========================================================================================="
-	echo "Attention: answer no to next Question Dialog"
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing Certbot-auto... "
-	./certbot-auto
-  echo -e "[${green}DONE${NC}]\n"
+	  apt-get -yqq install letsencrypt
+    echo -e "[${green}DONE${NC}]\n"
 }

@@ -70,9 +70,9 @@ InstallISPConfig() {
 	  php -q install.php
   fi
   if [ "$CFG_WEBSERVER" == "nginx" ]; then
-        /etc/init.d/nginx restart
+        service nginx restart
   else
-        /etc/init.d/apache2 restart
+        service apache2 restart
   fi
 
 }
