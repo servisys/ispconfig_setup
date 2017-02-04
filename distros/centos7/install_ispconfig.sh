@@ -64,5 +64,5 @@ InstallISPConfig() {
   echo "ispconfig_port=8080" >> autoinstall.ini
   echo "create_new_ispconfig_ssl_cert=no" >> autoinstall.ini
   echo "reconfigure_crontab=yes" >> autoinstall.ini
-  php -q install.php --autoinstall=autoinstall.ini
+  echo | php -q install.php --autoinstall=autoinstall.ini
 }

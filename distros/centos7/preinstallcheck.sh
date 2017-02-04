@@ -23,9 +23,14 @@ PreInstallCheck() {
     echo "ISPConfig is already installed, can't go on."
 	exit 1
   fi
+  
+  # Check if the FQDN is in /etc/hosts
+  if [ "X$(grep -E "[a-z,A-Z,0-9\.\-]{2,}" /etc/hostname |grep -vi "localhost")" == "X" ] ; then
+        echo -e "${red}Before installing ISPConfig, please read the Preliminary Note at https://www.howtoforge.com/tutorial/centos-7-server/"
+        exit 1
+  fi
 
-  SELINUX=`cat /etc/selinux/config  | grep "SELINUX=disabled"`
-  if [ -z "$SELINUX" ]; then
+  if [ $(getsebool 2>&1) != "getsebool:  SELinux is disabled" ]; then
 	
 	sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config
 	sed -i "s/SELINUX=permissive/SELINUX=disabled/" /etc/selinux/config

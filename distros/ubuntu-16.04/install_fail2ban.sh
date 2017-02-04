@@ -4,9 +4,9 @@
 #---------------------------------------------------------------------
 InstallFail2ban() {
   echo -n "Installing fail2ban... "
-  apt-get -y install fail2ban > /dev/null 2>&1
+  apt-get -yqq install fail2ban > /dev/null 2>&1
   echo -n "Installing Ubuntu Firewall... "
-  apt-get -y install ufw
+  apt-get -yqq install ufw
 
 
   case $CFG_MTA in

@@ -65,14 +65,14 @@ InstallISPConfig() {
 	  echo "ispconfig_port=8080" >> autoinstall.ini
 	  echo "create_new_ispconfig_ssl_cert=no" >> autoinstall.ini
 	  echo "reconfigure_crontab=yes" >> autoinstall.ini
-	  php -q install.php --autoinstall=autoinstall.ini
+	  echo | php -q install.php --autoinstall=autoinstall.ini
   else
 	  php -q install.php
   fi
   if [ "$CFG_WEBSERVER" == "nginx" ]; then
-        /etc/init.d/nginx restart
+        service nginx restart
   else
-        /etc/init.d/apache2 restart
+        service apache2 restart
   fi
 
 }
