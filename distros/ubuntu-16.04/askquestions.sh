@@ -13,7 +13,7 @@ AskQuestions() {
 		  
 	  while [ "x$CFG_MYSQL_ROOT_PWD" == "x" ]
 	  do
-		CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
+				CFG_MYSQL_ROOT_PWD=$(whiptail --title "MySQL" --backtitle "$WT_BACKTITLE" --inputbox "Please specify a root password" --nocancel 10 50 3>&1 1>&2 2>&3)
 	  done
 
 	  while [ "x$CFG_WEBSERVER" == "x" ]
@@ -33,22 +33,27 @@ AskQuestions() {
 	
 	  while [ "x$CFG_MTA" == "x" ]
 	  do
-		CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "dovecot" "(default)" ON "courier" "" OFF 3>&1 1>&2 2>&3)
+				CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "dovecot" "(default)" ON "courier" "" OFF 3>&1 1>&2 2>&3)
+	  done
+	  
+	  while [ "x$CFG_WEBMAIL" == "x" ]
+	  do
+				CFG_MTA=$(whiptail --title "Webmail" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select Webmail type" 10 50 2 "squirrelmail" "(default)" ON "roundcube" "" OFF 3>&1 1>&2 2>&3)
 	  done
 	  
 	  while [ "x$CFG_HHVMINSTALL" == "x" ]
 	  do
-		CFG_HHVMINSTALL=$(whiptail --title "Install HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+				CFG_HHVMINSTALL=$(whiptail --title "Install HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
 	  done
 	  
 	  while [ "x$CFG_METRONOM" == "x" ]
 	  do
-		CFG_METRONOM=$(whiptail --title "Install Metronom XMPP Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install Metronom XMPP Server?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+				CFG_METRONOM=$(whiptail --title "Install Metronom XMPP Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install Metronom XMPP Server?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
 	  done
 	  
 	  while [ "x$CFG_AVUPDATE" == "x" ]
 	  do
-		CFG_AVUPDATE=$(whiptail --title "Update Freshclam DB" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to update Antivirus Database during install?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
+				CFG_AVUPDATE=$(whiptail --title "Update Freshclam DB" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to update Antivirus Database during install?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
 	  done
 	  
 	  if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
@@ -68,7 +73,7 @@ AskQuestions() {
 		CFG_JKIT=no
 	  fi
 	  
-	  CFG_WEBMAIL=squirrelmail
+	  #CFG_WEBMAIL=squirrelmail
 	  
 	  SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country (ex. EN)" --nocancel 10 50 3>&1 1>&2 2>&3)
       SSL_STATE=$(whiptail --title "SSL State" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - STATE (ex. Italy)" --nocancel 10 50 3>&1 1>&2 2>&3)

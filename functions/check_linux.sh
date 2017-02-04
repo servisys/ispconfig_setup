@@ -56,8 +56,8 @@ CheckLinux() {
   #	Ubuntu 16.10
   #---------------------------------------------------------------------
 
-  if echo $ID-$VERSION_ID | grep -iq "ubuntu-16.04"; then
-		DISTRO=ubuntu-16.04
+  if echo $ID-$VERSION_ID | grep -iq "ubuntu-16.10"; then
+		DISTRO=ubuntu-16.10
   fi
   
   #---------------------------------------------------------------------
