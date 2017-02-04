@@ -9,7 +9,7 @@ InstallBasics() {
   echo -e "[${green}DONE${NC}]\n"
 
   echo "Installing basic packages... "
-  apt-get -y install ssh openssh-server vim-nox php5-cli ntp ntpdate debconf-utils binutils sudo git lsb-release > /dev/null 2>&1
+  apt-get -yqq install ssh openssh-server vim-nox php7.0-cli ntp ntpdate debconf-utils binutils sudo git lsb-release > /dev/null 2>&1
   service apparmor stop 
   update-rc.d -f apparmor remove 
   apt-get -y remove apparmor apparmor-utils
