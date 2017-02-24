@@ -71,7 +71,7 @@ source $PWD/distros/$DISTRO/install_basephp.sh #to remove in feature release
 #    Run the installer
 #---------------------------------------------------------------------
 clear
-echo "Welcome to ISPConfig Setup Script v.2.2.2"
+echo "Welcome to ISPConfig Setup Script v.2.2.3"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
 echo "You can visit my website at the followings URLS"
