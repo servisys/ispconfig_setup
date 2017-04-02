@@ -18,18 +18,6 @@ InstallWebServer() {
 	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp redis-server > /dev/null 2>&1
     echo -e "[${green}DONE${NC}]\n"
 	
-  if [ "$CFG_PHPMYADMIN" == "yes" ]; then
-	echo "==========================================================================================="
-	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-	echo "Due to a bug in dbconfig-common, this can't be automated."
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing phpMyAdmin... "
-	apt-get -y install phpmyadmin
-	echo -e "[${green}DONE${NC}]\n"
-  fi
-	
   	echo "<IfModule mod_headers.c>
     RequestHeader unset Proxy early
 	</IfModule>" | tee /etc/apache2/conf-available/httpoxy.conf
@@ -65,7 +53,6 @@ InstallWebServer() {
     echo -e "[${green}DONE${NC}]\n"
 	
 	phpenmod mcrypt
-	phpenmod mbstring
 	
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php7.0/fpm/php.ini
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php7.0/fpm/php.ini
@@ -74,23 +61,30 @@ InstallWebServer() {
 	
 	apt-get -yqq install fcgiwrap
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
-    
-	if [ "$CFG_PHPMYADMIN" == "yes" ]; then
-	echo "==========================================================================================="
-	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-	echo "Due to a bug in dbconfig-common, this can't be automated."
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing phpMyAdmin... "
-	apt-get -y install phpmyadmin php-mbstring php-gettext
-	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
-	echo -e "[${green}DONE${NC}]\n"
+
   fi
-    
-	
+
+  if [ "$CFG_PHPMYADMIN" == "yes" ]; then
+		echo "==========================================================================================="
+		echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
+		echo "Due to a bug in dbconfig-common, this can't be automated."
+		echo "==========================================================================================="
+		echo "Press ENTER to continue... "
+		read DUMMY
+		echo -n "Installing phpMyAdmin... "
+		apt-get -y install phpmyadmin php-mbstring php-gettext
+		phpenmod mbstring
+		echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+		echo -e "[${green}DONE${NC}]\n"
   fi
-    echo -n "Installing Lets Encrypt... "	
-	  apt-get -yqq install letsencrypt
-    echo -e "[${green}DONE${NC}]\n"
+
+  if [ "$CFG_XCACHE" == "yes" ]; then  
+		echo -n "Installing XCache... "
+		apt-get -yqq install php7-xcache > /dev/null 2>&1
+		echo -e "[${green}DONE${NC}]\n"
+  fi
+
+  echo -n "Installing Lets Encrypt... "	
+  apt-get -yqq install letsencrypt
+  echo -e "[${green}DONE${NC}]\n"
 }
