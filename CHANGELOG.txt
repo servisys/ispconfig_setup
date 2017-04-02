@@ -1,3 +1,6 @@
+v.2.2.4
+- various fix for Ubuntu 16.04
+
 v.2.2.3
 - Lot of fix for Ubuntu 16.04
 - fix for asking password in ispconfig autoinstall.ini parameter
