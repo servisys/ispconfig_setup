@@ -22,18 +22,23 @@ AskQuestions() {
           done
 	
 	  while [ "x$CFG_XCACHE" == "x" ]
-		  do
-				CFG_XCACHE=$(whiptail --title "Install XCache" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to install XCache during install? ATTENTION: If XCache is installed, Ioncube Loaders will not work !!" 20 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
+	  do
+		CFG_XCACHE=$(whiptail --title "Install XCache" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to install XCache during install? ATTENTION: If XCache is installed, Ioncube Loaders will not work !!" 20 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
 	  done
 	
 	  while [ "x$CFG_PHPMYADMIN" == "x" ]
-		  do
-				CFG_PHPMYADMIN=$(whiptail --title "Install phpMyAdmin" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to install phpMyAdmin during install?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
+ 	  do
+		CFG_PHPMYADMIN=$(whiptail --title "Install phpMyAdmin" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "You want to install phpMyAdmin during install?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
 	  done
 	
 	  while [ "x$CFG_MTA" == "x" ]
 	  do
 		CFG_MTA=$(whiptail --title "Mail Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select mailserver type" 10 50 2 "dovecot" "(default)" ON "courier" "" OFF 3>&1 1>&2 2>&3)
+	  done
+	  
+	  while [ "x$CFG_WEBMAIL" == "x" ]
+	  do
+		CFG_WEBMAIL=$(whiptail --title "Webmail" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select Webmail type" 10 50 2 "squirrelmail" "(default)" ON "roundcube" "" OFF 3>&1 1>&2 2>&3)
 	  done
 	  
 	  while [ "x$CFG_HHVMINSTALL" == "x" ]
@@ -68,7 +73,7 @@ AskQuestions() {
 		CFG_JKIT=no
 	  fi
 	  
-	  CFG_WEBMAIL=squirrelmail
+	  #CFG_WEBMAIL=squirrelmail
 	  
 	  SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country (ex. EN)" --nocancel 10 50 3>&1 1>&2 2>&3)
       SSL_STATE=$(whiptail --title "SSL State" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - STATE (ex. Italy)" --nocancel 10 50 3>&1 1>&2 2>&3)
