@@ -2,6 +2,11 @@
 
 [![PayPayl donate button](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TB4Q3UJDC5JDJ "Help US support this project using Paypal")
 
+# Newsletter #
+Subscribe to our newsletter to recive information about new version of the script.
+The link is here: http://eepurl.com/cAzq95
+We'll use only to inform you on new version of the script :)
+
 # Version #
 v.2.2.3
 
