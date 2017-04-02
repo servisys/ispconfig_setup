@@ -14,25 +14,23 @@ InstallWebServer() {
 	echo -n "Installing PHP and Modules... "
 	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-dev php7.0-mysqlnd php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php-memcached php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-opcache php-apcu php7.0-bz2 php-redis > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
-	echo -n "Installing needed Programs for PHP and Apache... "
-	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp redis-server > /dev/null 2>&1
-    echo -e "[${green}DONE${NC}]\n"
-	
-  if [ "$CFG_PHPMYADMIN" == "yes" ]; then
-	echo "==========================================================================================="
-	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-	echo "Due to a bug in dbconfig-common, this can't be automated."
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing phpMyAdmin... "
-	apt-get -y install phpmyadmin
-	echo -e "[${green}DONE${NC}]\n"
-  fi
+
 	
   	echo "<IfModule mod_headers.c>
     RequestHeader unset Proxy early
-	</IfModule>" | tee /etc/apache2/conf-available/httpoxy.conf
+	</IfModule>" | tee /etc/apache2/conf-available/httpoxy.conf > /dev/null 2>&1
+	
+	if [ "$CFG_PHPMYADMIN" == "yes" ]; then
+		echo "==========================================================================================="
+		echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
+		echo "Due to a bug in dbconfig-common, this can't be automated."
+		echo "==========================================================================================="
+		echo "Press ENTER to continue... "
+		read DUMMY
+		echo -n "Installing phpMyAdmin... "
+		apt-get -y install phpmyadmin
+		echo -e "[${green}DONE${NC}]\n"
+	fi
 	
 	echo -n "Activating Apache2 Modules... "
 	a2enmod suexec > /dev/null 2>&1
@@ -60,13 +58,6 @@ InstallWebServer() {
 	echo -n "Installing PHP and Modules... "
 	apt-get -yqq install php7.0-opcache php7.0-fpm php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt mcrypt imagemagick libruby php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl memcached php-memcache php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-opcache php-apcu > /dev/null 2>&1
 	
-	echo -n "Installing optional Packagages for PHP ... "
-	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
-    echo -e "[${green}DONE${NC}]\n"
-	
-	phpenmod mcrypt
-	phpenmod mbstring
-	
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php7.0/fpm/php.ini
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php7.0/fpm/php.ini
 	service php7.0-fpm reload
@@ -74,23 +65,36 @@ InstallWebServer() {
 	
 	apt-get -yqq install fcgiwrap
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
-    
+	
 	if [ "$CFG_PHPMYADMIN" == "yes" ]; then
-	echo "==========================================================================================="
-	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-	echo "Due to a bug in dbconfig-common, this can't be automated."
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing phpMyAdmin... "
-	apt-get -y install phpmyadmin php-mbstring php-gettext
-	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
-	echo -e "[${green}DONE${NC}]\n"
-  fi
-    
+		echo "==========================================================================================="
+		echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
+		echo "Due to a bug in dbconfig-common, this can't be automated."
+		echo "==========================================================================================="
+		echo "Press ENTER to continue... "
+		read DUMMY
+		echo -n "Installing phpMyAdmin... "
+		apt-get -y install phpmyadmin
+		echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
+		echo -e "[${green}DONE${NC}]\n"
+	fi
 	
   fi
-    echo -n "Installing Lets Encrypt... "	
-	  apt-get -yqq install letsencrypt
-    echo -e "[${green}DONE${NC}]\n"
+
+  if [ "$CFG_XCACHE" == "yes" ]; then  
+		echo -n "Installing XCache... "
+		apt-get -yqq install php7-xcache > /dev/null 2>&1
+		echo -e "[${green}DONE${NC}]\n"
+  fi
+  
+  echo -n "Installing needed Programs for PHP and Apache... "
+  apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp redis-server > /dev/null 2>&1
+  echo -e "[${green}DONE${NC}]\n"
+ 
+  phpenmod mcrypt
+  phpenmod mbstring
+
+  echo -n "Installing Lets Encrypt... "	
+  apt-get -yqq install letsencrypt
+  echo -e "[${green}DONE${NC}]\n"
 }
