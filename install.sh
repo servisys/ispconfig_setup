@@ -75,7 +75,7 @@ clear
 echo "Welcome to ISPConfig Setup Script v.2.2.4"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
-echo "You can visit my website at the followings URLS"
+echo "You can visit my website at the followings URLs"
 echo "http://www.servisys.it http://www.temporini.net"
 echo "and contact me with the following information"
 echo "contact email/hangout: temporini.matteo@gmail.com"
