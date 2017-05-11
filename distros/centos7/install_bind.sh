@@ -4,7 +4,7 @@
 #---------------------------------------------------------------------
 InstallBind() {
   echo -n "Installing bind... ";
-  yum -y install bind bind-utils > /dev/null 2>&1
+  yum -y install bind bind-utils haveged > /dev/null 2>&1
   cp /etc/named.conf /etc/named.conf_bak
   echo "options {" > /etc/named.conf
   echo "      listen-on port 53 { any; };" >> /etc/named.conf
