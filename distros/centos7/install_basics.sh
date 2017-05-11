@@ -8,7 +8,7 @@ InstallBasics() {
   echo -e "${green}done${NC}"
 
   echo -n "Installing basic packages... "
-  yum -y install nano wget net-tools NetworkManager-tui
+  yum -y install nano wget net-tools NetworkManager-tui selinux-policy deltarpm epel-release
   echo -e "${green}done${NC}"
   
   echo -n "Disabling Firewall... "
@@ -21,8 +21,6 @@ InstallBasics() {
   echo -e "${green}done${NC}"
   
   echo -n "Enabling additional Repository..."
-  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*
-  yum -y install epel-release
   rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*
   yum -y install yum-priorities
   sed -i "s/mirrorlist=https:\\/\\/mirrors.fedoraproject.org\\/metalink?repo=epel-7\\&arch=\$basearch/mirrorlist=https:\\/\\/mirrors.fedoraproject.org\\/metalink?repo=epel-7\\&arch=\$basearch\\`echo \n`priority=10/" /etc/yum.repos.d/epel.repo
