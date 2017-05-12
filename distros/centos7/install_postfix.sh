@@ -12,6 +12,9 @@ InstallPostfix() {
   mkdir /etc/mailman/
   touch /etc/mailman/virtual-mailman
   postmap /etc/mailman/virtual-mailman
+  if [ "$CFG_MAILMAN" == "yes" ]; then
+    InstallMailman
+  fi
   systemctl enable postfix.service > /dev/null 2>&1
   systemctl restart postfix.service > /dev/null 2>&1
   echo -e "${green}done${NC}\n"
