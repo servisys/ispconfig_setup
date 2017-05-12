@@ -97,5 +97,13 @@ InstallWebServer() {
     echo "Sorry Nginx not implemented Yet"
 	read DUMMY
   fi
+
+  echo -e "${green}done! ${NC}\n"
+
+  echo -n "Installing Lets Encrypt... "	
+  yum -y install certbot
+  systemctl enable certbot.service
+  systemctl start certbot.service
+
   echo -e "${green}done! ${NC}\n"
 }
