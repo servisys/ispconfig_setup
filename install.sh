@@ -214,6 +214,9 @@ else
 			InstallJailkit 
 	    fi
 		InstallFail2ban 
+		if [ "$CFG_METRONOM" == "yes" ]; then
+			InstallMetronom 
+		fi
 		InstallWebmail 
 		InstallISPConfig
 		#InstallFix
