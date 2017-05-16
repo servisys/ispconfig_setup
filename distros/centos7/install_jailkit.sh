@@ -4,7 +4,7 @@
 #---------------------------------------------------------------------
 
 #Program Versions
-JKV="2.17"  #Jailkit Version -> Maybe this can be automated
+JKV="2.19"  #Jailkit Version -> Maybe this can be automated
 
 InstallJailkit() {
   echo -n "Installing Jailkit... "

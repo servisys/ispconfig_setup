@@ -75,7 +75,7 @@ clear
 echo "Welcome to ISPConfig Setup Script v.2.2.4"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
-echo "You can visit my website at the followings URLS"
+echo "You can visit my website at the followings URLs"
 echo "http://www.servisys.it http://www.temporini.net"
 echo "and contact me with the following information"
 echo "contact email/hangout: temporini.matteo@gmail.com"
@@ -190,11 +190,11 @@ if [ -f /etc/debian_version ]; then
   fi
 else 
 	if [ -f /etc/centos-release ]; then
-		echo "Attention pls, this is the very first version of the script for Centos 7"
-		echo "Pls use only for test pourpose for now."
+		echo "Attention please, this is the very first version of the script for CentOS 7"
+		echo "Please use only for test purpose for now."
 		echo -e "${red}Not yet implemented: courier, nginx support${NC}"
-		echo -e "${green}Yet implemented: apache, mysql, bind, postfix, dovecot, roudcube webmail support${NC}"
-		echo "Help us to test and implement, press ENTER if you understand what i'm talinkg about..."
+		echo -e "${green}Implemented: apache, mysql, bind, postfix, dovecot, roudcube webmail support${NC}"
+		echo "Help us to test and implement, press ENTER if you understand what I'm talking about..."
 		read DUMMY
 		PreInstallCheck
 		AskQuestions 
@@ -214,10 +214,13 @@ else
 			InstallJailkit 
 	    fi
 		InstallFail2ban 
+		if [ "$CFG_METRONOM" == "yes" ]; then
+			InstallMetronom 
+		fi
 		InstallWebmail 
 		InstallISPConfig
 		#InstallFix
-		echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
+		echo -e "${green}Well done! ISPConfig installed and configured correctly :D ${NC}"
 		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
 		echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
 		echo -e "${red}If you setup Roundcube webmail go to http://$CFG_HOSTNAME_FQDN/roundcubemail/installer and configure db connection${NC}"

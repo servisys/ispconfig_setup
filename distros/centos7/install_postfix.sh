@@ -3,7 +3,7 @@
 #    Install and configure postfix
 #---------------------------------------------------------------------
 InstallPostfix() {
-  echo -e "Cheking and disabling sendmail...\n"
+  echo -e "Checking and disabling sendmail...\n"
   systemctl stop sendmail.service > /dev/null 2>&1
   systemctl disable sendmail.service > /dev/null 2>&1
   echo -e "Installing postfix... \n"
@@ -12,6 +12,9 @@ InstallPostfix() {
   mkdir /etc/mailman/
   touch /etc/mailman/virtual-mailman
   postmap /etc/mailman/virtual-mailman
+  if [ "$CFG_MAILMAN" == "yes" ]; then
+    InstallMailman
+  fi
   systemctl enable postfix.service > /dev/null 2>&1
   systemctl restart postfix.service > /dev/null 2>&1
   echo -e "${green}done${NC}\n"
