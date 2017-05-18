@@ -22,7 +22,7 @@ InstallJailkit() {
     rm -rf jailkit-$JKV
     echo -e "${green}done! ${NC}\n"
   else
-    echo -n "Jailkit is already installed... "
+    echo -e "Jailkit is already installed...\n"
   fi
 }
 
