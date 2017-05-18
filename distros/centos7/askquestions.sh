@@ -42,7 +42,7 @@ AskQuestions() {
 	  if (whiptail --title "Mailman" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Mailman?" 10 50) then
 		CFG_MAILMAN=yes
 		MMSITEPASS=$(whiptail --title "Mailman Site Password" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the Mailman site password" --nocancel 10 50 3>&1 1>&2 2>&3)
-		MMISTOWNER=$(whiptail --title "Mailman Site List Owner" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the Mailman site list owner" --nocancel 10 50 3>&1 1>&2 2>&3)
+		MMLISTOWNER=$(whiptail --title "Mailman Site List Owner" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the Mailman site list owner" --nocancel 10 50 3>&1 1>&2 2>&3)
 		MMLISTPASS=$(whiptail --title "Mailman Site List Password" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the Mailman site list password" --nocancel 10 50 3>&1 1>&2 2>&3)
 	  else
 		CFG_MAILMAN=no
