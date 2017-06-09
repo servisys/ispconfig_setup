@@ -1,3 +1,6 @@
+v.2.2.6
+- Fix for Centos 7
+
 v.2.2.5
 - Fix for Centos 7
 - Small fix for debian multiserver setup and version installation
