@@ -8,7 +8,7 @@ The link is here: http://eepurl.com/cAzq95
 We'll use only to inform you on new version of the script :)
 
 # Version #
-v.2.2.5
+v.2.2.6
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
