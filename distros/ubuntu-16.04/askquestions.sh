@@ -38,7 +38,7 @@ AskQuestions() {
 	  
 	  while [ "x$CFG_WEBMAIL" == "x" ]
 	  do
-		CFG_WEBMAIL=$(whiptail --title "Webmail" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select Webmail type" 10 50 2 "squirrelmail" "(default)" ON "roundcube" "" OFF 3>&1 1>&2 2>&3)
+		CFG_WEBMAIL=$(whiptail --title "Webmail" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select Webmail type" 10 50 2 "roundcube" "(default)" ON "squirrelmail" "" OFF 3>&1 1>&2 2>&3)
 	  done
 	  
 	  while [ "x$CFG_HHVMINSTALL" == "x" ]
