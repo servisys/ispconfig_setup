@@ -175,7 +175,7 @@ if [ -f /etc/debian_version ]; then
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
   if [ "$CFG_WEBMAIL" == "roundcube" ]; then
     if [ "$DISTRO" != "debian8" ]; then
-		echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roudcube user, as the one you inserted in ISPconfig ${NC}"
+		echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roundcube user, as the one you inserted in ISPconfig ${NC}"
 	fi
   fi
   if [ "$CFG_WEBSERVER" == "nginx" ]; then
@@ -193,7 +193,7 @@ else
 		echo "Attention please, this is the very first version of the script for CentOS 7"
 		echo "Please use only for test purpose for now."
 		echo -e "${red}Not yet implemented: courier, nginx support${NC}"
-		echo -e "${green}Implemented: apache, mysql, bind, postfix, dovecot, roudcube webmail support${NC}"
+		echo -e "${green}Implemented: apache, mysql, bind, postfix, dovecot, roundcube webmail support${NC}"
 		echo "Help us to test and implement, press ENTER if you understand what I'm talking about..."
 		read DUMMY
 		source $PWD/distros/$DISTRO/install_mailman.sh
