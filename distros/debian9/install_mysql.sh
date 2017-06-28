@@ -10,7 +10,7 @@ InstallSQLServer() {
     sed -i 's/bind-address		= 127.0.0.1/#bind-address		= 127.0.0.1\nsql-mode="NO_ENGINE_SUBSTITUTION"/' /etc/mysql/mariadb.conf.d/50-server.cnf
     echo "update mysql.user set plugin = 'mysql_native_password' where user='root';" | mysql -u root
 	sed -i 's/password =/password = '$CFG_MYSQL_ROOT_PWD'/' /etc/mysql/debian.cnf
-	mysql -e "UPDATE mysql.user SET Password = PASSWORD('CHANGEME') WHERE User = 'root'"
+	mysql -e "UPDATE mysql.user SET Password = PASSWORD('$CFG_MYSQL_ROOT_PWD') WHERE User = 'root'"
 	echo -n "Fix Mysql security"
 	# Kill the anonymous users
 	mysql -e "DROP USER ''@'localhost'"
