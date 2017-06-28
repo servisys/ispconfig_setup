@@ -14,7 +14,7 @@ InstallWebServer() {
 	apt-get -yqq install apache2 apache2-doc apache2-utils libapache2-mod-php  libapache2-mod-fcgid apache2-suexec-pristine libruby libapache2-mod-python php-memcache php-imagick php-gettext  libapache2-mod-passenger  > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap phpmyadmin php7.0-cli php7.0-cgi php-pear php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-zip php7.0-mbstring php7.0-imap php7.0-mcrypt php7.0-snmp php7.0-xmlrpc php7.0-xsl  > /dev/null 2>&1
+	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-zip php7.0-mbstring php7.0-imap php7.0-mcrypt php7.0-snmp php7.0-xmlrpc php7.0-xsl  > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP-FPM"
 	apt-get -yqq php7.0-fpm
