@@ -68,12 +68,12 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
 	
 	echo -n "Installing Lets Encrypt... "	
-	apt-get -yqq apt-get install certbot
+	apt-get -yqq apt-get install certbot > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
   
     echo -n "Install PHP Opcode Cache "	
-    apt-get -y install php7.0-opcache php-apcu
-	service apache2 restart
+    apt-get -yqq install php7.0-opcache php-apcu > /dev/null 2>&1
+	service apache2 restart > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
   else
 	
