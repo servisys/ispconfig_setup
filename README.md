@@ -8,12 +8,13 @@ The link is here: http://eepurl.com/cAzq95
 We'll use only to inform you on new version of the script :)
 
 # Version #
-v.2.2.6
+v.3.0.0
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
 Tested on:
 
+- Debian 9 Stretch ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Debian 8 Jessie ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Debian 7 Wheezy ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
 - Ubuntu 14.04 Trusty ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS)
@@ -34,8 +35,9 @@ of installation of ISPConfig 3 control panel.
 
 Before start be sure to configure your server following the following guides:
 
-- Debian 7: https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
+- Debian 9: https://www.howtoforge.com/tutorial/debian-minimal-server/
 - Debian 8: https://www.howtoforge.com/tutorial/debian-8-jessie-minimal-server/
+- Debian 7: https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
 - Ubuntu 14.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Ubuntu 15.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Ubuntu 16.04: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/

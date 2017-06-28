@@ -33,10 +33,10 @@ InstallISPConfig() {
 	elif [ $CFG_WEBSERVER == "nginx" ]; then
 		echo "http_server=nginx" >> autoinstall.ini
 	else
-    echo "http_server=" >> autoinstall.ini
   fi
 	echo "ispconfig_port=8080" >> autoinstall.ini
 	echo "ispconfig_use_ssl=y" >> autoinstall.ini
+	echo "ispconfig_admin_password=admin" >> autoinstall.ini
 	echo
 	echo "[ssl_cert]" >> autoinstall.ini
 	echo "ssl_cert_country=$SSL_COUNTRY" >> autoinstall.ini

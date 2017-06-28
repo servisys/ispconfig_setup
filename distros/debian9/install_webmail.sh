@@ -14,128 +14,10 @@ InstallWebmail() {
 	  echo "roundcube-core roundcube/mysql/app-pass password $CFG_ROUNDCUBE_PWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/app-password-confirm password $CFG_ROUNDCUBE_PWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/hosts string localhost" | debconf-set-selections
-	  backports=$(cat /etc/apt/sources.list | grep jessie-backports | grep -v "#")
-	  if [ -z "$backports" ]; then
-	    echo -e "\n# jessie-backports, previously on backports.debian.org" >> /etc/apt/sources.list
-	    echo "deb http://http.debian.net/debian/ jessie-backports main contrib non-free" >> /etc/apt/sources.list
-	    echo "deb-src http://http.debian.net/debian/ jessie-backports main contrib non-free" >> /etc/apt/sources.list
-	  fi
-	  apt-get -qq update
-	  apt-get -yqq -t jessie-backports install roundcube roundcube-mysql roundcube-plugins > /dev/null 2>&1
+	  sed -i "s/\$config\['default_host'\] = '';/\$config['default_host'] = 'localhost';/" /etc/roundcube/config.inc.php
 	  if [ $CFG_WEBSERVER == "apache" ]; then
-		mv /etc/roundcube/apache.conf /etc/roundcube/apache.conf.default
-		cat << "EOF" > /etc/roundcube/apache.conf
-<VirtualHost *:80>
-	# Those aliases do not work properly with several hosts on your apache server
-	# Uncomment them to use it or adapt them to your configuration
-	#    Alias /roundcube /var/lib/roundcube
-	Alias /webmail /var/lib/roundcube
-
-	<Directory /var/lib/roundcube/>
-	  Options +FollowSymLinks
-	  # This is needed to parse /var/lib/roundcube/.htaccess. See its
-	  # content before setting AllowOverride to None.
-	  AllowOverride All
-	  <IfVersion >= 2.3>
-		Require all granted
-	  </IfVersion>
-	  <IfVersion < 2.3>
-		Order allow,deny
-		Allow from all
-	  </IfVersion>
-	</Directory>
-
-	# Protecting basic directories:
-	<Directory /var/lib/roundcube/config>
-			Options -FollowSymLinks
-			AllowOverride None
-	</Directory>
-
-	<Directory /var/lib/roundcube/temp>
-			Options -FollowSymLinks
-			AllowOverride None
-			<IfVersion >= 2.3>
-			  Require all denied
-			</IfVersion>
-			<IfVersion < 2.3>
-			  Order allow,deny
-			  Deny from all
-			</IfVersion>
-	</Directory>
-
-	<Directory /var/lib/roundcube/logs>
-			Options -FollowSymLinks
-			AllowOverride None
-			<IfVersion >= 2.3>
-			  Require all denied
-			</IfVersion>
-			<IfVersion < 2.3>
-			  Order allow,deny
-			  Deny from all
-			</IfVersion>
-	</Directory>
-</VirtualHost>
-
-<IfModule mod_ssl.c>
-<VirtualHost *:443>
-	# Those aliases do not work properly with several hosts on your apache server
-	# Uncomment them to use it or adapt them to your configuration
-	#    Alias /roundcube /var/lib/roundcube
-	Alias /webmail /var/lib/roundcube
-
-	<Directory /var/lib/roundcube/>
-	  Options +FollowSymLinks
-	  # This is needed to parse /var/lib/roundcube/.htaccess. See its
-	  # content before setting AllowOverride to None.
-	  AllowOverride All
-	  <IfVersion >= 2.3>
-		Require all granted
-	  </IfVersion>
-	  <IfVersion < 2.3>
-		Order allow,deny
-		Allow from all
-	  </IfVersion>
-	</Directory>
-
-	# Protecting basic directories:
-	<Directory /var/lib/roundcube/config>
-			Options -FollowSymLinks
-			AllowOverride None
-	</Directory>
-
-	<Directory /var/lib/roundcube/temp>
-			Options -FollowSymLinks
-			AllowOverride None
-			<IfVersion >= 2.3>
-			  Require all denied
-			</IfVersion>
-			<IfVersion < 2.3>
-			  Order allow,deny
-			  Deny from all
-			</IfVersion>
-	</Directory>
-
-	<Directory /var/lib/roundcube/logs>
-			Options -FollowSymLinks
-			AllowOverride None
-			<IfVersion >= 2.3>
-			  Require all denied
-			</IfVersion>
-			<IfVersion < 2.3>
-			  Order allow,deny
-			  Deny from all
-			</IfVersion>
-	</Directory>
-
-	# SSL Configuration
-	SSLEngine On
-	SSLProtocol All -SSLv2 -SSLv3
-	SSLCertificateFile /usr/local/ispconfig/interface/ssl/ispserver.crt
-	SSLCertificateKeyFile /usr/local/ispconfig/interface/ssl/ispserver.key
-	#SSLCACertificateFile /usr/local/ispconfig/interface/ssl/ispserver.bundle
-</VirtualHost>
-</IfModule>
-EOF
+		echo "Alias /webmail /var/lib/roundcube" >> /etc/apache2/conf-enabled/roundcube.conf
+		service apache2 reload
 	  else
         cat << "EOF" > /etc/nginx/sites-available/roundcube.vhost
 server {
@@ -181,27 +63,7 @@ server {
 EOF
 		ln -s /etc/nginx/sites-available/roundcube.vhost /etc/nginx/sites-enabled/roundcube.vhost
 	  fi
-	  # ISPConfig integration
-	  cd /tmp
-	  wget -q --no-check-certificate -O ispconfig3_roundcube.tgz https://github.com/w2c/ispconfig3_roundcube/tarball/master
-	  tar xzf ispconfig3_roundcube.tgz
-	  cp -r /tmp/*ispconfig3_roundcube*/ispconfig3_* /usr/share/roundcube/plugins/
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_account /var/lib/roundcube/plugins/ispconfig3_account
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_autoreply /var/lib/roundcube/plugins/ispconfig3_autoreply
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_autoselect /var/lib/roundcube/plugins/ispconfig3_autoselect
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_fetchmail /var/lib/roundcube/plugins/ispconfig3_fetchmail
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_filter /var/lib/roundcube/plugins/ispconfig3_filter
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_forward /var/lib/roundcube/plugins/ispconfig3_forward
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_pass /var/lib/roundcube/plugins/ispconfig3_pass
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_spam /var/lib/roundcube/plugins/ispconfig3_spam
-	  ln -s /usr/share/roundcube/plugins/ispconfig3_wblist /var/lib/roundcube/plugins/ispconfig3_wblist
-	  sed -i "/'zipdownload',/a 'jqueryui',\n'ispconfig3_account',\n'ispconfig3_autoreply',\n'ispconfig3_pass',\n'ispconfig3_spam',\n'ispconfig3_fetchmail',\n'ispconfig3_filter',\n'ispconfig3_forward'," /etc/roundcube/config.inc.php
-	  mv /usr/share/roundcube/plugins/ispconfig3_account/config/config.inc.php.dist /usr/share/roundcube/plugins/ispconfig3_account/config/config.inc.php
-	  sed -i "s/\$rcmail_config\['remote_soap_pass'\] = '.*';/\$rcmail_config\['remote_soap_pass'\] = '$CFG_ROUNDCUBE_PWD';/" /usr/share/roundcube/plugins/ispconfig3_account/config/config.inc.php
-	  sed -i "s/\$rcmail_config\['soap_url'\] = '.*';/\$rcmail_config['soap_url'] = 'https\:\/\/$CFG_HOSTNAME_FQDN\:8080\/remote\/';/" /usr/share/roundcube/plugins/ispconfig3_account/config/config.inc.php
-	  mv /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php.dist /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
-	  sed -i "s/\$rcmail_config\['password_min_length'\] = 6;/\$rcmail_config\['password_min_length'\] = 8;/" /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
-	  sed -i "s/\$rcmail_config\['password_check_symbol'\] = TRUE;/\$rcmail_config\['password_check_symbol'\] = FALSE;/" /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
+	  
     ;;
 	"squirrelmail")
 	  if [ $CFG_WEBSERVER == "apache" ]; then

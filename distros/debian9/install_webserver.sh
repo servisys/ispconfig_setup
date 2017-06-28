@@ -11,10 +11,16 @@ InstallWebServer() {
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
 	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt-get -yqq install apache2 apache2.2-common apache2-doc apache2-mpm-prefork apache2-utils libapache2-mod-php5 libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec libapache2-mod-passenger libapache2-mod-python libexpat1 ssl-cert libruby > /dev/null 2>&1  
+	apt-get -yqq install apache2 apache2-doc apache2-utils libapache2-mod-php  libapache2-mod-fcgid apache2-suexec-pristine libruby libapache2-mod-python php-memcache php-imagick php-gettext  libapache2-mod-passenger  > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php5 php5-common php5 php5-common php5-dev php5-gd php5-mysqlnd php5-imap php5-cli php5-cgi php-pear php-auth php5-fpm php5-mcrypt php5-imagick php5-curl php5-intl php5-memcached php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl > /dev/null 2>&1
+	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap phpmyadmin php7.0-cli php7.0-cgi php-pear php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-zip php7.0-mbstring php7.0-imap php7.0-mcrypt php7.0-snmp php7.0-xmlrpc php7.0-xsl  > /dev/null 2>&1
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP-FPM"
+	apt-get -yqq php7.0-fpm
+	a2enmod actions > /dev/null 2>&1 
+	a2enmod proxy_fcgi > /dev/null 2>&1 
+	a2enmod alias > /dev/null 2>&1 
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing needed Programs for PHP and Apache... "
 	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
@@ -50,14 +56,25 @@ InstallWebServer() {
 	a2enmod fastcgi > /dev/null 2>&1
 	a2enmod alias > /dev/null 2>&1
 	a2enmod fcgid > /dev/null 2>&1
+	a2enmod cgi > /dev/null 2>&1
+	a2enmod headers > /dev/null 2>&1
+	
+	echo -n "Disable HTTP_PROXY"
+	echo "<IfModule mod_headers.c>" >> /etc/apache2/conf-available/httpoxy.conf
+	echo "     RequestHeader unset Proxy early" >> /etc/apache2/conf-available/httpoxy.conf
+	echo "</IfModule>" >> /etc/apache2/conf-available/httpoxy.conf
+	a2enconf httpoxy > /dev/null 2>&1
 	service apache2 restart > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	
 	echo -n "Installing Lets Encrypt... "	
-	apt-get -yqq install python-certbot-apache -t jessie-backports
-	certbot &
+	apt-get -yqq apt-get install certbot
 	echo -e "[${green}DONE${NC}]\n"
   
+    echo -n "Install PHP Opcode Cache "	
+    apt-get -y install php7.0-opcache php-apcu
+	service apache2 restart
+	echo -e "[${green}DONE${NC}]\n"
   else
 	
   CFG_NGINX=y

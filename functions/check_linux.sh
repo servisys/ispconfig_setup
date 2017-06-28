@@ -32,9 +32,9 @@ CheckLinux() {
   #    Debian 9 Stretch
   #---------------------------------------------------------------------
   
-  #if echo $ID-$VERSION_ID | grep -iq "debian-9"; then
-#		DISTRO=debian9
- # fi
+  if echo $ID-$VERSION_ID | grep -iq "debian-9"; then
+		DISTRO=debian9
+  fi
   
   #---------------------------------------------------------------------
   #    Ubuntu 14.04

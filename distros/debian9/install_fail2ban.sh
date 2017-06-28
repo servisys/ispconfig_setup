@@ -67,18 +67,11 @@ EOF
   "dovecot")
 cat > /etc/fail2ban/jail.local <<EOF
 
-[dovecot-pop3imap]
+[dovecot]
 enabled = true
-filter = dovecot-pop3imap
-action = iptables-multiport[name=dovecot-pop3imap, port="pop3,pop3s,imap,imaps", protocol=tcp]
+filter = dovecot
 logpath = /var/log/mail.log
 maxretry = 5
-EOF
-
-cat > /etc/fail2ban/filter.d/dovecot-pop3imap.conf <<EOF
-[Definition]
-failregex = (?: pop3-login|imap-login): .*(?:Authentication failure|Aborted login \(auth failed|Aborted login \(tried to use disabled|Disconnected \(auth failed|Aborted login \(\d+ authentication attempts).*rip=(?P<host>\S*),.*
-ignoreregex =
 EOF
 	;;
   esac
@@ -100,15 +93,11 @@ maxretry = 5
 
 EOF
 
-cat > /etc/fail2ban/filter.d/pureftpd.conf <<EOF
-[Definition]
-failregex = .*pure-ftpd: \(.*@<HOST>\) \[WARNING\] Authentication failed for user.*
-ignoreregex =
-EOF
-
-echo "ignoreregex =" >> /etc/fail2ban/filter.d/postfix-sasl.conf
-
   service fail2ban restart > /dev/null 2>&1
+  echo -e "[${green}DONE${NC}]\n"
+  
+  echo -n "Installing UFW Firewall... "
+  apt-get -yqq install ufw
   echo -e "[${green}DONE${NC}]\n"
 }
 
