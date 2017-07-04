@@ -1,5 +1,8 @@
+v.3.0.1
+- Added support for both PHP7 and PHP 5.6 in Debian 9
+
 v.3.0.0
-- added support for Debian 9 - PHP 7 - Apache and Roundcube webmail - MariaDB as SQL
+- Added support for Debian 9 - PHP 7 - Apache and Roundcube webmail - MariaDB as SQL
 
 v.2.2.6
 - Fix for Centos 7
