@@ -14,16 +14,19 @@ InstallWebServer() {
 	apt-get -yqq install apache2 apache2-doc apache2-utils libapache2-mod-php  libapache2-mod-fcgid apache2-suexec-pristine libruby libapache2-mod-python php-memcache php-imagick php-gettext  libapache2-mod-passenger  > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-zip php7.0-mbstring php7.0-imap php7.0-mcrypt php7.0-snmp php7.0-xmlrpc php7.0-xsl  > /dev/null 2>&1
+	# Need to check if soemthing is asked before suppress messages
+	apt-get -y install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-zip php7.0-mbstring php7.0-imap php7.0-mcrypt php7.0-snmp php7.0-xmlrpc php7.0-xsl  > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP-FPM"
-	apt-get -yqq install php7.0-fpm
+	#Need to check if soemthing is asked before suppress messages
+	apt-get -y install php7.0-fpm
+	#Need to check if soemthing is asked before suppress messages
 	a2enmod actions > /dev/null 2>&1 
 	a2enmod proxy_fcgi > /dev/null 2>&1 
 	a2enmod alias > /dev/null 2>&1 
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing needed Programs for PHP and Apache... "
-	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
+	apt-get -y install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
     	echo -e "[${green}DONE${NC}]\n"
 	
   if [ $CFG_PHPMYADMIN == "yes" ]; then
