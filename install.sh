@@ -5,7 +5,7 @@
 # ISPConfig 3 system installer
 #
 # Script: install.sh
-# Version: 2.2.4
+# Version: 3.0.2
 # Author: Matteo Temporini <temporini.matteo@gmail.com>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
@@ -72,7 +72,7 @@ source $PWD/distros/$DISTRO/install_basephp.sh #to remove in feature release
 #---------------------------------------------------------------------
 clear
 
-echo "Welcome to ISPConfig Setup Script v.3.0.1"
+echo "Welcome to ISPConfig Setup Script v.3.0.2"
 echo "This software is developed by Temporini Matteo"
 echo "with the support of the community."
 echo "You can visit my website at the followings URLs"

@@ -1,3 +1,8 @@
+v.3.0.2
+- Added support for nginx on Debian 9
+- Phpmyadmin accessible on http:/IPADDRESS:8081/phpmyadmin
+- Roundcube accessible at https://IPADDRESS/roundcube/
+
 v.3.0.1
 - Added support for both PHP7 and PHP 5.6 in Debian 9
 
