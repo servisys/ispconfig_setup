@@ -21,7 +21,7 @@ AskQuestions() {
 		  
 	  while [ "x$CFG_PHP56" == "x" ]
 		  do
-				CFG_PHP56=$(whiptail --title "Install PHP 5.6" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "By default ISPConfig comes with php 7, do you want to install al php 5.6 version?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
+				CFG_PHP56=$(whiptail --title "Install PHP 5.6" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "By default ISPConfig comes with php 7, do you want to install also php 5.6 version?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
 		 done
 
 	  while [ "x$CFG_HHVM" == "x" ]
