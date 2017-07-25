@@ -111,7 +111,17 @@ InstallWebServer() {
 	apt-get -y install phpmyadmin
 	echo -e "[${green}DONE${NC}]\n"
   fi
-  
+
+   
+    if [ $CFG_PHP56 == "yes" ]; then
+		echo "Installing PHP 5.6"
+		apt-get -yqq install apt-transport-https
+		curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
+		echo 'deb https://packages.sury.org/php/ stretch main' > /etc/apt/sources.list.d/deb.sury.org.list
+		apt-get update  > /dev/null 2>&1
+		apt-get -yqq install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
+		echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
+	fi  
   	echo -n "Installing Lets Encrypt... "	
 	apt-get -yqq install certbot -t jessie-backports
 	certbot &
