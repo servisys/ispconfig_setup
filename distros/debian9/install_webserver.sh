@@ -30,12 +30,6 @@ InstallWebServer() {
     	echo -e "[${green}DONE${NC}]\n"
 	
   if [ $CFG_PHPMYADMIN == "yes" ]; then
-	echo "==========================================================================================="
-	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-	echo "Due to a bug in dbconfig-common, this can't be automated."
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
 	echo -n "Installing phpMyAdmin... "
 	apt-get -y install phpmyadmin
 	echo -e "[${green}DONE${NC}]\n"
@@ -87,8 +81,6 @@ InstallWebServer() {
   CFG_NGINX=y
   CFG_APACHE=n
 	echo -n "Installing NGINX and Modules... "
-	service apache2 stop
-	update-rc.d -f apache2 remove
 	apt-get -yqq install nginx > /dev/null 2>&1
 	service nginx start 
 	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-zip php7.0-mbstring php7.0-imap php7.0-mcrypt php7.0-snmp php7.0-xmlrpc php7.0-xsl > /dev/null 2>&1
@@ -96,17 +88,10 @@ InstallWebServer() {
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php/7.0/fpm/php.ini
 	echo -n "Installing needed Programs for PHP and NGINX... "
 	apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp > /dev/null 2>&1
-	#sed -i "s/#/;/" /etc/php5/conf.d/ming.ini
-	service php5-fpm reload
+	service php7.0-fpm reload
 	apt-get -yqq install fcgiwrap
   
   if [ $CFG_PHPMYADMIN == "yes" ]; then
-	echo "==========================================================================================="
-	echo "Attention: When asked 'Configure database for phpmyadmin with dbconfig-common?' select 'NO'"
-	echo "Due to a bug in dbconfig-common, this can't be automated."
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
 	echo -n "Installing phpMyAdmin... "
 	apt-get -y install phpmyadmin
 	echo -e "[${green}DONE${NC}]\n"
@@ -123,7 +108,7 @@ InstallWebServer() {
 		echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 	fi  
 	echo -n "Installing Lets Encrypt... "	
-	apt-get -yqq apt-get install certbot > /dev/null 2>&1
+	apt-get -yqq install certbot > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	
 	echo -n "Install PHP Opcode Cache "	
