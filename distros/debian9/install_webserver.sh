@@ -69,7 +69,7 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
 	
 	echo -n "Installing Lets Encrypt... "	
-	apt-get -yqq apt-get install certbot > /dev/null 2>&1
+	apt-get -yqq certbot > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
   
     echo -n "Install PHP Opcode Cache "	
