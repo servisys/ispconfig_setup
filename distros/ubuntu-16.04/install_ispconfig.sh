@@ -1,6 +1,6 @@
 #---------------------------------------------------------------------
 # Function: InstallISPConfig
-#    Start the ISPConfig3 intallation script
+#    Start the ISPConfig3 installation script
 #---------------------------------------------------------------------
 InstallISPConfig() {
   echo "Installing ISPConfig3... "

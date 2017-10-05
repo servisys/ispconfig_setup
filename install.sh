@@ -84,7 +84,7 @@ echo "========================================="
 echo "ISPConfig 3 System installer"
 echo "========================================="
 echo
-echo "This script will do a nearly unattended intallation of"
+echo "This script will do a nearly unattended installation of"
 echo "all software needed to run ISPConfig 3."
 echo "When this script starts running, it'll keep going all the way"
 echo "So before you continue, please make sure the following checklist is ok:"
