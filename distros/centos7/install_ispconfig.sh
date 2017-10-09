@@ -1,11 +1,11 @@
 #---------------------------------------------------------------------
 # Function: InstallISPConfig
-#    Start the ISPConfig3 intallation script
+#    Start the ISPConfig3 installation script
 #---------------------------------------------------------------------
 InstallISPConfig() {
   echo "Installing ISPConfig3... "
   cd /tmp
-  wget http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
+  wget https://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
   tar xfz ISPConfig-3-stable.tar.gz
   cd ispconfig3_install/install/
   echo "Create INI file"
