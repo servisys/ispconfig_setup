@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------
-# Function: AskQuestionsCluster Debian 8
+# Function: AskQuestionsCluster Debian 9
 #    Ask for all needed user input needed for the possible cluster setup
 #-----------------------------------------------------------------------------
 
