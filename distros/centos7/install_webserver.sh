@@ -62,10 +62,12 @@ InstallWebServer() {
 	echo "x-httpd-suphp="php:/usr/bin/php-cgi"" >> /etc/suphp.conf
 	echo ";Handler for CGI-scripts" >> /etc/suphp.conf
 	echo "x-suphp-cgi=\"execute:"'!'"self\"" >> /etc/suphp.conf
-	
+
+	echo "RequestHeader unset Proxy early" >> /etc/httpd/conf/httpd.conf
+
 	sed -i '0,/<FilesMatch \\.php$>/ s/<FilesMatch \\.php$>/<Directory \/usr\/share>\n<FilesMatch \\.php$>/' /etc/httpd/conf.d/php.conf
 	sed -i '0,/<\/FilesMatch>/ s/<\/FilesMatch>/<\/FilesMatch>\n<\/Directory>/' /etc/httpd/conf.d/php.conf
-	
+
 	systemctl start php-fpm.service
     systemctl enable php-fpm.service
     systemctl enable httpd.service
