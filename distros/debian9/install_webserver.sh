@@ -83,6 +83,7 @@ InstallWebServer() {
   CFG_APACHE=n
 	echo -n "Installing NGINX and Modules... "
 	apt-get -yqq install nginx > /dev/null 2>&1
+  echo 'fastcgi_param HTTP_PROXY "";' >> /etc/nginx/fastcgi_params
 	service nginx start
 	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-zip php7.0-mbstring php7.0-imap php7.0-mcrypt php7.0-snmp php7.0-xmlrpc php7.0-xsl > /dev/null 2>&1
 	#Need to check if soemthing is asked before suppress messages
@@ -122,7 +123,7 @@ InstallWebServer() {
   echo -e "[${green}DONE${NC}]\n"
   if [ $CFG_PHP56 == "yes" ]; then
 	echo -e "${red}Attention!!! You had installed php7 and php 5.6, to make php 5.6 work you had to configure the following in ISPConfig ${NC}"
-	echo -e "${red}Path for PHP FastCGI binary: /usr/bin/php-cgi5.6 ${NC}"
+	echo -e "${red}Path for PHP FastCGI binary: /usr/bin/php5.6-cgi ${NC}"
 	echo -e "${red}Path for php.ini directory: /etc/php/5.6/cgi ${NC}"
 	echo -e "${red}Path for PHP-FPM init script: /etc/init.d/php5.6-fpm ${NC}"
 	echo -e "${red}Path for php.ini directory: /etc/php/5.6/fpm ${NC}"
