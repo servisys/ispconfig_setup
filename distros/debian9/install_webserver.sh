@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: InstallWebServer Debian 8
+# Function: InstallWebServer Debian 9
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
@@ -69,7 +69,7 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
 	
 	echo -n "Installing Lets Encrypt... "	
-	apt-get -yqq certbot > /dev/null 2>&1
+	apt-get -yqq install certbot > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
   
     echo -n "Install PHP Opcode Cache "	
