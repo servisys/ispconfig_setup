@@ -13,6 +13,7 @@ InstallJailkit() {
   wget -q http://olivier.sessink.nl/jailkit/jailkit-$JKV.tar.gz
   tar xfz jailkit-$JKV.tar.gz
   cd jailkit-$JKV
+  echo 5 > debian/compat
   ./debian/rules binary > /dev/null 2>&1
   cd ..
   dpkg -i jailkit_$JKV-1_*.deb > /dev/null 2>&1
