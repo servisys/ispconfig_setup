@@ -80,7 +80,7 @@ cat >> /etc/fail2ban/jail.local <<EOF
 [pureftpd]
 enabled = true
 port = ftp
-filter = pureftpd
+filter = pure-ftpd
 logpath = /var/log/syslog
 maxretry = 3
 
