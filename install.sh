@@ -175,7 +175,7 @@ if [ -f /etc/debian_version ]; then
   echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
   if [ "$CFG_WEBMAIL" == "roundcube" ]; then
     if [ "$DISTRO" != "debian8" ]; then
-		echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roudcube user, as the one you inserted in ISPconfig ${NC}"
+		echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roundcube user, as the one you inserted in ISPconfig ${NC}"
 	fi
   fi
   if [ "$CFG_WEBSERVER" == "nginx" ]; then
