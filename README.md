@@ -3,7 +3,7 @@
 [![PayPayl donate button](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TB4Q3UJDC5JDJ "Help US support this project using Paypal")
 
 # Newsletter #
-Subscribe to our newsletter to recive information about new version of the script.
+Subscribe to our newsletter to receive information about new version of the script.
 The link is here: http://eepurl.com/cAzq95
 We'll use only to inform you on new version of the script :)
 
@@ -20,7 +20,7 @@ Tested on:
 - Ubuntu 14.04 Trusty ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
 - Ubuntu 15.10 Willy ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
 - Ubuntu 16.04 Xenial Xerus ( [Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
-- Centos 7 ([Servisys VPS](https://www.servisys.it/), Vitualbox)
+- CentOS 7 ([Servisys VPS](https://www.servisys.it/), Vitualbox)
 - ISPConfig 3.*
 
 For now it is tested and developed only on Debian systems.
@@ -29,9 +29,7 @@ Maybe it works well also on Ubuntu systems.
 
 ### What is this repository for? ###
 
-This repository contains some scripts for the automation
-
-of installation of ISPConfig 3 control panel.
+This repository contains some scripts for the automation of installation of ISPConfig 3 control panel.
 
 Before start be sure to configure your server following the following guides:
 
@@ -41,44 +39,588 @@ Before start be sure to configure your server following the following guides:
 - Ubuntu 14.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Ubuntu 15.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Ubuntu 16.04: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
-- Centos 7: http://www.howtoforge.com/centos-7-server
+- CentOS 7: http://www.howtoforge.com/centos-7-server
 
-You can Choose during install:
-- Apache / Nginx
+#### Supported Software and Linux distributions
+<table cellpadding="0" cellspacing="0">
+	<tr>
+		<td rowspan="2"><strong>Component</strong></td>
+		<td rowspan="2"><strong>Software</strong></td>
+		<td colspan="3"><strong>Debian/Raspbian</strong></td>
+		<td colspan="6"><strong>Ubuntu</strong></td>
+		<td><strong>CentOS</strong></td>
+		<td colspan="2"><strong>openSUSE Leap</strong></td>
+		<td><strong>Fedora</strong></td>
+	</tr>
+	<tr>
+		<td>7</td>
+		<td>8</td>
+		<td>9</td>
+		<td>14.04</td>
+		<td>15.10</td>
+		<td>16.04</td>
+		<td>16.10</td>
+		<td>17.10</td>
+		<td>18.04</td>
+		<td>7</td>
+		<td>42.1-3</td>
+		<td>15.0</td>
+		<td>22-28</td>
+	</tr>
+	<tr>
+		<td rowspan="2">Web: HTTP</td>
+		<td>Apache</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>nginx</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Mail: SMTP</td>
+		<td>Postfix</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="2">Mail: POP3/IMAP</td>
+		<td>Courier</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Dovecot</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>FTP</td>
+		<td>Pure-FPTd</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="3">DNS</td>
+		<td>Bind</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>PowerDNS</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>MyDNS</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="2">Database</td>
+		<td>MySQL</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>MariaDB</td>
+		<td></td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="2">Webmail client</td>
+		<td>Roundcube</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>SquirrelMail</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Chat: XMPP</td>
+		<td>Metronome</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔*</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Mailing lists</td>
+		<td>Mailman</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="2">Antivirus</td>
+		<td>Amavisd</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>ClamAV</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Spam filtering</td>
+		<td>SpamAssassin</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Greylisting</td>
+		<td>Postgrey</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="2">Mail signing</td>
+		<td>OpenDKIM</td>
+		<td></td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>OpenDMARC</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Firewall</td>
+		<td>UFW</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Intrusion protection</td>
+		<td>Fail2Ban</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Rootkit detection</td>
+		<td>rkhunter</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="2">Statistics</td>
+		<td>Webalizer</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>AWStats</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>Quota</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Let's Encrypt</td>
+		<td>Certbot/letsencrypt</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>Jailkit</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>HHVM</td>
+		<td></td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>MultiServer</td>
+		<td></td>
+		<td></td>
+		<td>✔</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+* Not enabled.
+
+
+You can choose during install:
+- Apache or nginx
 - Dovecot or Courier
-- Quota On/Off
-- Jailkit On/Off
-- Squirrelmail / Roundcube
+- Quota
+- Jailkit
+- SquirrelMail or Roundcube
 - ISPConfig 3 Standard / Expert mode
 - ISPConfig 3 Multiserver Setup (* Debian 8 only for now)
 
 ### How do I get set up? ###
 
-* Summary of set up
+Follow one of the above guides to install a fresh copy of a supported Linux distribution.
 
-First of all follow the guide 
+Run the following command:
 
-https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
-
-to install debian as required for ISPConfig
-
-* Configuration for Debian 7 / 8 / 9 - Ubuntu 14.04 / 15.10 / 16.04
-
-After you got a fresh and perfect Debian installation you had to
+* Debian/Raspbian 7, 8 and 9 and Ubuntu 14.04, 15.10, 16.04 and 16.10
 
 ```shell
-cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+cd /tmp; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo bash install.sh
 ```
-* Centos 7
+* CentOS 7
 
 ```shell
-cd /tmp; yum install wget unzip net-tools; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+cd /tmp; yum install wget unzip net-tools; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo bash install.sh
 ```
 
-Centos 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
+CentOS 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
 Some feature are missing for now, only implemented Apache and Dovecot, no webmail.
 
-Follow the instruction on the screen
+If `wget` fails, try adding the `--no-check-certificate` parameter.
+
+Follow the instructions on the screen
 
 ### Who had contributed to this work? ###
 
