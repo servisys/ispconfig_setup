@@ -13,21 +13,70 @@
 #
 #---------------------------------------------------------------------
 
-#Those lines are for logging porpuses
+# Bash Colour
+red='\e[0;31m'
+green='\e[0;32m'
+yellow='\e[0;33m'
+bold='\e[1m'
+underlined='\e[4m'
+NC='\e[0m' # No Color
+
+if [[ "$#" -ne 0 ]]; then
+	echo -e "Usage: sudo $0" >&2
+	exit 1
+fi
+
+# Check if user is root
+if [[ $(id -u) -ne 0 ]]; then # $EUID
+	echo -e "${red}Error: This script must be run as root, please run this script again with the root user or sudo.${NC}" >&2
+	exit 1
+fi
+
+# Check if on Linux
+if ! echo "$OSTYPE" | grep -iq "linux"; then
+	echo -e "${red}Error: This script must be run on Linux.${NC}" >&2
+	exit 1
+fi
+
+# Check memory
+TOTAL_PHYSICAL_MEM=$(awk '/^MemTotal:/{print $2}' /proc/meminfo)
+TOTAL_SWAP=$(awk '/^SwapTotal:/{print $2}' /proc/meminfo)
+if [ $TOTAL_PHYSICAL_MEM -lt 524288 ]; then
+	echo "This machine has: $(printf "%'d" $((TOTAL_PHYSICAL_MEM / 1024))) MiB ($(printf "%'d" $(((($TOTAL_PHYSICAL_MEM * 1024) / 1000) / 1000))) MB) memory (RAM)."
+	echo -e "\n${red}Error: ISPConfig needs more memory to function properly. Please run this script on a machine with at least 512 MiB memory, 1 GiB (1024 MiB) recommended.${NC}" >&2
+	exit 1
+fi
+
+# Check connectivity
+echo -e "Checking internet connection..."
+
+if [ ! ping -q -c 3 www.ispconfig.org > /dev/null 2>&1 -eq 0 ]; then
+	echo -e "${red}Error: Could not reach www.ispconfig.org, please check your internet connection and run this script again.${NC}" >&2
+	exit 1;
+fi
+
+echo -e "[${green}DONE${NC}]\n"
+
+# Check for already installed ISPConfig version
+if [ -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
+	echo -e "${red}Error: ISPConfig is already installed, cannot go on.${NC}" >&2
+	exit 1
+fi
+
+#Those lines are for logging purposes
 exec > >(tee -i /var/log/ispconfig_setup.log)
 exec 2>&1
 
 #---------------------------------------------------------------------
 # Global variables
 #---------------------------------------------------------------------
-CFG_HOSTNAME_FQDN=`hostname -f`;
+CFG_HOSTNAME_FQDN=`hostname -f`; # hostname -A
+IP_ADDRESS=(`hostname -I`);
+RE='^2([0-4][0-9]|5[0-5])|1?[0-9][0-9]{1,2}(\.(2([0-4][0-9]|5[0-5])|1?[0-9]{1,2})){3}$'
+IPv4_ADDRESS=( $(for i in ${IP_ADDRESS[*]}; do [[ "$i" =~ $RE ]] && echo "$i"; done) )
+RE='^[[:xdigit:]]{1,4}(:[[:xdigit:]]{1,4}){7}$'
+IPv6_ADDRESS=( $(for i in ${IP_ADDRESS[*]}; do [[ "$i" =~ $RE ]] && echo "$i"; done) )
 WT_BACKTITLE="ISPConfig 3 System Installer from Temporini Matteo"
-
-# Bash Colour
-red='\033[0;31m'
-green='\033[0;32m'
-NC='\033[0m' # No Color
-
 
 #Saving current directory
 PWD=$(pwd);
@@ -39,6 +88,7 @@ PWD=$(pwd);
 source $PWD/functions/check_linux.sh
 echo "Checking your system, please wait..."
 CheckLinux
+echo -e "[${green}DONE${NC}]\n"
 
 #---------------------------------------------------------------------
 # Load needed Modules
@@ -61,14 +111,13 @@ source $PWD/distros/$DISTRO/install_webstats.sh
 source $PWD/distros/$DISTRO/install_jailkit.sh
 source $PWD/distros/$DISTRO/install_fail2ban.sh
 source $PWD/distros/$DISTRO/install_webmail.sh
-source $PWD/distros/$DISTRO/install_metronom.sh
 source $PWD/distros/$DISTRO/install_ispconfig.sh
 source $PWD/distros/$DISTRO/install_fix.sh
 
 source $PWD/distros/$DISTRO/install_basephp.sh #to remove in feature release
 #---------------------------------------------------------------------
 # Main program [ main() ]
-#    Run the installer
+#	Run the installer
 #---------------------------------------------------------------------
 clear
 
@@ -78,158 +127,197 @@ echo "with the support of the community."
 echo "You can visit my website at the followings URLs"
 echo "http://www.servisys.it http://www.temporini.net"
 echo "and contact me with the following information"
-echo "contact email/hangout: temporini.matteo@gmail.com"
-echo "skype: matteo.temporini"
+echo "contact email/Hangouts: temporini.matteo@gmail.com"
+echo "Skype: matteo.temporini"
 echo "========================================="
 echo "ISPConfig 3 System installer"
 echo "========================================="
-echo
-echo "This script will do a nearly unattended installation of"
+echo -e "\nThis script will do a nearly unattended installation of"
 echo "all software needed to run ISPConfig 3."
-echo "When this script starts running, it'll keep going all the way"
-echo "So before you continue, please make sure the following checklist is ok:"
-echo
+echo "When this script starts running, it will keep going all the way"
+echo -e "So, before you continue, please make sure the following checklist is ok:\n"
 echo "- This is a clean standard clean installation for supported systems";
-echo "- Internet connection is working properly";
-echo
-echo
-if [ -n "$PRETTY_NAME" ]; then
-	echo -e "The detected Linux Distribution is: " $PRETTY_NAME
-else
-	echo -e "The detected Linux Distribution is: " $ID-$VERSION_ID
+echo -e "- Internet connection is working properly\n\n";
+echo -e "The detected Linux Distribution is:\t${PRETTY_NAME:-$ID-$VERSION_ID}"
+if [ -n "$ID_LIKE" ]; then
+	echo -e "Related Linux Distributions:\t\t$ID_LIKE"
 fi
-echo
+ARCHITECTURE=$(getconf LONG_BIT)
+echo -e "Architecture:\t\t\t\t$HOSTTYPE ($ARCHITECTURE-bit)"
+echo -e "Computer name:\t\t\t\t$HOSTNAME"
+echo -e "Hostname:\t\t\t\t$CFG_HOSTNAME_FQDN"
+if [ -n "$IPv4_ADDRESS" ]; then
+	echo -e "Private IPv4 address$([[ ${#IPv4_ADDRESS[*]} -gt 1 ]] && echo "es"):\t\t\t${IPv4_ADDRESS[*]}"
+fi
+if [ -n "$IPv6_ADDRESS" ]; then
+	echo -e "Private IPv6 address$([[ ${#IPv6_ADDRESS[*]} -gt 1 ]] && echo "es"):\t\t\t${IPv6_ADDRESS[*]}"
+fi
+echo -e "Total memory (RAM):\t\t\t$(printf "%'d" $((TOTAL_PHYSICAL_MEM / 1024))) MiB ($(printf "%'d" $(((($TOTAL_PHYSICAL_MEM * 1024) / 1000) / 1000))) MB)"
+echo -e "Total swap space:\t\t\t$(printf "%'d" $((TOTAL_SWAP / 1024))) MiB ($(printf "%'d" $(((($TOTAL_SWAP * 1024) / 1000) / 1000))) MB)\n"
+RE='^.+\.localdomain$'
+RE1='^.{4,253}$'
+RE2='^([[:alnum:]][a-zA-Z0-9\-]{1,61}[[:alnum:]]\.)+[a-zA-Z]{2,63}$'
+if [[ $CFG_HOSTNAME_FQDN =~ $RE ]]; then
+	echo -e "${yellow}Warning: Hostname cannot be *.localdomain.${NC}\n"
+elif ! [[ $CFG_HOSTNAME_FQDN =~ $RE1 && $CFG_HOSTNAME_FQDN =~ $RE2 ]]; then
+	echo -e "${yellow}Warning: Hostname is not a valid fully qualified domain name (FQDN).${NC}\n"
+fi
+if uname -r | grep -iq "microsoft"; then
+	echo -e "${yellow}Warning: The Windows Subsystem for Linux (WSL) is not yet fully supported by this script.${NC}"
+	echo -e "For more information, see this issue: https://github.com/servisys/ispconfig_setup/issues/176\n"
+fi
 if [ -n "$DISTRO" ]; then
-	read -p "Is this correct? (y/n)" -n 1 -r
+	echo -e "Installing for this Linux Distribution:\t$DISTRO"
+	read -p "Is this correct? (y/n) " -n 1 -r
 	echo    # (optional) move to a new line
-	if [[ ! $REPLY =~ ^[Yy]$ ]]
+	RE='^[Yy]$'
+	if [[ ! $REPLY =~ $RE ]]
 		then
 		exit 1
 	fi
 else
-	echo -e "Sorry but your System is not supported by this script, if you want your system supported "
-	echo -e "open an issue on GitHub: https://github.com/servisys/ispconfig_setup"
+	echo -e "Sorry but your System is not supported by this script, if you want your system supported " >&2
+	echo -e "open an issue on GitHub: https://github.com/servisys/ispconfig_setup/issues" >&2
+	if echo "$ID" | grep -iq 'debian\|raspbian\|ubuntu\|centos\|opensuse\|fedora'; then
+		echo -e "\nIt is possible that this script will work if you manually set the DISTRO variable to a version of $ID that is supported."
+	elif [ -n "$ID_LIKE" ] && echo "$ID_LIKE" | grep -iq 'debian\|raspbian\|ubuntu\|centos\|opensuse\|fedora'; then
+		echo -e "\nIt is possible that this script will work if you manually set the DISTRO variable to one of the related Linux distributions that is supported."
+	fi
+	if echo $ID | grep -iq "opensuse"; then
+		echo -e "\nYou can use the script here temporary: https://gist.github.com/jniltinho/7734f4879c4469b9a47f3d3eb4ff0bfb"
+		echo -e "Adjust it accordingly for your version of $ID and this issue: https://git.ispconfig.org/ispconfig/ispconfig3/issues/5074."
+	fi
 	exit 1
 fi
 
+RE='^.*[^[:space:]]+.*$'
 if [ "$DISTRO" == "debian8" ]; then
-	     while [ "x$CFG_ISPCVERSION" == "x" ]
-          do
-                CFG_ISPCVERSION=$(whiptail --title "ISPConfig Version" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select ISPConfig Version you want to install" 10 50 2 "Stable" "(default)" ON "Beta" "" OFF 3>&1 1>&2 2>&3)
-          done
-         while [ "x$CFG_MULTISERVER" == "x" ]
-          do
-                CFG_MULTISERVER=$(whiptail --title "MULTISERVER SETUP" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like to install ISPConfig in a MultiServer Setup?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
-          done
+	while [[ ! "$CFG_ISPCVERSION" =~ $RE ]]
+	do
+		CFG_ISPCVERSION=$(whiptail --title "ISPConfig Version" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select ISPConfig Version you want to install" 10 50 2 "Stable" "(default)" ON "Beta" "" OFF 3>&1 1>&2 2>&3)
+	done
+	while [[ ! "$CFG_MULTISERVER" =~ $RE ]]
+	do
+		CFG_MULTISERVER=$(whiptail --title "MULTISERVER SETUP" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like to install ISPConfig in a MultiServer Setup?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
+	done
 else
 	CFG_MULTISERVER=no
 fi
 
 if [ -f /etc/debian_version ]; then
-  PreInstallCheck
-  if [ "$CFG_MULTISERVER" == "no" ]; then
-	AskQuestions
-  else
-    source $PWD/distros/$DISTRO/askquestions_multiserver.sh
-	AskQuestionsMultiserver
-  fi
-  InstallBasics 
-  InstallSQLServer 
-  if [ "$CFG_SETUP_WEB" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
-    InstallWebServer
-    InstallFTP 
-    if [ "$CFG_QUOTA" == "yes" ]; then
-    	InstallQuota 
-    fi
-    if [ "$CFG_JKIT" == "yes" ]; then
-    	InstallJailkit 
-    fi
-    if [ "$CFG_HHVM" == "yes" ]; then
-    	InstallHHVM
-    fi
-    if [ "$CFG_METRONOM" == "yes" ]; then
-    	InstallMetronom 
-    fi
-    InstallWebmail 
-  else
-    InstallBasePhp    #to remove in feature release
-  fi  
-  if [ "$CFG_SETUP_MAIL" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
-    InstallPostfix 
-    InstallMTA 
-    InstallAntiVirus 
-  fi  
-  if [ "$CFG_SETUP_NS" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
-    InstallBind 
-  fi
-  InstallWebStats
-  InstallFail2ban
-  if [ "$CFG_ISPCVERSION" == "Beta" ]; then
-		source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
-		InstallISPConfigBeta
-  fi
-  InstallISPConfig
-  InstallFix
-  echo -e "${green}Well done ISPConfig installed and configured correctly :D ${NC}"
-  echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
-  echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
-  if [ "$CFG_WEBMAIL" == "roundcube" ]; then
-    if [ "$DISTRO" != "debian8" ]; then
-		echo -e "${red}You had to edit user/pass /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of roudcube user, as the one you inserted in ISPconfig ${NC}"
-	fi
-  fi
-  if [ "$CFG_WEBSERVER" == "nginx" ]; then
-  	if [ "$CFG_PHPMYADMIN" == "yes" ]; then
-  		echo "Phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin";
-	fi
-	if [ "$DISTRO" == "debian8" ] && [ "$CFG_WEBMAIL" == "roundcube" ]; then
-		echo "Webmail is accessibile at  https://$CFG_HOSTNAME_FQDN/webmail or https://IP_ADDRESS/webmail";
+	PreInstallCheck
+	if [ "$CFG_MULTISERVER" == "no" ]; then
+		AskQuestions
 	else
-		echo "Webmail is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/webmail or http://IP_ADDRESS:8081/webmail";
+		source $PWD/distros/$DISTRO/askquestions_multiserver.sh
+		AskQuestionsMultiserver
 	fi
-  fi
-else 
-	if [ -f /etc/centos-release ]; then
-		echo "Attention please, this is the very first version of the script for CentOS 7"
-		echo "Please use only for test purpose for now."
-		echo -e "${red}Not yet implemented: courier, nginx support${NC}"
-		echo -e "${green}Implemented: apache, mysql, bind, postfix, dovecot, roundcube webmail support${NC}"
-		echo "Help us to test and implement, press ENTER if you understand what I'm talking about..."
-		read DUMMY
-		source $PWD/distros/$DISTRO/install_mailman.sh
-		PreInstallCheck
-		AskQuestions 
-		InstallBasics 
-		InstallPostfix 
-		InstallSQLServer 
-		InstallMTA 
-		InstallAntiVirus 
+	InstallBasics 
+	InstallSQLServer 
+	if [ "$CFG_SETUP_WEB" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
 		InstallWebServer
 		InstallFTP 
-		#if [ $CFG_QUOTA == "yes" ]; then
-		#		InstallQuota 
-		#fi
-		InstallBind 
-        InstallWebStats 
-	    if [ "$CFG_JKIT" == "yes" ]; then
+		if [ "$CFG_QUOTA" == "yes" ]; then
+			InstallQuota 
+		fi
+		if [ "$CFG_JKIT" == "yes" ]; then
 			InstallJailkit 
-	    fi
-		InstallFail2ban 
+		fi
+		if [ "$CFG_HHVM" == "yes" ]; then
+			InstallHHVM
+		fi
 		if [ "$CFG_METRONOM" == "yes" ]; then
+			source $PWD/distros/$DISTRO/install_metronom.sh
 			InstallMetronom 
 		fi
 		InstallWebmail 
-		InstallISPConfig
-		#InstallFix
-		echo -e "${green}Well done! ISPConfig installed and configured correctly :D ${NC}"
-		echo "Now you can connect to your ISPConfig installation at https://$CFG_HOSTNAME_FQDN:8080 or https://IP_ADDRESS:8080"
-		echo "You can visit my GitHub profile at https://github.com/servisys/ispconfig_setup/"
-		echo -e "${red}If you setup Roundcube webmail go to http://$CFG_HOSTNAME_FQDN/roundcubemail/installer and configure db connection${NC}"
-		echo -e "${red}After that disable access to installer in /etc/httpd/conf.d/roundcubemail.conf${NC}"
 	else
-		echo "${red}Unsupported linux distribution.${NC}"
+		InstallBasePhp    #to remove in feature release
+	fi	
+	if [ "$CFG_SETUP_MAIL" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
+		InstallPostfix 
+		InstallMTA 
+		InstallAntiVirus 
+	fi	
+	if [ "$CFG_SETUP_NS" == "yes" ] || [ "$CFG_MULTISERVER" == "no" ]; then
+		InstallBind 
 	fi
+	InstallWebStats
+	InstallFail2ban
+	if [ "$CFG_ISPCVERSION" == "Beta" ]; then
+		source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
+		InstallISPConfigBeta
+	fi
+	InstallISPConfig
+	InstallFix
+	echo -e "\n${green}Well done! ISPConfig installed and configured correctly :D${NC} 😃"
+	echo -e "\nNow you can access to your ISPConfig installation at: ${underlined}https://$CFG_HOSTNAME_FQDN:8080${NC} or ${underlined}https://${IP_ADDRESS[0]}:8080${NC}"
+	echo -e "The default ISPConfig Username is: ${bold}admin${NC}\n\t      and the Password is: ${bold}admin${NC}"
+	echo -e "${yellow}Warning: This is a security risk. Please change the default password after your first login.${NC}"
+	
+	if [ "$CFG_WEBMAIL" == "roundcube" ]; then
+		if [ "$DISTRO" != "debian8" ]; then
+			echo -e "\n${red}You will need to edit the username and password in /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of the roudcube user, as the one you set in ISPconfig ${NC}"
+		fi
+	fi
+	if [ "$CFG_WEBSERVER" == "nginx" ]; then
+		if [ "$CFG_PHPMYADMIN" == "yes" ]; then
+			echo "phpMyAdmin is accessible at: http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://${IP_ADDRESS[0]}:8081/phpmyadmin";
+		fi
+		if [ "$DISTRO" == "debian8" ] && [ "$CFG_WEBMAIL" == "roundcube" ]; then
+			echo "Webmail is accessible at: https://$CFG_HOSTNAME_FQDN/webmail or https://${IP_ADDRESS[0]}/webmail";
+		else
+			echo "Webmail is accessible at: http://$CFG_HOSTNAME_FQDN:8081/webmail or http://${IP_ADDRESS[0]}:8081/webmail";
+		fi
+	fi
+elif [ -f /etc/redhat-release ]; then # /etc/centos-release
+	echo "Attention please, this is the very first version of the script for CentOS $VERSION_ID"
+	echo "Please use only for test purpose for now."
+	echo -e "${red}Not yet implemented: courier, nginx support${NC}"
+	echo -e "${green}Implemented: apache, mysql, bind, postfix, dovecot, roundcube webmail support${NC}"
+	echo "Help us to test and implement, press ENTER if you understand what I'm talking about..."
+	read DUMMY
+	source $PWD/distros/$DISTRO/install_mailman.sh
+	PreInstallCheck
+	AskQuestions 
+	InstallBasics 
+	InstallPostfix 
+	InstallSQLServer 
+	InstallMTA 
+	InstallAntiVirus 
+	InstallWebServer
+	InstallFTP 
+	#if [ $CFG_QUOTA == "yes" ]; then
+	#		InstallQuota 
+	#fi
+	InstallBind 
+	InstallWebStats 
+	if [ "$CFG_JKIT" == "yes" ]; then
+		InstallJailkit 
+	fi
+	InstallFail2ban 
+	if [ "$CFG_METRONOM" == "yes" ]; then
+		source $PWD/distros/$DISTRO/install_metronom.sh
+		InstallMetronom 
+	fi
+	InstallWebmail 
+	InstallISPConfig
+	#InstallFix
+	echo -e "\n\n"
+	echo -e "\n${green}Well done! ISPConfig installed and configured correctly :D${NC} 😃"
+	echo -e "\nNow you can access to your ISPConfig installation at: ${underlined}https://$CFG_HOSTNAME_FQDN:8080${NC} or ${underlined}https://${IP_ADDRESS[0]}:8080${NC}"
+	echo -e "The default ISPConfig Username is: ${bold}admin${NC}\n\t      and the Password is: ${bold}admin${NC}"
+	echo -e "${yellow}Warning: This is a security risk. Please change the default password after your first login.${NC}"
+	echo -e "\n${red}If you setup Roundcube webmail go to: http://$CFG_HOSTNAME_FQDN/roundcubemail/installer and configure db connection${NC}"
+	echo -e "${red}After that disable access to installer in /etc/httpd/conf.d/roundcubemail.conf${NC}"
+elif [ -f /etc/SuSE-release ]; then
+	echo -e "${red}Unsupported linux distribution.${NC}" >&2
+else
+	echo -e "${red}Unsupported linux distribution.${NC}" >&2
 fi
 
+echo -e "\nYou can visit the GitHub repository at: https://github.com/servisys/ispconfig_setup/"
+echo "If you need support or have questions, ask here: https://www.howtoforge.com/community/#ispconfig-3.23"
+echo "Please report any errors or issues with this auto installer script at: https://github.com/servisys/ispconfig_setup/issues and with ISPConfig at: https://git.ispconfig.org/ispconfig/ispconfig3/issues"
 exit 0
 

@@ -23,7 +23,7 @@ Tested on:
 - CentOS 7 ([Servisys VPS](https://www.servisys.it/), Vitualbox)
 - ISPConfig 3.*
 
-For now it is tested and developed only on Debian systems.
+For now, it is tested and developed only on Debian systems.
 
 Maybe it works well also on Ubuntu systems.
 
@@ -31,15 +31,18 @@ Maybe it works well also on Ubuntu systems.
 
 This repository contains some scripts for the automation of installation of ISPConfig 3 control panel.
 
-Before start be sure to configure your server following the following guides:
+Before starting, be sure to follow one of these guides to install a supported Linux distribution:
 
-- Debian 9: https://www.howtoforge.com/tutorial/debian-minimal-server/
+- Debian 7: https://www.howtoforge.com/tutorial/debian-7-wheezy-minimal-server/
 - Debian 8: https://www.howtoforge.com/tutorial/debian-8-jessie-minimal-server/
-- Debian 7: https://www.howtoforge.com/perfect-server-debian-wheezy-apache2-bind-dovecot-ispconfig-3
-- Ubuntu 14.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
-- Ubuntu 15.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
-- Ubuntu 16.04: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
-- CentOS 7: http://www.howtoforge.com/centos-7-server
+- Debian 9: https://www.howtoforge.com/tutorial/debian-minimal-server/
+- Ubuntu 14.10: https://www.howtoforge.com/tutorial/ubuntu-14.10-utopic-unicorn-server
+- Ubuntu 15.10: https://www.howtoforge.com/tutorial/ubuntu-15.10-wily-werewolf-minimal-server/
+- Ubuntu 16.04: https://www.howtoforge.com/tutorial/ubuntu-16.04-xenial-xerus-minimal-server/
+- Ubuntu 16.10: https://www.howtoforge.com/tutorial/ubuntu-16.10-yakkety-yak-minimal-server/
+- Ubuntu 17.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
+- Ubuntu 18.04: https://www.howtoforge.com/tutorial/ubuntu-lts-minimal-server/
+- CentOS 7: https://www.howtoforge.com/tutorial/centos-7-minimal-server/
 
 #### Supported Software and Linux distributions
 <table cellpadding="0" cellspacing="0">
@@ -152,7 +155,7 @@ Before start be sure to configure your server following the following guides:
 	</tr>
 	<tr>
 		<td>FTP</td>
-		<td>Pure-FPTd</td>
+		<td>Pure-FTPd</td>
 		<td>✔</td>
 		<td>✔</td>
 		<td>✔</td>
@@ -612,11 +615,11 @@ cd /tmp; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarb
 * CentOS 7
 
 ```shell
-cd /tmp; yum install wget unzip net-tools; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo bash install.sh
+cd /tmp; sudo yum install wget unzip net-tools; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo bash install.sh
 ```
 
 CentOS 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
-Some feature are missing for now, only implemented Apache and Dovecot, no webmail.
+Some features are missing for now, only implemented Apache and Dovecot, no webmail.
 
 If `wget` fails, try adding the `--no-check-certificate` parameter.
 
