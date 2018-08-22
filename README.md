@@ -558,8 +558,8 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td></td>
 		<td>HHVM</td>
 		<td></td>
-		<td>✔</td>
-		<td>✔</td>
+		<td>✔^</td>
+		<td>✔^</td>
 		<td>✔</td>
 		<td>✔</td>
 		<td>✔</td>
@@ -589,7 +589,8 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td></td>
 	</tr>
 </table>
-* Not enabled.
+* Not yet enabled.
+^ Not yet enabled on Raspbian.
 
 
 You can choose during install:

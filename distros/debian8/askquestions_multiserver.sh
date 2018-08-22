@@ -37,15 +37,15 @@ AskQuestionsMultiserver(){
 
 			text="Before you continue, run the following SQL commands on the Master $CFG_SQLSERVER server:
 
-			CREATE USER 'root'@'$(ping -c1 $CFG_HOSTNAME_FQDN | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
+			CREATE USER 'root'@'$(ping -c1 "$CFG_HOSTNAME_FQDN" | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
 
-			GRANT ALL PRIVILEGES ON * . * TO 'root'@'$(ping -c1 $CFG_HOSTNAME_FQDN | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
+			GRANT ALL PRIVILEGES ON * . * TO 'root'@'$(ping -c1 "$CFG_HOSTNAME_FQDN" | grep icmp_seq | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
 
 			CREATE USER 'root'@'$CFG_HOSTNAME_FQDN' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD';
 
 			GRANT ALL PRIVILEGES ON * . * TO 'root'@'$CFG_HOSTNAME_FQDN' IDENTIFIED BY '$CFG_MASTER_MYSQL_ROOT_PWD' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
 
-			Press "OK" when done
+			Press \"OK\" when done
 			"
 
 			whiptail --title "$CFG_SQLSERVER commands on Master Server" --msgbox "$text" 25 90
@@ -124,7 +124,7 @@ AskQuestionsMultiserver(){
 		done
 		CFG_WEBMAIL=${CFG_WEBMAIL,,}
 
-		if [ $CFG_WEBMAIL == "roundcube" ]; then
+		if [ "$CFG_WEBMAIL" == "roundcube" ]; then
 			roundcube_db=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database name" --nocancel 10 50 3>&1 1>&2 2>&3)
 			roundcube_user=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube user" --nocancel 10 50 $USER 3>&1 1>&2 2>&3)
 			roundcube_pass=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the roundcube user password" --nocancel 10 50 3>&1 1>&2 2>&3)

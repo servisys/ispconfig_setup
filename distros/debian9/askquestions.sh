@@ -25,10 +25,14 @@ AskQuestions() {
 		CFG_PHP56=$(whiptail --title "Install PHP 5.6" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "By default ISPConfig comes with PHP 7, do you want to install also PHP 5.6 version?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
 	done
 
-	while [[ ! "$CFG_HHVM" =~ $RE ]]
-	do
-		CFG_HHVM=$(whiptail --title "HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM (Hip Hop Virtual Machine) as PHP engine?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
-	done
+	if echo "$ID" | grep -iq 'raspbian'; then
+		CFG_HHVM="no"
+	else
+		while [[ ! "$CFG_HHVM" =~ $RE ]]
+		do
+			CFG_HHVM=$(whiptail --title "HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM (Hip Hop Virtual Machine) as PHP engine?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
+		done
+	fi
 
 	while [[ ! "$CFG_PHPMYADMIN" =~ $RE ]]
 	do

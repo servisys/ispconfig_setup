@@ -39,10 +39,10 @@ if ! echo "$OSTYPE" | grep -iq "linux"; then
 fi
 
 # Check memory
-TOTAL_PHYSICAL_MEM=$(awk '/^MemTotal:/{print $2}' /proc/meminfo)
-TOTAL_SWAP=$(awk '/^SwapTotal:/{print $2}' /proc/meminfo)
-if [ $TOTAL_PHYSICAL_MEM -lt 524288 ]; then
-	echo "This machine has: $(printf "%'d" $((TOTAL_PHYSICAL_MEM / 1024))) MiB ($(printf "%'d" $(((($TOTAL_PHYSICAL_MEM * 1024) / 1000) / 1000))) MB) memory (RAM)."
+TOTAL_PHYSICAL_MEM=$(awk '/^MemTotal:/ {print $2}' /proc/meminfo)
+TOTAL_SWAP=$(awk '/^SwapTotal:/ {print $2}' /proc/meminfo)
+if [ "$TOTAL_PHYSICAL_MEM" -lt 524288 ]; then
+	echo "This machine has: $(printf "%'d" $((TOTAL_PHYSICAL_MEM / 1024))) MiB ($(printf "%'d" $((((TOTAL_PHYSICAL_MEM * 1024) / 1000) / 1000))) MB) memory (RAM)."
 	echo -e "\n${red}Error: ISPConfig needs more memory to function properly. Please run this script on a machine with at least 512 MiB memory, 1 GiB (1024 MiB) recommended.${NC}" >&2
 	exit 1
 fi
@@ -50,7 +50,7 @@ fi
 # Check connectivity
 echo -e "Checking internet connection..."
 
-if [ ! ping -q -c 3 www.ispconfig.org > /dev/null 2>&1 -eq 0 ]; then
+if ! ping -q -c 3 www.ispconfig.org > /dev/null 2>&1; then
 	echo -e "${red}Error: Could not reach www.ispconfig.org, please check your internet connection and run this script again.${NC}" >&2
 	exit 1;
 fi
@@ -70,8 +70,8 @@ exec 2>&1
 #---------------------------------------------------------------------
 # Global variables
 #---------------------------------------------------------------------
-CFG_HOSTNAME_FQDN=`hostname -f`; # hostname -A
-IP_ADDRESS=(`hostname -I`);
+CFG_HOSTNAME_FQDN=$(hostname -f); # hostname -A
+IP_ADDRESS=( $(hostname -I) );
 RE='^2([0-4][0-9]|5[0-5])|1?[0-9][0-9]{1,2}(\.(2([0-4][0-9]|5[0-5])|1?[0-9]{1,2})){3}$'
 IPv4_ADDRESS=( $(for i in ${IP_ADDRESS[*]}; do [[ "$i" =~ $RE ]] && echo "$i"; done) )
 RE='^[[:xdigit:]]{1,4}(:[[:xdigit:]]{1,4}){7}$'
@@ -152,8 +152,8 @@ fi
 if [ -n "$IPv6_ADDRESS" ]; then
 	echo -e "Private IPv6 address$([[ ${#IPv6_ADDRESS[*]} -gt 1 ]] && echo "es"):\t\t\t${IPv6_ADDRESS[*]}"
 fi
-echo -e "Total memory (RAM):\t\t\t$(printf "%'d" $((TOTAL_PHYSICAL_MEM / 1024))) MiB ($(printf "%'d" $(((($TOTAL_PHYSICAL_MEM * 1024) / 1000) / 1000))) MB)"
-echo -e "Total swap space:\t\t\t$(printf "%'d" $((TOTAL_SWAP / 1024))) MiB ($(printf "%'d" $(((($TOTAL_SWAP * 1024) / 1000) / 1000))) MB)\n"
+echo -e "Total memory (RAM):\t\t\t$(printf "%'d" $((TOTAL_PHYSICAL_MEM / 1024))) MiB ($(printf "%'d" $((((TOTAL_PHYSICAL_MEM * 1024) / 1000) / 1000))) MB)"
+echo -e "Total swap space:\t\t\t$(printf "%'d" $((TOTAL_SWAP / 1024))) MiB ($(printf "%'d" $((((TOTAL_SWAP * 1024) / 1000) / 1000))) MB)\n"
 RE='^.+\.localdomain$'
 RE1='^.{4,253}$'
 RE2='^([[:alnum:]][a-zA-Z0-9\-]{1,61}[[:alnum:]]\.)+[a-zA-Z]{2,63}$'
@@ -183,7 +183,7 @@ else
 	elif [ -n "$ID_LIKE" ] && echo "$ID_LIKE" | grep -iq 'debian\|raspbian\|ubuntu\|centos\|opensuse\|fedora'; then
 		echo -e "\nIt is possible that this script will work if you manually set the DISTRO variable to one of the related Linux distributions that is supported."
 	fi
-	if echo $ID | grep -iq "opensuse"; then
+	if echo "$ID" | grep -iq "opensuse"; then
 		echo -e "\nYou can use the script here temporary: https://gist.github.com/jniltinho/7734f4879c4469b9a47f3d3eb4ff0bfb"
 		echo -e "Adjust it accordingly for your version of $ID and this issue: https://git.ispconfig.org/ispconfig/ispconfig3/issues/5074."
 	fi
