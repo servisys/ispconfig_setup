@@ -12,7 +12,7 @@ InstallWebServer() {
 	apt-get -yqq install apache2 apache2-doc apache2-utils libapache2-mod-php libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec-pristine libapache2-mod-python php7.2-fpm libruby > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php7.2 php7.2-common php7.2-gd php7.2-dev php7.2-mysqlnd php7.2-imap php7.2-cli php7.2-cgi php-pear php-auth php7.2-mcrypt php7.2-curl php7.2-intl php7.2-pspell php7.2-recode php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl php-memcached php-imagick php-gettext php7.2-zip php7.2-mbstring php7.2-opcache php-apcu php7.2-bz2 php-redis > /dev/null 2>&1
+	apt-get -yqq install php7.2 php7.2-common php7.2-gd php7.2-dev php7.2-mysqlnd php7.2-imap php7.2-cli php7.2-cgi php-pear php7.2-curl php7.2-intl php7.2-pspell php7.2-recode php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl php-memcached php-imagick php-gettext php7.2-zip php7.2-mbstring php7.2-opcache php-apcu php7.2-bz2 php-redis > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 
 	
@@ -56,7 +56,7 @@ InstallWebServer() {
 	service nginx start 
 	
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php7.2-opcache php7.2-fpm php7.2 php7.2-common php7.2-gd php7.2-mysql php7.2-imap php7.2-cli php7.2-cgi php-pear php-auth php7.2-mcrypt mcrypt imagemagick libruby php7.2-curl php7.2-intl php7.2-pspell php7.2-recode php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl memcached php-memcache php-imagick php-gettext php7.2-zip php7.2-mbstring php7.2-opcache php-apcu > /dev/null 2>&1
+	apt-get -yqq install php7.2-opcache php7.2-fpm php7.2 php7.2-common php7.2-gd php7.2-mysql php7.2-imap php7.2-cli php7.2-cgi php-pear mcrypt imagemagick libruby php7.2-curl php7.2-intl php7.2-pspell php7.2-recode php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl memcached php-memcache php-imagick php-gettext php7.2-zip php7.2-mbstring php7.2-opcache php-apcu > /dev/null 2>&1
 	
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.2/fpm/php.ini
 	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php/7.2/fpm/php.ini
@@ -91,7 +91,6 @@ InstallWebServer() {
   apt-get -yqq install mcrypt imagemagick memcached curl tidy snmp redis-server > /dev/null 2>&1
   echo -e "[${green}DONE${NC}]\n"
  
-  phpenmod mcrypt
   phpenmod mbstring
 
   echo -n "Installing Lets Encrypt... "	
