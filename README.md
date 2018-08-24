@@ -88,3 +88,20 @@ Follow the instruction on the screen
 * Special thanks to Bartłomiej Gajda ( http://webard.me/ ) for the bug fixes to multiserver setup and beta installation
 * The code is based on the "Automatic Debian System Installation for ISPConfig 3" of Author: Mark Stunnenberg <mark@e-rave.nl>
 * Howtoforge community https://www.howtoforge.com/community/
+
+### Mind the Ubuntu 18.04 Amavis bug ###
+
+* Howtoforge points out a bug:
+
+The amavisd-new program has currently a bug in Ubuntu 18.04 which prevents that emails get signed with Dkim correctly. Run the following commands to patch amavisd-new.
+
+Workaround also is provided:
+
+```shell
+cd /tmp
+wget https://git.ispconfig.org/ispconfig/ispconfig3/raw/stable-3.1/helper_scripts/ubuntu-amavisd-new-2.11.patch
+cd /usr/sbin
+cp -pf amavisd-new amavisd-new_bak
+patch < /tmp/ubuntu-amavisd-new-2.11.patch
+```
+
