@@ -14,7 +14,7 @@
 #	  echo "roundcube-core roundcube/mysql/app-pass password $CFG_ROUNDCUBE_PWD" | debconf-set-selections
 #	  echo "roundcube-core roundcube/app-password-confirm password $CFG_ROUNDCUBE_PWD" | debconf-set-selections
 #	  echo "roundcube-core roundcube/hosts string localhost" | debconf-set-selections
-#	  apt-get -yqq install roundcube roundcube-core roundcube-mysql roundcube-plugins roundcube-plugins-extra javascript-common libjs-jquery-mousewheel php-net-sieve tinymce > /dev/null 2>&1
+#	  apt-get -yqq install roundcube roundcube-core roundcube-mysql roundcube-plugins javascript-common libjs-jquery-mousewheel php-net-sieve tinymce > /dev/null 2>&1
 # 
 #
 #  echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
