@@ -4,7 +4,7 @@
 #---------------------------------------------------------------------
 InstallAntiVirus() {
   echo -n "Installing Anti-Virus & utilities... [${red}(THIS TAKES SOME TIME. DON'T ABORT !!!)${NC}]\n"
-  apt-get -yqq install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl postgrey > /dev/null 2>&1
+  apt-get -yqq install amavisd-new spamassassin clamav clamav-daemon unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl postgrey > /dev/null 2>&1
   echo -e "[${green}DONE${NC}]\n"
   
   sed -i "s/AllowSupplementaryGroups false/AllowSupplementaryGroups true/" /etc/clamav/clamd.conf
