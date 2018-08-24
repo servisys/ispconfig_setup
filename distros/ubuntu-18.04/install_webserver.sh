@@ -9,10 +9,10 @@ InstallWebServer() {
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
 	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt-get -yqq install apache2 apache2-doc apache2-utils libapache2-mod-php libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec-pristine libapache2-mod-python php7.0-fpm libruby > /dev/null 2>&1
+	apt-get -yqq install apache2 apache2-doc apache2-utils libapache2-mod-php libapache2-mod-fastcgi libapache2-mod-fcgid apache2-suexec-pristine libapache2-mod-python php7.2-fpm libruby > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php7.0 php7.0-common php7.0-gd php7.0-dev php7.0-mysqlnd php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php-memcached php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-opcache php-apcu php7.0-bz2 php-redis > /dev/null 2>&1
+	apt-get -yqq install php7.2 php7.2-common php7.2-gd php7.2-dev php7.2-mysqlnd php7.2-imap php7.2-cli php7.2-cgi php-pear php-auth php7.2-mcrypt php7.2-curl php7.2-intl php7.2-pspell php7.2-recode php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl php-memcached php-imagick php-gettext php7.2-zip php7.2-mbstring php7.2-opcache php-apcu php7.2-bz2 php-redis > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 
 	
@@ -56,11 +56,11 @@ InstallWebServer() {
 	service nginx start 
 	
 	echo -n "Installing PHP and Modules... "
-	apt-get -yqq install php7.0-opcache php7.0-fpm php7.0 php7.0-common php7.0-gd php7.0-mysql php7.0-imap php7.0-cli php7.0-cgi php-pear php-auth php7.0-mcrypt mcrypt imagemagick libruby php7.0-curl php7.0-intl php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl memcached php-memcache php-imagick php-gettext php7.0-zip php7.0-mbstring php7.0-opcache php-apcu > /dev/null 2>&1
+	apt-get -yqq install php7.2-opcache php7.2-fpm php7.2 php7.2-common php7.2-gd php7.2-mysql php7.2-imap php7.2-cli php7.2-cgi php-pear php-auth php7.2-mcrypt mcrypt imagemagick libruby php7.2-curl php7.2-intl php7.2-pspell php7.2-recode php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl memcached php-memcache php-imagick php-gettext php7.2-zip php7.2-mbstring php7.2-opcache php-apcu > /dev/null 2>&1
 	
-	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.0/fpm/php.ini
-	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php/7.0/fpm/php.ini
-	service php7.0-fpm reload
+	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.2/fpm/php.ini
+	sed -i "s/;date.timezone =/date.timezone=\"Europe\/Rome\"/" /etc/php/7.2/fpm/php.ini
+	service php7.2-fpm reload
 	echo -e "[${green}DONE${NC}]\n"
 	
 	apt-get -yqq install fcgiwrap

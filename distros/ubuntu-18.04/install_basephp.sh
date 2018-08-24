@@ -4,6 +4,6 @@
 #---------------------------------------------------------------------
 InstallBasePhp(){
   echo -n "Installing basic php modules for ispconfig..."
-  apt-get -yqq install php7.0-cli php7.0-mysql php7.0-mcrypt mcrypt > /dev/null 2>&1
+  apt-get -yqq install php7.2-cli php7.2-mysql php7.2-mcrypt mcrypt > /dev/null 2>&1
   echo -e "[${green}DONE${NC}]\n"
 }
