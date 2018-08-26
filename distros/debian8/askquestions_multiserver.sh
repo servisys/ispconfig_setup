@@ -4,8 +4,11 @@
 #-----------------------------------------------------------------------------
 
 AskQuestionsMultiserver(){
-	echo "Installing pre-required packages"
-	[ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"	|| apt-get -y install whiptail > /dev/null 2>&1
+	if ! command -v whiptail >/dev/null; then
+		echo -n "Installing whiptail... "
+		apt-get -yqq install whiptail
+		echo -e "[${green}DONE${NC}]\n"
+	fi
 
 	while [[ ! "$CFG_SQLSERVER" =~ $RE ]]
 	do
@@ -126,7 +129,7 @@ AskQuestionsMultiserver(){
 
 		if [ "$CFG_WEBMAIL" == "roundcube" ]; then
 			roundcube_db=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database name" --nocancel 10 50 3>&1 1>&2 2>&3)
-			roundcube_user=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube user" --nocancel 10 50 $USER 3>&1 1>&2 2>&3)
+			roundcube_user=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube user" --nocancel 10 50 "$USER" 3>&1 1>&2 2>&3)
 			roundcube_pass=$(whiptail --title "RoundCube mail client" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the roundcube user password" --nocancel 10 50 3>&1 1>&2 2>&3)
 		else
 			CFG_WEBMAIL="no";
@@ -162,7 +165,7 @@ AskQuestionsMultiserver(){
 
 	while [[ ! "$SSL_COUNTRY" =~ $RE ]]
 	do
-		SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country Name (2 letter code) (ex. EN)" --nocancel 10 50 $(echo $LANG | cut -c 4-5) 3>&1 1>&2 2>&3)
+		SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country Name (2 letter code) (ex. EN)" --nocancel 10 50 "${LANG:3:2}" 3>&1 1>&2 2>&3)
 	done
 
 	while [[ ! "$SSL_STATE" =~ $RE ]]

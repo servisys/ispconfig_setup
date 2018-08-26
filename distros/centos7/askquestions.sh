@@ -3,8 +3,11 @@
 #	Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
-	echo "Installing pre-required packages"
-	[ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"	|| yum -y install newt
+	if ! command -v whiptail >/dev/null; then
+		echo -n "Installing whiptail... "
+		yum -y -q install newt
+		echo -e "[${green}DONE${NC}]\n"
+	fi
 
 	while [[ ! "$CFG_MYSQL_ROOT_PWD" =~ $RE ]]
 	do
@@ -44,7 +47,7 @@ AskQuestions() {
 	if (whiptail --title "Mailman" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Mailman?" 10 50) then
 		CFG_MAILMAN=yes
 		MMSITEPASS=$(whiptail --title "Mailman Site Password" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the Mailman site password" --nocancel 10 50 3>&1 1>&2 2>&3)
-		MMLISTOWNER=$(whiptail --title "Mailman Site List Owner" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the Mailman site list owner" --nocancel 10 50 $USER 3>&1 1>&2 2>&3)
+		MMLISTOWNER=$(whiptail --title "Mailman Site List Owner" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the Mailman site list owner" --nocancel 10 50 "$USER" 3>&1 1>&2 2>&3)
 		MMLISTPASS=$(whiptail --title "Mailman Site List Password" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the Mailman site list password" --nocancel 10 50 3>&1 1>&2 2>&3)
 	else
 		CFG_MAILMAN=no
@@ -58,13 +61,13 @@ AskQuestions() {
 
 	if [ $CFG_WEBMAIL == roundcube ]; then
 		ROUNDCUBE_DB=$(whiptail --title "ROUNDCUBE Database Name" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database name" --nocancel 10 50 3>&1 1>&2 2>&3)
-		ROUNDCUBE_USER=$(whiptail --title "ROUNDCUBE Database User" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database user" --nocancel 10 50 $USER 3>&1 1>&2 2>&3)
+		ROUNDCUBE_USER=$(whiptail --title "ROUNDCUBE Database User" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database user" --nocancel 10 50 "$USER" 3>&1 1>&2 2>&3)
 		ROUNDCUBE_PWD=$(whiptail --title "ROUNDCUBE Database Name" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the roundcube password" --nocancel 10 50 3>&1 1>&2 2>&3)
 	fi
 	
 	while [[ ! "$SSL_COUNTRY" =~ $RE ]]
 	do
-		SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country Name (2 letter code) (ex. EN)" --nocancel 10 50 $(echo $LANG | cut -c 4-5) 3>&1 1>&2 2>&3)
+		SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country Name (2 letter code) (ex. EN)" --nocancel 10 50 "${LANG:3:2}" 3>&1 1>&2 2>&3)
 	done
 
 	while [[ ! "$SSL_STATE" =~ $RE ]]

@@ -6,8 +6,11 @@ AskQuestions() {
 	CFG_SETUP_WEB=yes #Needed for Multiserver setup compatibility
 	CFG_SETUP_MAIL=yes #Needed for Multiserver setup compatibility
 	CFG_SETUP_NS=yes #Needed for Multiserver setup compatibility
-	echo "Installing pre-required packages"
-	[ -f /bin/whiptail ] && echo -e "whiptail found: ${green}OK${NC}\n"	|| apt-get -y install whiptail > /dev/null 2>&1
+	if ! command -v whiptail >/dev/null; then
+		echo -n "Installing whiptail... "
+		apt-get -yqq install whiptail
+		echo -e "[${green}DONE${NC}]\n"
+	fi
 
 	while [[ ! "$CFG_MYSQL_ROOT_PWD" =~ $RE ]]
 	do
@@ -67,7 +70,7 @@ AskQuestions() {
 
 	while [[ ! "$SSL_COUNTRY" =~ $RE ]]
 	do
-		SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country Name (2 letter code) (ex. EN)" --nocancel 10 50 $(echo $LANG | cut -c 4-5) 3>&1 1>&2 2>&3)
+		SSL_COUNTRY=$(whiptail --title "SSL Country" --backtitle "$WT_BACKTITLE" --inputbox "SSL Configuration - Country Name (2 letter code) (ex. EN)" --nocancel 10 50 "${LANG:3:2}" 3>&1 1>&2 2>&3)
 	done
 
 	while [[ ! "$SSL_STATE" =~ $RE ]]

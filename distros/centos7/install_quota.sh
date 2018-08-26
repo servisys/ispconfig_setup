@@ -3,23 +3,21 @@
 #    Install and configure of disk quota
 #---------------------------------------------------------------------
 InstallQuota() {
-  echo -n "Installing and initializing quota (this might take while)... "
-  yum -y install quota > /dev/null 2>&1
+	echo -n "Installing and initializing quota (this might take while)... "
+	yum -y install quota > /dev/null 2>&1
 
 
-  if ! [ -f /proc/user_beancounters ]; then
+	if ! [ -f /proc/user_beancounters ]; then
 
-	  if [ `cat /etc/fstab | grep ',usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0' | wc -l` -eq 0 ]; then
-		sed -i '/tmpfs/!s/errors=remount-ro/errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0/' /etc/fstab
-	  fi
-	  if [ `cat /etc/fstab | grep 'defaults' | wc -l` -ne 0 ]; then
-		sed -i '/tmpfs/!s/defaults/defaults,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0/' /etc/fstab
-	  fi
-	  mount -o remount /
-	  quotacheck -avugm > /dev/null 2>&1
-	  quotaon -avug > /dev/null 2>&1
+		if [ "$(grep -c ',usrjquota=quota.user,grpjquota=quota.group,jqfmt=vfsv0' /etc/fstab)" -eq 0 ]; then
+			sed -i '/\/[[:space:]]\+/ {/tmpfs/!s/errors=remount-ro/errors=remount-ro,usrjquota=quota.user,grpjquota=quota.group,jqfmt=vfsv0/}' /etc/fstab
+			sed -i '/\/[[:space:]]\+/ {/tmpfs/!s/defaults/defaults,usrjquota=quota.user,grpjquota=quota.group,jqfmt=vfsv0/}' /etc/fstab
+		fi
+		mount -o remount /
+		quotacheck -avugm
+		quotaon -avug
 
-  fi
+	fi
 
-  echo -e "${green}done! ${NC}\n"
+	echo -e "${green}done! ${NC}\n"
 }

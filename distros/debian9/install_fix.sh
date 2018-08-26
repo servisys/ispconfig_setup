@@ -15,10 +15,10 @@ InstallFix(){
 	sed -i 's/;openssl.cafile=/openssl.cafile=\/etc\/ssl\/certs\/ca-certificates.crt/' /etc/php/7.0/fpm/php.ini
 	if [ $CFG_WEBSERVER == "apache" ]; then
 		service apache2 reload > /dev/null 2>&1
-		service php7-fpm reload > /dev/null 2>&1
+		service php7.0-fpm reload > /dev/null 2>&1
 	else
 		service nginx reload > /dev/null 2>&1
-		service php7-fpm reload > /dev/null 2>&1
+		service php7.0-fpm reload > /dev/null 2>&1
 	fi
   fi
 }

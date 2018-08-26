@@ -48,7 +48,7 @@ if [ "$TOTAL_PHYSICAL_MEM" -lt 524288 ]; then
 fi
 
 # Check connectivity
-echo -e "Checking internet connection..."
+echo -n "Checking internet connection... "
 
 if ! ping -q -c 3 www.ispconfig.org > /dev/null 2>&1; then
 	echo -e "${red}Error: Could not reach www.ispconfig.org, please check your internet connection and run this script again.${NC}" >&2
@@ -86,7 +86,7 @@ PWD=$(pwd);
 #---------------------------------------------------------------------
 
 source $PWD/functions/check_linux.sh
-echo "Checking your system, please wait..."
+echo -n "Checking your system, please wait... "
 CheckLinux
 echo -e "[${green}DONE${NC}]\n"
 
@@ -142,8 +142,22 @@ echo -e "The detected Linux Distribution is:\t${PRETTY_NAME:-$ID-$VERSION_ID}"
 if [ -n "$ID_LIKE" ]; then
 	echo -e "Related Linux Distributions:\t\t$ID_LIKE"
 fi
+CPU=( $(sed -n 's/^model name[[:space:]]*: *//p' /proc/cpuinfo | uniq) )
+if [ -n "$CPU" ]; then
+	echo -e "Processor (CPU):\t\t\t${CPU[*]}"
+fi
+CPU_CORES=$(nproc --all)
+echo -e "CPU Cores:\t\t\t\t$CPU_CORES"
 ARCHITECTURE=$(getconf LONG_BIT)
 echo -e "Architecture:\t\t\t\t$HOSTTYPE ($ARCHITECTURE-bit)"
+echo -e "Total memory (RAM):\t\t\t$(printf "%'d" $((TOTAL_PHYSICAL_MEM / 1024))) MiB ($(printf "%'d" $((((TOTAL_PHYSICAL_MEM * 1024) / 1000) / 1000))) MB)"
+echo -e "Total swap space:\t\t\t$(printf "%'d" $((TOTAL_SWAP / 1024))) MiB ($(printf "%'d" $((((TOTAL_SWAP * 1024) / 1000) / 1000))) MB)"
+if command -v lspci >/dev/null; then
+	GPU=( $(lspci 2>/dev/null | grep -i 'vga\|3d\|2d' | sed -n 's/^.*: //p') )
+fi
+if [ -n "$GPU" ]; then
+	echo -e "Graphics Processor (GPU):\t\t${GPU[*]}"
+fi
 echo -e "Computer name:\t\t\t\t$HOSTNAME"
 echo -e "Hostname:\t\t\t\t$CFG_HOSTNAME_FQDN"
 if [ -n "$IPv4_ADDRESS" ]; then
@@ -152,8 +166,14 @@ fi
 if [ -n "$IPv6_ADDRESS" ]; then
 	echo -e "Private IPv6 address$([[ ${#IPv6_ADDRESS[*]} -gt 1 ]] && echo "es"):\t\t\t${IPv6_ADDRESS[*]}"
 fi
-echo -e "Total memory (RAM):\t\t\t$(printf "%'d" $((TOTAL_PHYSICAL_MEM / 1024))) MiB ($(printf "%'d" $((((TOTAL_PHYSICAL_MEM * 1024) / 1000) / 1000))) MB)"
-echo -e "Total swap space:\t\t\t$(printf "%'d" $((TOTAL_SWAP / 1024))) MiB ($(printf "%'d" $((((TOTAL_SWAP * 1024) / 1000) / 1000))) MB)\n"
+TIME_ZONE=$(timedatectl 2>/dev/null | grep -i 'time zone\|timezone' | sed -n 's/^.*: //p')
+echo -e "Time zone:\t\t\t\t$TIME_ZONE\n"
+if CONTAINER=$(systemd-detect-virt -c); then
+	echo -e "Virtualization container:\t\t$CONTAINER\n"
+fi
+if VM=$(systemd-detect-virt -v); then
+	echo -e "Virtual Machine (VM) hypervisor:\t$VM\n"
+fi
 RE='^.+\.localdomain$'
 RE1='^.{4,253}$'
 RE2='^([[:alnum:]][a-zA-Z0-9\-]{1,61}[[:alnum:]]\.)+[a-zA-Z]{2,63}$'
@@ -257,7 +277,7 @@ if [ -f /etc/debian_version ]; then
 	
 	if [ "$CFG_WEBMAIL" == "roundcube" ]; then
 		if [ "$DISTRO" != "debian8" ]; then
-			echo -e "\n${red}You will need to edit the username and password in /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of the roudcube user, as the one you set in ISPconfig ${NC}"
+			echo -e "\n${red}You will need to edit the username and password in /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of the roundcube user, as the one you set in ISPconfig ${NC}"
 		fi
 	fi
 	if [ "$CFG_WEBSERVER" == "nginx" ]; then
