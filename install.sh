@@ -20,6 +20,7 @@ yellow='\e[0;33m'
 bold='\e[1m'
 underlined='\e[4m'
 NC='\e[0m' # No Color
+COLUMNS=$(tput cols)
 
 if [[ "$#" -ne 0 ]]; then
 	echo -e "Usage: sudo $0" >&2
@@ -89,6 +90,40 @@ source $PWD/functions/check_linux.sh
 echo -n "Checking your system, please wait... "
 CheckLinux
 echo -e "[${green}DONE${NC}]\n"
+
+# Adapted from: https://github.com/virtualmin/slib/blob/master/slib.sh#L460
+RE='^.+\.localdomain$'
+RE1='^.{4,253}$'
+RE2='^([[:alnum:]][[:alnum:]\-]{1,61}[[:alnum:]]\.)+[a-zA-Z]{2,63}$'
+if [[ $CFG_HOSTNAME_FQDN =~ $RE ]]; then
+	echo "The hostname is: $CFG_HOSTNAME_FQDN."
+	echo -e "${yellow}Warning: Hostname cannot be *.localdomain.${NC}\n"
+elif ! [[ $CFG_HOSTNAME_FQDN =~ $RE1 && $CFG_HOSTNAME_FQDN =~ $RE2 ]]; then
+	echo "The hostname is: $CFG_HOSTNAME_FQDN."
+	echo -e "${yellow}Warning: Hostname is not a valid fully qualified domain name (FQDN).${NC}\n"
+fi
+if [[ $CFG_HOSTNAME_FQDN =~ $RE ]] || ! [[ $CFG_HOSTNAME_FQDN =~ $RE1 && $CFG_HOSTNAME_FQDN =~ $RE2 ]]; then
+	echo "The IP address is: ${IP_ADDRESS[0]}."
+	# Source: https://www.faqforge.com/linux/which-ports-are-used-on-a-ispconfig-3-server-and-shall-be-open-in-the-firewall/
+	echo -e "${yellow}Warning: If this system is connected to a router and/or behind a NAT, please be sure that the private (internal) IP address is static before continuing.${NC} For routers, static internal IP addresses are usually assigned via DHCP reservation. See your routers user guide for more info… You will also need to forward some ports depending on what software you choose to install:\n\tTCP Ports\n\t\t20\t- FTP\n\t\t21\t- FTP\n\t\t22\t- SSH/SFTP\n\t\t25\t- Mail (SMTP)\n\t\t53\t- DNS\n\t\t80\t- Web (HTTP)\n\t\t110\t- Mail (POP3)\n\t\t143\t- Mail (IMAP)\n\t\t443\t- Web (HTTPS)\n\t\t465\t- Mail (SMTPS)\n\t\t587\t- Mail (SMTP)\n\t\t993\t- Mail (IMAPS)\n\t\t995\t- Mail (POP3S)\n\t\t3306\t- Database\n\t\t5222\t- Chat (XMPP)\n\t\t8080\t- ISPConfig\n\t\t8081\t- ISPConfig\n\t\t10000\t- ISPConfig\n\n\tUDP Ports\n\t\t53\t- DNS\n\t\t3306\t- Database\n" | fold -s -w "$COLUMNS"
+	read -p "Would you like to update the hostname for this system? (recommended) (y/n) " -n 1 -r
+	echo -e "\n"   # (optional) move to a new line
+	RE='^[Yy]$'
+	if [[ $REPLY =~ $RE ]]; then
+		while ! [[ $line =~ $RE1 && $line =~ $RE2 ]]; do
+			read -p "Please enter a fully qualified domain name (FQDN) (e.g. ${HOSTNAME%%.*}.example.com): " -r line
+		done
+		# hostnamectl set-hostname "$line"
+		subdomain=${line%%.*}
+		hostnamectl set-hostname "$subdomain"
+		if grep -q "^${IP_ADDRESS[0]}" /etc/hosts; then
+			sed -i "s/^${IP_ADDRESS[0]}.*/${IP_ADDRESS[0]}\t$line\t$subdomain/" /etc/hosts
+		else
+			sed -i "s/^127.0.1.1.*/${IP_ADDRESS[0]}\t$line\t$subdomain/" /etc/hosts
+		fi
+		CFG_HOSTNAME_FQDN=$(hostname -f); # hostname -A
+	fi
+fi
 
 #---------------------------------------------------------------------
 # Load needed Modules
@@ -161,10 +196,10 @@ fi
 echo -e "Computer name:\t\t\t\t$HOSTNAME"
 echo -e "Hostname:\t\t\t\t$CFG_HOSTNAME_FQDN"
 if [ -n "$IPv4_ADDRESS" ]; then
-	echo -e "Private IPv4 address$([[ ${#IPv4_ADDRESS[*]} -gt 1 ]] && echo "es"):\t\t\t${IPv4_ADDRESS[*]}"
+	echo -e "IPv4 address$([[ ${#IPv4_ADDRESS[*]} -gt 1 ]] && echo "es"):\t\t\t\t${IPv4_ADDRESS[*]}"
 fi
 if [ -n "$IPv6_ADDRESS" ]; then
-	echo -e "Private IPv6 address$([[ ${#IPv6_ADDRESS[*]} -gt 1 ]] && echo "es"):\t\t\t${IPv6_ADDRESS[*]}"
+	echo -e "IPv6 address$([[ ${#IPv6_ADDRESS[*]} -gt 1 ]] && echo "es"):\t\t\t\t${IPv6_ADDRESS[*]}"
 fi
 TIME_ZONE=$(timedatectl 2>/dev/null | grep -i 'time zone\|timezone' | sed -n 's/^.*: //p')
 echo -e "Time zone:\t\t\t\t$TIME_ZONE\n"
@@ -174,14 +209,6 @@ fi
 if VM=$(systemd-detect-virt -v); then
 	echo -e "Virtual Machine (VM) hypervisor:\t$VM\n"
 fi
-RE='^.+\.localdomain$'
-RE1='^.{4,253}$'
-RE2='^([[:alnum:]][a-zA-Z0-9\-]{1,61}[[:alnum:]]\.)+[a-zA-Z]{2,63}$'
-if [[ $CFG_HOSTNAME_FQDN =~ $RE ]]; then
-	echo -e "${yellow}Warning: Hostname cannot be *.localdomain.${NC}\n"
-elif ! [[ $CFG_HOSTNAME_FQDN =~ $RE1 && $CFG_HOSTNAME_FQDN =~ $RE2 ]]; then
-	echo -e "${yellow}Warning: Hostname is not a valid fully qualified domain name (FQDN).${NC}\n"
-fi
 if uname -r | grep -iq "microsoft"; then
 	echo -e "${yellow}Warning: The Windows Subsystem for Linux (WSL) is not yet fully supported by this script.${NC}"
 	echo -e "For more information, see this issue: https://github.com/servisys/ispconfig_setup/issues/176\n"
@@ -189,10 +216,9 @@ fi
 if [ -n "$DISTRO" ]; then
 	echo -e "Installing for this Linux Distribution:\t$DISTRO"
 	read -p "Is this correct? (y/n) " -n 1 -r
-	echo    # (optional) move to a new line
+	echo -e "\n"    # (optional) move to a new line
 	RE='^[Yy]$'
-	if [[ ! $REPLY =~ $RE ]]
-		then
+	if [[ ! $REPLY =~ $RE ]]; then
 		exit 1
 	fi
 else
