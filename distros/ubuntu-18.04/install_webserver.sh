@@ -69,14 +69,7 @@ InstallWebServer() {
 		apt-get -y install phpmyadmin
     	echo "With nginx phpmyadmin is accessibile at  http://$CFG_HOSTNAME_FQDN:8081/phpmyadmin or http://IP_ADDRESS:8081/phpmyadmin"
   fi
-      echo -n "Installing Lets Encrypt... "	
+    echo -n "Installing Lets Encrypt... "	
 	apt-get -y install certbot
-	echo "==========================================================================================="
-	echo "Attention: answer no to next Question Dialog"
-	echo "==========================================================================================="
-	echo "Press ENTER to continue... "
-	read DUMMY
-	echo -n "Installing Certbot-auto... "
-	./certbot-auto
   echo -e "[${green}DONE${NC}]\n"
 }
