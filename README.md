@@ -8,7 +8,7 @@ The link is here: http://eepurl.com/cAzq95
 We'll use only to inform you on new version of the script :)
 
 # Version #
-v.3.0.2
+v.3.0.3
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
@@ -20,6 +20,7 @@ Tested on:
 - Ubuntu 14.04 Trusty ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
 - Ubuntu 15.10 Willy ([Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
 - Ubuntu 16.04 Xenial Xerus ( [Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
+- Ubuntu 18.04 Bionic Beaver ( [Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
 - CentOS 7 ([Servisys VPS](https://www.servisys.it/), Vitualbox)
 - ISPConfig 3.*
 
@@ -81,7 +82,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -97,7 +98,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td></td>
 		<td></td>
 		<td></td>
@@ -114,7 +115,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -131,7 +132,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td></td>
 		<td></td>
 		<td></td>
@@ -147,7 +148,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -164,7 +165,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -181,7 +182,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -230,7 +231,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td></td>
 		<td></td>
 		<td></td>
@@ -246,7 +247,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -263,7 +264,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔*</td>
 		<td></td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -296,7 +297,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔*</td>
 		<td></td>
 		<td></td>
@@ -330,7 +331,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -346,7 +347,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -363,7 +364,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -397,7 +398,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td></td>
 		<td></td>
 		<td></td>
@@ -447,7 +448,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -464,7 +465,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td></td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -481,7 +482,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td></td>
 		<td></td>
 		<td></td>
@@ -497,7 +498,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -514,7 +515,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔*</td>
 		<td></td>
 		<td></td>
@@ -531,7 +532,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td></td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -548,7 +549,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td>✔</td>
 		<td></td>
 		<td></td>
@@ -565,7 +566,7 @@ Before starting, be sure to follow one of these guides to install a supported Li
 		<td>✔</td>
 		<td>✔</td>
 		<td></td>
-		<td></td>
+		<td>✔</td>
 		<td></td>
 		<td></td>
 		<td></td>
@@ -608,7 +609,7 @@ Follow one of the above guides to install a fresh copy of a supported Linux dist
 
 Run the following command:
 
-* Debian/Raspbian 7, 8 and 9 and Ubuntu 14.04, 15.10, 16.04 and 16.10
+* Debian/Raspbian 7, 8 and 9 and Ubuntu 14.04, 15.10, 16.04, 16.10 and 18.04
 
 ```shell
 cd /tmp; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo bash install.sh

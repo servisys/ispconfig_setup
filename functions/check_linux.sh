@@ -101,7 +101,7 @@ CheckLinux() {
 		#---------------------------------------------------------------------
 
 		elif echo "$VERSION_ID" | grep -iq "18.04"; then
-			DISTRO='' #ubuntu-18.04
+			DISTRO=ubuntu-18.04
 		fi
 	
 	elif echo "$ID" | grep -iq "centos"; then
