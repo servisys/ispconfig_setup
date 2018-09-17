@@ -8,7 +8,7 @@ The link is here: http://eepurl.com/cAzq95
 We'll use only to inform you on new version of the script :)
 
 # Version #
-v.3.0.3
+v.3.0.3.1
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
@@ -42,6 +42,7 @@ Before start be sure to configure your server following the following guides:
 - Ubuntu 14.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Ubuntu 15.10: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
 - Ubuntu 16.04: https://www.howtoforge.com/tutorial/ubuntu-minimal-server-install/
+- Ubuntu 18.04: https://www.howtoforge.com/tutorial/ubuntu-lts-minimal-server/
 - Centos 7: http://www.howtoforge.com/centos-7-server
 
 You can Choose during install:
