@@ -68,7 +68,9 @@ InstallISPConfig() {
 	  echo | php -q install.php --autoinstall=autoinstall.ini
   else
 	  php -q install.php
+	  
   fi
+  mysql -u root -D dbispconfig -e "UPDATE sys_user SET passwort = md5('admin') WHERE username = 'admin';"
   if [ "$CFG_WEBSERVER" == "nginx" ]; then
         /etc/init.d/nginx restart
   else
