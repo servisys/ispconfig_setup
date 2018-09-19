@@ -5,7 +5,7 @@
 AskQuestions() {
 	if ! command -v whiptail >/dev/null; then
 		echo -n "Installing whiptail... "
-		apt-get -yqq install whiptail
+		apt_install whiptail
 		echo -e "[${green}DONE${NC}]\n"
 	fi
 	
@@ -41,10 +41,12 @@ AskQuestions() {
 		CFG_AVUPDATE=$(whiptail --title "Update Freshclam DB" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to update Antivirus Database?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
 	done
 
-	if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
-		CFG_QUOTA=yes
-	else
-		CFG_QUOTA=no
+	if [[ ! "$CFG_QUOTA" =~ $RE ]]; then
+		if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
+			CFG_QUOTA=yes
+		else
+			CFG_QUOTA=no
+		fi
 	fi
 
 	while [[ ! "$CFG_ISPC" =~ $RE ]]; 
@@ -52,16 +54,20 @@ AskQuestions() {
 		CFG_ISPC=$(whiptail --title "ISPConfig Setup" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like full unattended setup of expert mode for ISPConfig?" 10 50 2 "standard" "(default)" ON "expert" "" OFF 3>&1 1>&2 2>&3); 
 	done
 
-	if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit (it must be installed before ISPConfig)?" 10 50) then
-		CFG_JKIT=yes
-	else
-		CFG_JKIT=no
+	if [[ ! "$CFG_JKIT" =~ $RE ]]; then
+		if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit (it must be installed before ISPConfig)?" 10 50) then
+			CFG_JKIT=yes
+		else
+			CFG_JKIT=no
+		fi
 	fi
 
-	if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DomainKeys Identified Mail (DKIM) configuration for Amavis? (not recommended)" 10 50) then
-		CFG_DKIM=y
-	else
-		CFG_DKIM=n
+	if [[ ! "$CFG_DKIM" =~ $RE ]]; then
+		if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DomainKeys Identified Mail (DKIM) configuration for Amavis? (not recommended)" 10 50) then
+			CFG_DKIM=y
+		else
+			CFG_DKIM=n
+		fi
 	fi
 	
 	while [[ ! "$CFG_WEBMAIL" =~ $RE ]]

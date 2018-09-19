@@ -6,7 +6,7 @@
 AskQuestionsMultiserver(){
 	if ! command -v whiptail >/dev/null; then
 		echo -n "Installing whiptail... "
-		apt-get -yqq install whiptail
+		apt_install whiptail
 		echo -e "[${green}DONE${NC}]\n"
 	fi
 

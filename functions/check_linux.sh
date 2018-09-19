@@ -3,6 +3,60 @@
 #	Check Installed Linux Version
 #---------------------------------------------------------------------
 
+# Adapted from: https://github.com/mail-in-a-box/mailinabox/blob/master/setup/functions.sh#L1
+function hide_output {
+	OUTPUT=$(mktemp)
+
+	# <&-
+	"$@" &> "$OUTPUT"
+
+	E=$?
+	if [[ $E -ne 0 ]]; then
+		echo -e "\nError: The following command failed: $*\n"
+		echo "-----------------------------------------"
+		cat "$OUTPUT"
+		echo "-----------------------------------------"
+		echo
+		rm -f "$OUTPUT"
+		exit $E
+	fi
+
+	rm -f "$OUTPUT"
+}
+
+# Adapted from: https://github.com/mail-in-a-box/mailinabox/blob/master/setup/functions.sh#L41
+function apt_install {
+	hide_output apt-get -y install "$@"
+}
+
+function apt_remove {
+	hide_output apt-get -y remove "$@"
+}
+
+function yum_install {
+	hide_output yum -y install "$@"
+}
+
+function yum_remove {
+	hide_output yum -y erase "$@"
+}
+
+function zypper_install {
+	hide_output zypper in -y "$@"
+}
+
+function zypper_remove {
+	hide_output zypper rm -y "$@"
+}
+
+function dnf_install {
+	hide_output dnf -y install "$@"
+}
+
+function dnf_remove {
+	hide_output dnf -y erase "$@"
+}
+
 CheckLinux() {
 
 	#Extract information on system

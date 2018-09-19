@@ -3,8 +3,8 @@
 #    Install Metronom Server
 #---------------------------------------------------------------------
 InstallMetronom() {
-  echo -n "Installing Metronome...";
-  yum -y install git lua lua-devel lua-filesystem libidn-devel openssl-devel lua-bitop lua-socket lua-sec luarocks
+  echo -n "Installing Metronome... ";
+  yum_install git lua lua-devel lua-filesystem libidn-devel openssl-devel lua-bitop lua-socket lua-sec luarocks
   luarocks install lpc
   adduser --no-create-home --shell /sbin/nologin --comment 'Metronome' metronome
   cd /opt; git clone https://github.com/maranda/metronome.git metronome

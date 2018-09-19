@@ -3,8 +3,8 @@
 #    Install and configure fail2ban
 #---------------------------------------------------------------------
 InstallFail2ban() {
-  echo -n "Installing fail2ban... "
-  apt-get -y install fail2ban > /dev/null 2>&1
+  echo -n "Installing Intrusion protection (Fail2Ban)... "
+  apt_install fail2ban
 
 
   case $CFG_MTA in
@@ -108,7 +108,9 @@ EOF
 
 echo "ignoreregex =" >> /etc/fail2ban/filter.d/postfix-sasl.conf
 
-  service fail2ban restart > /dev/null 2>&1
+  echo -e "[${green}DONE${NC}]\n"
+  echo -n "Restarting Fail2Ban... "
+  service fail2ban restart
   echo -e "[${green}DONE${NC}]\n"
 }
 

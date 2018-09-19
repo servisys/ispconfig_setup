@@ -80,13 +80,13 @@ IPv6_ADDRESS=( $(for i in ${IP_ADDRESS[*]}; do [[ "$i" =~ $RE ]] && echo "$i"; d
 WT_BACKTITLE="ISPConfig 3 System Installer from Temporini Matteo"
 
 #Saving current directory
-PWD=$(pwd);
+APWD=$(pwd);
 
 #---------------------------------------------------------------------
 # Load needed functions
 #---------------------------------------------------------------------
 
-source $PWD/functions/check_linux.sh
+source $APWD/functions/check_linux.sh
 echo -n "Checking your system, please wait... "
 CheckLinux
 echo -e "[${green}DONE${NC}]\n"
@@ -106,12 +106,16 @@ if [[ $CFG_HOSTNAME_FQDN =~ $RE ]] || ! [[ $CFG_HOSTNAME_FQDN =~ $RE1 && $CFG_HO
 	echo "The IP address is: ${IP_ADDRESS[0]}."
 	# Source: https://www.faqforge.com/linux/which-ports-are-used-on-a-ispconfig-3-server-and-shall-be-open-in-the-firewall/
 	echo -e "${yellow}Warning: If this system is connected to a router and/or behind a NAT, please be sure that the private (internal) IP address is static before continuing.${NC} For routers, static internal IP addresses are usually assigned via DHCP reservation. See your routers user guide for more info… You will also need to forward some ports depending on what software you choose to install:\n\tTCP Ports\n\t\t20\t- FTP\n\t\t21\t- FTP\n\t\t22\t- SSH/SFTP\n\t\t25\t- Mail (SMTP)\n\t\t53\t- DNS\n\t\t80\t- Web (HTTP)\n\t\t110\t- Mail (POP3)\n\t\t143\t- Mail (IMAP)\n\t\t443\t- Web (HTTPS)\n\t\t465\t- Mail (SMTPS)\n\t\t587\t- Mail (SMTP)\n\t\t993\t- Mail (IMAPS)\n\t\t995\t- Mail (POP3S)\n\t\t3306\t- Database\n\t\t5222\t- Chat (XMPP)\n\t\t8080\t- ISPConfig\n\t\t8081\t- ISPConfig\n\t\t10000\t- ISPConfig\n\n\tUDP Ports\n\t\t53\t- DNS\n\t\t3306\t- Database\n" | fold -s -w "$COLUMNS"
-	read -p "Would you like to update the hostname for this system? (recommended) (y/n) " -n 1 -r
+	# read -p "Would you like to update the hostname for this system? (recommended) (y/n) " -n 1 -r
+	echo -n "Would you like to update the hostname for this system? (recommended) (y/n) "
+	read -n 1 -r
 	echo -e "\n"   # (optional) move to a new line
 	RE='^[Yy]$'
 	if [[ $REPLY =~ $RE ]]; then
 		while ! [[ $line =~ $RE1 && $line =~ $RE2 ]]; do
-			read -p "Please enter a fully qualified domain name (FQDN) (e.g. ${HOSTNAME%%.*}.example.com): " -r line
+			# read -p "Please enter a fully qualified domain name (FQDN) (e.g. ${HOSTNAME%%.*}.example.com): " -r line
+			echo -n "Please enter a fully qualified domain name (FQDN) (e.g. ${HOSTNAME%%.*}.example.com): "
+			read -r line
 		done
 		# hostnamectl set-hostname "$line"
 		subdomain=${line%%.*}
@@ -129,27 +133,27 @@ fi
 # Load needed Modules
 #---------------------------------------------------------------------
 
-source $PWD/distros/$DISTRO/preinstallcheck.sh
-source $PWD/distros/$DISTRO/askquestions.sh
+source $APWD/distros/$DISTRO/preinstallcheck.sh
+source $APWD/distros/$DISTRO/askquestions.sh
 
-source $PWD/distros/$DISTRO/install_basics.sh
-source $PWD/distros/$DISTRO/install_postfix.sh
-source $PWD/distros/$DISTRO/install_mysql.sh
-source $PWD/distros/$DISTRO/install_mta.sh
-source $PWD/distros/$DISTRO/install_antivirus.sh
-source $PWD/distros/$DISTRO/install_webserver.sh
-source $PWD/distros/$DISTRO/install_hhvm.sh
-source $PWD/distros/$DISTRO/install_ftp.sh
-source $PWD/distros/$DISTRO/install_quota.sh
-source $PWD/distros/$DISTRO/install_bind.sh
-source $PWD/distros/$DISTRO/install_webstats.sh
-source $PWD/distros/$DISTRO/install_jailkit.sh
-source $PWD/distros/$DISTRO/install_fail2ban.sh
-source $PWD/distros/$DISTRO/install_webmail.sh
-source $PWD/distros/$DISTRO/install_ispconfig.sh
-source $PWD/distros/$DISTRO/install_fix.sh
+source $APWD/distros/$DISTRO/install_basics.sh
+source $APWD/distros/$DISTRO/install_postfix.sh
+source $APWD/distros/$DISTRO/install_mysql.sh
+source $APWD/distros/$DISTRO/install_mta.sh
+source $APWD/distros/$DISTRO/install_antivirus.sh
+source $APWD/distros/$DISTRO/install_webserver.sh
+source $APWD/distros/$DISTRO/install_hhvm.sh
+source $APWD/distros/$DISTRO/install_ftp.sh
+source $APWD/distros/$DISTRO/install_quota.sh
+source $APWD/distros/$DISTRO/install_bind.sh
+source $APWD/distros/$DISTRO/install_webstats.sh
+source $APWD/distros/$DISTRO/install_jailkit.sh
+source $APWD/distros/$DISTRO/install_fail2ban.sh
+source $APWD/distros/$DISTRO/install_webmail.sh
+source $APWD/distros/$DISTRO/install_ispconfig.sh
+source $APWD/distros/$DISTRO/install_fix.sh
 
-source $PWD/distros/$DISTRO/install_basephp.sh #to remove in feature release
+source $APWD/distros/$DISTRO/install_basephp.sh #to remove in feature release
 #---------------------------------------------------------------------
 # Main program [ main() ]
 #	Run the installer
@@ -215,7 +219,9 @@ if uname -r | grep -iq "microsoft"; then
 fi
 if [ -n "$DISTRO" ]; then
 	echo -e "Installing for this Linux Distribution:\t$DISTRO"
-	read -p "Is this correct? (y/n) " -n 1 -r
+	# read -p "Is this correct? (y/n) " -n 1 -r
+	echo -n "Is this correct? (y/n) "
+	read -n 1 -r
 	echo -e "\n"    # (optional) move to a new line
 	RE='^[Yy]$'
 	if [[ ! $REPLY =~ $RE ]]; then
@@ -255,7 +261,7 @@ if [ -f /etc/debian_version ]; then
 	if [ "$CFG_MULTISERVER" == "no" ]; then
 		AskQuestions
 	else
-		source $PWD/distros/$DISTRO/askquestions_multiserver.sh
+		source $APWD/distros/$DISTRO/askquestions_multiserver.sh
 		AskQuestionsMultiserver
 	fi
 	InstallBasics 
@@ -273,7 +279,7 @@ if [ -f /etc/debian_version ]; then
 			InstallHHVM
 		fi
 		if [ "$CFG_METRONOM" == "yes" ]; then
-			source $PWD/distros/$DISTRO/install_metronom.sh
+			source $APWD/distros/$DISTRO/install_metronom.sh
 			InstallMetronom 
 		fi
 		InstallWebmail 
@@ -291,7 +297,7 @@ if [ -f /etc/debian_version ]; then
 	InstallWebStats
 	InstallFail2ban
 	if [ "$CFG_ISPCVERSION" == "Beta" ]; then
-		source $PWD/distros/$DISTRO/install_ispconfigbeta.sh
+		source $APWD/distros/$DISTRO/install_ispconfigbeta.sh
 		InstallISPConfigBeta
 	fi
 	InstallISPConfig
@@ -323,19 +329,22 @@ elif [ -f /etc/redhat-release ]; then # /etc/centos-release
 	echo -e "${green}Implemented: apache, mysql, bind, postfix, dovecot, roundcube webmail support${NC}"
 	echo "Help us to test and implement, press ENTER if you understand what I'm talking about..."
 	read DUMMY
-	source $PWD/distros/$DISTRO/install_mailman.sh
+	source $APWD/distros/$DISTRO/install_mailman.sh
 	PreInstallCheck
 	AskQuestions 
 	InstallBasics 
 	InstallPostfix 
+	if [ "$CFG_MAILMAN" == "yes" ]; then
+		InstallMailman
+	fi
 	InstallSQLServer 
 	InstallMTA 
 	InstallAntiVirus 
 	InstallWebServer
 	InstallFTP 
-	#if [ $CFG_QUOTA == "yes" ]; then
-	#		InstallQuota 
-	#fi
+	if [ "$CFG_QUOTA" == "yes" ]; then
+		InstallQuota 
+	fi
 	InstallBind 
 	InstallWebStats 
 	if [ "$CFG_JKIT" == "yes" ]; then
@@ -343,7 +352,7 @@ elif [ -f /etc/redhat-release ]; then # /etc/centos-release
 	fi
 	InstallFail2ban 
 	if [ "$CFG_METRONOM" == "yes" ]; then
-		source $PWD/distros/$DISTRO/install_metronom.sh
+		source $APWD/distros/$DISTRO/install_metronom.sh
 		InstallMetronom 
 	fi
 	InstallWebmail 
@@ -357,9 +366,9 @@ elif [ -f /etc/redhat-release ]; then # /etc/centos-release
 	echo -e "\n${red}If you setup Roundcube webmail go to: http://$CFG_HOSTNAME_FQDN/roundcubemail/installer and configure db connection${NC}"
 	echo -e "${red}After that disable access to installer in /etc/httpd/conf.d/roundcubemail.conf${NC}"
 elif [ -f /etc/SuSE-release ]; then
-	echo -e "${red}Unsupported linux distribution.${NC}" >&2
+	echo -e "${red}Unsupported Linux distribution.${NC}" >&2
 else
-	echo -e "${red}Unsupported linux distribution.${NC}" >&2
+	echo -e "${red}Unsupported Linux distribution.${NC}" >&2
 fi
 
 echo -e "\nYou can visit the GitHub repository at: https://github.com/servisys/ispconfig_setup/"

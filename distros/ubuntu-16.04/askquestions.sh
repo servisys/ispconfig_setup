@@ -5,7 +5,7 @@
 AskQuestions() {
 	if ! command -v whiptail >/dev/null; then
 		echo -n "Installing whiptail... "
-		apt-get -yqq install whiptail
+		apt_install whiptail
 		echo -e "[${green}DONE${NC}]\n"
 	fi
 	
@@ -41,11 +41,11 @@ AskQuestions() {
 	done
 	CFG_MTA=${CFG_MTA,,}
 	
-	while [[ ! "$CFG_WEBMAIL" =~ $RE ]]
-	do
-		CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Please select your webmail client" 10 50 2 "Roundcube" "(default)" ON "SquirrelMail" "" OFF 3>&1 1>&2 2>&3)
-	done
-	CFG_WEBMAIL=${CFG_WEBMAIL,,}
+	# while [[ ! "$CFG_WEBMAIL" =~ $RE ]]
+	# do
+		# CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Please select your webmail client" 10 50 2 "Roundcube" "(default)" ON "SquirrelMail" "" OFF 3>&1 1>&2 2>&3)
+	# done
+	# CFG_WEBMAIL=${CFG_WEBMAIL,,}
 	
 	while [[ ! "$CFG_HHVMINSTALL" =~ $RE ]]
 	do
@@ -62,10 +62,12 @@ AskQuestions() {
 		CFG_AVUPDATE=$(whiptail --title "Update Freshclam DB" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to update Antivirus Database?" 10 50 2 "yes" "(default)" ON "no" "" OFF 3>&1 1>&2 2>&3)
 	done
 	
-	if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
-		CFG_QUOTA=yes
-	else
-		CFG_QUOTA=no
+	if [[ ! "$CFG_QUOTA" =~ $RE ]]; then
+		if (whiptail --title "Quota" --backtitle "$WT_BACKTITLE" --yesno "Setup user quota?" 10 50) then
+			CFG_QUOTA=yes
+		else
+			CFG_QUOTA=no
+		fi
 	fi
 
 	while [[ ! "$CFG_ISPC" =~ $RE ]]
@@ -73,10 +75,12 @@ AskQuestions() {
 		CFG_ISPC=$(whiptail --title "ISPConfig Setup" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like full unattended setup of expert mode for ISPConfig?" 10 50 2 "standard" "(default)" ON "expert" "" OFF 3>&1 1>&2 2>&3)
 	done
 
-	if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit (it must be installed before ISPConfig)?" 10 50) then
-		CFG_JKIT=yes
-	else
-		CFG_JKIT=no
+	if [[ ! "$CFG_JKIT" =~ $RE ]]; then
+		if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit (it must be installed before ISPConfig)?" 10 50) then
+			CFG_JKIT=yes
+		else
+			CFG_JKIT=no
+		fi
 	fi
 	
 	#CFG_WEBMAIL=squirrelmail

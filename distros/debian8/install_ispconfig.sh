@@ -5,17 +5,17 @@
 InstallISPConfig() {
   echo "Installing ISPConfig3... "
   cd /tmp
-  if [ $CFG_ISPCVERSION == "Beta" ]; then
-	wget -O ISPConfig-3.1-beta.tar.gz  https://www.ispconfig.org/downloads/ISPConfig-3.1b2.tar.gz
+  if [ "$CFG_ISPCVERSION" == "Beta" ]; then
+	wget -q -O ISPConfig-3.1-beta.tar.gz https://git.ispconfig.org/ispconfig/ispconfig3/repository/archive.tar.gz
 	tar xfz ISPConfig-3.1-beta.tar.gz
 	cd ispconfig3_install*
 	cd install
   else
-	wget https://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
+	wget -q https://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz
 	tar xfz ISPConfig-3-stable.tar.gz
 	cd ispconfig3_install/install/
   fi
-  if [ $CFG_ISPC == "standard" ]; then
+  if [ "$CFG_ISPC" == "standard" ]; then
   	echo "Create INI file"
 	touch autoinstall.ini
 	echo "[install]" > autoinstall.ini
@@ -28,15 +28,16 @@ InstallISPConfig() {
 	echo "mysql_database=dbispconfig" >> autoinstall.ini
 	echo "mysql_port=3306" >> autoinstall.ini
 	echo "mysql_charset=utf8" >> autoinstall.ini
-	if [ $CFG_WEBSERVER == "apache" ]; then
+	if [ "$CFG_WEBSERVER" == "apache" ]; then
 		echo "http_server=apache" >> autoinstall.ini
-	elif [ $CFG_WEBSERVER == "nginx" ]; then
+	elif [ "$CFG_WEBSERVER" == "nginx" ]; then
 		echo "http_server=nginx" >> autoinstall.ini
 	else
-    echo "http_server=" >> autoinstall.ini
+	    echo "http_server=" >> autoinstall.ini
   fi
 	echo "ispconfig_port=8080" >> autoinstall.ini
 	echo "ispconfig_use_ssl=y" >> autoinstall.ini
+	echo "ispconfig_admin_password=admin" >> autoinstall.ini
 	echo
 	echo "[ssl_cert]" >> autoinstall.ini
 	echo "ssl_cert_country=$SSL_COUNTRY" >> autoinstall.ini
@@ -84,11 +85,14 @@ InstallISPConfig() {
     php -q install.php
   fi
   if [ $CFG_SETUP_WEB == "yes" ]; then
-    if [ $CFG_WEBSERVER == "nginx" ]; then
+    if [ "$CFG_WEBSERVER" == "nginx" ]; then
+        echo -n "Restarting nginx... "
         /etc/init.d/nginx restart
-     else
+     elif [ "$CFG_WEBSERVER" == "apache" ]; then
+        echo -n "Restarting Apache... "
         /etc/init.d/apache2 restart
      fi
+     echo -e "[${green}DONE${NC}]\n"
   fi
 
 }

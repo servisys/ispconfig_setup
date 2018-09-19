@@ -8,7 +8,7 @@ AskQuestions() {
 	CFG_SETUP_NS=yes #Needed for Multiserver setup compatibility
 	if ! command -v whiptail >/dev/null; then
 		echo -n "Installing whiptail... "
-		apt-get -yqq install whiptail
+		apt_install whiptail
 		echo -e "[${green}DONE${NC}]\n"
 	fi
 

@@ -5,7 +5,7 @@
 AskQuestions() {
 	if ! command -v whiptail >/dev/null; then
 		echo -n "Installing whiptail... "
-		yum -y -q install newt
+		yum_install newt
 		echo -e "[${green}DONE${NC}]\n"
 	fi
 
@@ -32,25 +32,40 @@ AskQuestions() {
 	#CFG_QUOTA=no
 	#fi
 
-	if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit (it must be installed before ISPConfig)?" 10 50) then
-		CFG_JKIT=yes
-	else
-		CFG_JKIT=no
+	if [[ ! "$CFG_JKIT" =~ $RE ]]; then
+		if (whiptail --title "Jailkit" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Jailkit (it must be installed before ISPConfig)?" 10 50) then
+			CFG_JKIT=yes
+		else
+			CFG_JKIT=no
+		fi
 	fi
 
-	if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DomainKeys Identified Mail (DKIM) configuration for Amavis? (not recommended)" 10 50) then
-		CFG_DKIM=y
-	else
-		CFG_DKIM=n
+	if [[ ! "$CFG_DKIM" =~ $RE ]]; then
+		if (whiptail --title "DKIM" --backtitle "$WT_BACKTITLE" --yesno "Would you like to skip DomainKeys Identified Mail (DKIM) configuration for Amavis? (not recommended)" 10 50) then
+			CFG_DKIM=y
+		else
+			CFG_DKIM=n
+		fi
 	fi
 	
-	if (whiptail --title "Mailman" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Mailman?" 10 50) then
-		CFG_MAILMAN=yes
-		MMSITEPASS=$(whiptail --title "Mailman Site Password" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the Mailman site password" --nocancel 10 50 3>&1 1>&2 2>&3)
-		MMLISTOWNER=$(whiptail --title "Mailman Site List Owner" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the Mailman site list owner" --nocancel 10 50 "$USER" 3>&1 1>&2 2>&3)
-		MMLISTPASS=$(whiptail --title "Mailman Site List Password" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the Mailman site list password" --nocancel 10 50 3>&1 1>&2 2>&3)
-	else
-		CFG_MAILMAN=no
+	if [[ ! "$CFG_MAILMAN" =~ $RE ]]; then
+		if (whiptail --title "Mailman" --backtitle "$WT_BACKTITLE" --yesno "Would you like to install Mailman?" 10 50) then
+			CFG_MAILMAN=yes
+			while [[ ! "$MMSITEPASS" =~ $RE ]]
+			do
+				MMSITEPASS=$(whiptail --title "Mailman Site Password" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the Mailman site password" --nocancel 10 50 3>&1 1>&2 2>&3)
+			done
+			while [[ ! "$MMLISTOWNER" =~ $RE ]]
+			do
+				MMLISTOWNER=$(whiptail --title "Mailman Site List Owner" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the Mailman site list owner" --nocancel 10 50 "$USER" 3>&1 1>&2 2>&3)
+			done
+			while [[ ! "$MMLISTPASS" =~ $RE ]]
+			do
+				MMLISTPASS=$(whiptail --title "Mailman Site List Password" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the Mailman site list password" --nocancel 10 50 3>&1 1>&2 2>&3)
+			done
+		else
+			CFG_MAILMAN=no
+		fi
 	fi
 	
 	while [[ ! "$CFG_WEBMAIL" =~ $RE ]]
@@ -59,10 +74,19 @@ AskQuestions() {
 	done
 	CFG_WEBMAIL=${CFG_WEBMAIL,,}
 
-	if [ $CFG_WEBMAIL == roundcube ]; then
-		ROUNDCUBE_DB=$(whiptail --title "ROUNDCUBE Database Name" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database name" --nocancel 10 50 3>&1 1>&2 2>&3)
-		ROUNDCUBE_USER=$(whiptail --title "ROUNDCUBE Database User" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database user" --nocancel 10 50 "$USER" 3>&1 1>&2 2>&3)
-		ROUNDCUBE_PWD=$(whiptail --title "ROUNDCUBE Database Name" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the roundcube password" --nocancel 10 50 3>&1 1>&2 2>&3)
+	if [ "$CFG_WEBMAIL" == roundcube ]; then
+		while [[ ! "$ROUNDCUBE_DB" =~ $RE ]]
+		do
+			ROUNDCUBE_DB=$(whiptail --title "ROUNDCUBE Database Name" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database name" --nocancel 10 50 3>&1 1>&2 2>&3)
+		done
+		while [[ ! "$ROUNDCUBE_USER" =~ $RE ]]
+		do
+			ROUNDCUBE_USER=$(whiptail --title "ROUNDCUBE Database User" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database user" --nocancel 10 50 "$USER" 3>&1 1>&2 2>&3)
+		done
+		while [[ ! "$ROUNDCUBE_PWD" =~ $RE ]]
+		do
+			ROUNDCUBE_PWD=$(whiptail --title "ROUNDCUBE Database Name" --backtitle "$WT_BACKTITLE" --passwordbox "Please specify the roundcube password" --nocancel 10 50 3>&1 1>&2 2>&3)
+		done
 	fi
 	
 	while [[ ! "$SSL_COUNTRY" =~ $RE ]]

@@ -3,9 +3,9 @@
 #    Install the chosen webmail client. Squirrelmail or Roundcube
 #---------------------------------------------------------------------
 InstallWebmail() {
-  echo -n "Installing Webmail client ($CFG_WEBMAIL)... "
   case $CFG_WEBMAIL in
 	"roundcube")
+	  echo -n "Installing Webmail client (Roundcube)... "
 	  CFG_ROUNDCUBE_PWD=$(< /dev/urandom tr -dc A-Z-a-z-0-9 | head -c12)
 	  echo "roundcube-core roundcube/dbconfig-install boolean true" | debconf-set-selections
 	  echo "roundcube-core roundcube/database-type select mysql" | debconf-set-selections
@@ -14,15 +14,15 @@ InstallWebmail() {
 	  echo "roundcube-core roundcube/mysql/app-pass password $CFG_ROUNDCUBE_PWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/app-password-confirm password $CFG_ROUNDCUBE_PWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/hosts string localhost" | debconf-set-selections
-	  backports=$(cat /etc/apt/sources.list | grep jessie-backports | grep -v "#")
+	  backports=$(grep jessie-backports /etc/apt/sources.list | grep -v "#")
 	  if [ -z "$backports" ]; then
 	    echo -e "\n# jessie-backports, previously on backports.debian.org" >> /etc/apt/sources.list
 	    echo "deb http://http.debian.net/debian/ jessie-backports main contrib non-free" >> /etc/apt/sources.list
 	    echo "deb-src http://http.debian.net/debian/ jessie-backports main contrib non-free" >> /etc/apt/sources.list
 	  fi
-	  apt-get -qq update
-	  apt-get -yqq -t jessie-backports install roundcube roundcube-mysql roundcube-plugins > /dev/null 2>&1
-	  if [ $CFG_WEBSERVER == "apache" ]; then
+	  hide_output apt-get update
+	  apt_install roundcube roundcube-core roundcube-mysql roundcube-plugins
+	  if [ "$CFG_WEBSERVER" == "apache" ]; then
 		mv /etc/roundcube/apache.conf /etc/roundcube/apache.conf.default
 		cat << "EOF" > /etc/roundcube/apache.conf
 <VirtualHost *:80>
@@ -136,7 +136,7 @@ InstallWebmail() {
 </VirtualHost>
 </IfModule>
 EOF
-	  else
+	  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
         cat << "EOF" > /etc/nginx/sites-available/roundcube.vhost
 server {
    # SSL configuration
@@ -183,7 +183,7 @@ EOF
 	  fi
 	  # ISPConfig integration
 	  cd /tmp
-	  wget -q --no-check-certificate -O ispconfig3_roundcube.tgz https://github.com/w2c/ispconfig3_roundcube/tarball/master
+	  wget -q -O ispconfig3_roundcube.tgz https://github.com/w2c/ispconfig3_roundcube/tarball/master
 	  tar xzf ispconfig3_roundcube.tgz
 	  cp -r /tmp/*ispconfig3_roundcube*/ispconfig3_* /usr/share/roundcube/plugins/
 	  ln -s /usr/share/roundcube/plugins/ispconfig3_account /var/lib/roundcube/plugins/ispconfig3_account
@@ -204,9 +204,10 @@ EOF
 	  sed -i "s/\$rcmail_config\['password_check_symbol'\] = TRUE;/\$rcmail_config\['password_check_symbol'\] = FALSE;/" /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
     ;;
 	"squirrelmail")
-	  if [ $CFG_WEBSERVER == "apache" ]; then
+	  echo -n "Installing Webmail client (SquirrelMail)... "
+	  if [ "$CFG_WEBSERVER" == "apache" ]; then
 	    echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
-	    apt-get -yqq install squirrelmail wamerican > /dev/null 2>&1
+	    apt_install squirrelmail wamerican
 	    ln -s /etc/squirrelmail/apache.conf /etc/apache2/conf-available/squirrelmail.conf
 	    a2enconf squirrelmail
 	    sed -i 1d /etc/squirrelmail/apache.conf
@@ -235,10 +236,13 @@ EOF
 	  fi	
 	;;
   esac
-  if [ $CFG_WEBSERVER == "apache" ]; then
-	  service apache2 restart > /dev/null 2>&1
-  else
-	  service nginx restart > /dev/null 2>&1
+  echo -e "[${green}DONE${NC}]\n"
+  if [ "$CFG_WEBSERVER" == "apache" ]; then
+	  echo -n "Restarting Apache... "
+	  service apache2 restart
+  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
+	  echo -n "Restarting nginx... "
+	  service nginx restart
   fi
   echo -e "[${green}DONE${NC}]\n"
 }

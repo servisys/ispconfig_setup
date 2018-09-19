@@ -3,6 +3,7 @@
 #	Do some pre-install checks
 #---------------------------------------------------------------------
 PreInstallCheck() {
+	echo -n "Preparing to install... "
 	# Check source.list
 	#contrib=$(cat /etc/apt/sources.list | grep contrib | grep -v "cdrom")
 	#nonfree=$(cat /etc/apt/sources.list | grep non-free | grep -v "cdrom")

@@ -3,9 +3,9 @@
 #    Install the chosen webmail client. Squirrelmail or Roundcube
 #---------------------------------------------------------------------
 InstallWebmail() {
-  echo -n "Installing Webmail client ($CFG_WEBMAIL)... "
   case $CFG_WEBMAIL in
 	"roundcube")
+	  echo -n "Installing Webmail client (Roundcube)... "
 	  CFG_ROUNDCUBE_PWD=$(< /dev/urandom tr -dc A-Z-a-z-0-9 | head -c12)
 	  echo "roundcube-core roundcube/dbconfig-install boolean true" | debconf-set-selections
 	  echo "roundcube-core roundcube/database-type select mysql" | debconf-set-selections
@@ -14,12 +14,14 @@ InstallWebmail() {
 	  echo "roundcube-core roundcube/mysql/app-pass password $CFG_ROUNDCUBE_PWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/app-password-confirm password $CFG_ROUNDCUBE_PWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/hosts string localhost" | debconf-set-selections
-	  apt-get -yqq install roundcube roundcube-core roundcube-mysql roundcube-plugins
+	  apt_install roundcube roundcube-core roundcube-mysql roundcube-plugins
 	  sed -i "s/\$config\['default_host'\] = '';/\$config['default_host'] = 'localhost';/" /etc/roundcube/config.inc.php
-	  if [ $CFG_WEBSERVER == "apache" ]; then
+	  if [ "$CFG_WEBSERVER" == "apache" ]; then
 		echo "Alias /webmail /var/lib/roundcube" >> /etc/apache2/conf-enabled/roundcube.conf
+		echo -e "[${green}DONE${NC}]\n"
+		echo -n "Reloading Apache... "
 		service apache2 reload
-	  else
+	  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
         cat << "EOF" > /etc/nginx/sites-available/roundcube.vhost
 server {
    # SSL configuration
@@ -67,9 +69,10 @@ EOF
 	  
     ;;
 	"squirrelmail")
-	  if [ $CFG_WEBSERVER == "apache" ]; then
+	  echo -n "Installing Webmail client (SquirrelMail)... "
+	  if [ "$CFG_WEBSERVER" == "apache" ]; then
 	    echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
-	    apt-get -yqq install squirrelmail wamerican > /dev/null 2>&1
+	    apt_install squirrelmail wamerican
 	    ln -s /etc/squirrelmail/apache.conf /etc/apache2/conf-available/squirrelmail.conf
 	    a2enconf squirrelmail
 	    sed -i 1d /etc/squirrelmail/apache.conf
@@ -98,10 +101,13 @@ EOF
 	  fi	
 	;;
   esac
-  if [ $CFG_WEBSERVER == "apache" ]; then
-	  service apache2 restart > /dev/null 2>&1
-  else
-	  service nginx restart > /dev/null 2>&1
+  echo -e "[${green}DONE${NC}]\n"
+  if [ "$CFG_WEBSERVER" == "apache" ]; then
+	  echo -n "Restarting Apache... "
+	  service apache2 restart
+  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
+	  echo -n "Restarting nginx... "
+	  service nginx restart
   fi
   echo -e "[${green}DONE${NC}]\n"
 }

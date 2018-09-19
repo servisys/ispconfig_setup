@@ -3,8 +3,8 @@
 #    Install and configure fail2ban
 #---------------------------------------------------------------------
 InstallFail2ban() {
-  echo -n "Installing fail2ban... "
-  apt-get -y install fail2ban > /dev/null 2>&1
+  echo -n "Installing Intrusion protection (Fail2Ban)... "
+  apt_install fail2ban
 
 
   case $CFG_MTA in
@@ -104,7 +104,9 @@ cat > /etc/fail2ban/filter.d/pureftpd.conf <<EOF
 failregex = .*pure-ftpd: \(.*@<HOST>\) \[WARNING\] Authentication failed for user.*
 ignoreregex =
 EOF
-  service fail2ban restart > /dev/null 2>&1
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
+  echo -n "Restarting Fail2Ban... "
+  service fail2ban restart
+  echo -e "[${green}DONE${NC}]\n"
 }
 
