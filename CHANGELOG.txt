@@ -1,3 +1,7 @@
+v.3.0.4
+- Added Raspbian support
+- Bug fix
+
 v.3.0.3.1
 - Added small fix for ubuntu 18.04
 
