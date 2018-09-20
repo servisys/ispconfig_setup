@@ -3,19 +3,30 @@
 #    Install basic packages
 #---------------------------------------------------------------------
 InstallBasics() {
-  echo -n "Updating apt and upgrading currently installed packages... "
-  apt-get -qq update > /dev/null 2>&1
-  apt-get -qqy upgrade > /dev/null 2>&1
+  echo -n "Updating apt package database and upgrading currently installed packages... "
+  hide_output apt-get update
+  # hide_output apt-get -y upgrade
+  hide_output apt-get -y dist-upgrade
+  hide_output apt-get -y autoremove
   echo -e "[${green}DONE${NC}]\n"
 
-  echo "Installing basic packages... "
-  apt-get -yqq install ssh openssh-server vim-nox php7.0-cli ntp ntpdate debconf-utils binutils sudo git lsb-release > /dev/null 2>&1
+  echo -n "Installing basic packages (OpenSSH server, NTP, binutils, etc.)... "
+  apt_install ssh openssh-server nano vim-nox php7.0-cli ntp ntpdate debconf-utils binutils sudo git lsb-release
+  echo -e "[${green}DONE${NC}]\n"
+  echo -n "Stopping AppArmor... "
   service apparmor stop 
-  update-rc.d -f apparmor remove 
-  apt-get -y remove apparmor apparmor-utils
-
-  echo "dash dash/sh boolean false" | debconf-set-selections
-  dpkg-reconfigure -f noninteractive dash > /dev/null 2>&1
-  echo -n "Reconfigure dash... "
   echo -e "[${green}DONE${NC}]\n"
+  echo -n "Disabling AppArmor... "
+  hide_output update-rc.d -f apparmor remove 
+  echo -e "[${green}DONE${NC}]\n"
+  echo -n "Removing AppArmor... "
+  apt_remove apparmor apparmor-utils
+  echo -e "[${green}DONE${NC}]\n"
+
+  if [ /bin/sh -ef /bin/dash ]; then
+    echo -n "Changing the default shell from dash to bash... "
+    echo "dash dash/sh boolean false" | debconf-set-selections
+    dpkg-reconfigure -f noninteractive dash > /dev/null 2>&1
+    echo -e "[${green}DONE${NC}]\n"
+  fi
 }

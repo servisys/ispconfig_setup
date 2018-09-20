@@ -3,8 +3,8 @@
 #    Install and configure web stats
 #---------------------------------------------------------------------
 InstallWebStats() {
-  echo -n "Installing stats... ";
-  apt-get -y install vlogger webalizer awstats geoip-database libclass-dbi-mysql-perl > /dev/null 2>&1
+  echo -n "Installing Statistics (Vlogger, Webalizer and AWStats)... ";
+  apt_install vlogger webalizer awstats geoip-database libclass-dbi-mysql-perl
   sed -i 's/^/#/' /etc/cron.d/awstats
   echo -e "[${green}DONE${NC}]\n"
 }

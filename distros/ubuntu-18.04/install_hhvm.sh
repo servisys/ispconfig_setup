@@ -3,8 +3,7 @@
 #    Install HHVM
 #---------------------------------------------------------------------
 InstallHHVM() {
-  echo -n "Installing HHVM...) "
-  # installs add-apt-repository
+  echo -n "Installing HHVM (Hip Hop Virtual Machine)... "
   apt-get -y install hhvm
   echo -e "[${green}DONE${NC}]\n"
 }

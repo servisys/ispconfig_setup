@@ -3,10 +3,10 @@
 #    Install and configure mysql
 #---------------------------------------------------------------------
 InstallSQLServer() {
-  echo -n "Installing mysql... "
-  yum -y install mariadb-server expect > /dev/null 2>&1
-  systemctl enable mariadb.service > /dev/null 2>&1
-  systemctl start mariadb.service > /dev/null 2>&1
+  echo -n "Installing Database server (MariaDB)... "
+  yum_install mariadb-server expect
+  systemctl enable mariadb.service
+  systemctl start mariadb.service
 SECURE_MYSQL=$(expect -c "
 set timeout 3
 spawn mysql_secure_installation
@@ -29,5 +29,5 @@ send \"y\r\"
 expect eof
 ")
   echo "${SECURE_MYSQL}"
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }

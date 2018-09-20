@@ -3,23 +3,22 @@
 #    Install and configure of disk quota
 #---------------------------------------------------------------------
 InstallQuota() {
-  echo -n "Installing and initializing quota (this might take while)... "
-  yum -y install quota > /dev/null 2>&1
+	echo -n "Installing Quota... "
+	echo -e "\n${red}Sorry but Quota is not yet supported.${NC}" >&2
+	echo -e "For more information, see this issue: https://github.com/servisys/ispconfig_setup/issues/69\n"
+	return
+	yum_install quota
+	echo -e "[${green}DONE${NC}]\n"
 
-
-  if ! [ -f /proc/user_beancounters ]; then
-
-	  if [ `cat /etc/fstab | grep ',usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0' | wc -l` -eq 0 ]; then
-		sed -i '/tmpfs/!s/errors=remount-ro/errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0/' /etc/fstab
-	  fi
-	  if [ `cat /etc/fstab | grep 'defaults' | wc -l` -ne 0 ]; then
-		sed -i '/tmpfs/!s/defaults/defaults,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0/' /etc/fstab
-	  fi
-	  mount -o remount /
-	  quotacheck -avugm > /dev/null 2>&1
-	  quotaon -avug > /dev/null 2>&1
-
-  fi
-
-  echo -e "${green}done! ${NC}\n"
+	if ! [ -f /proc/user_beancounters ]; then
+		echo -n "Initializing Quota, this may take awhile... "
+		if [ "$(grep -c ',uquota,gquota' /etc/fstab)" -eq 0 ]; then
+			sed -i '/\/[[:space:]]\+/ {/tmpfs/!s/errors=remount-ro/errors=remount-ro,uquota,gquota/}' /etc/fstab
+			sed -i '/\/[[:space:]]\+/ {/tmpfs/!s/defaults/defaults,uquota,gquota/}' /etc/fstab
+		fi
+		mount -o remount /
+		quotacheck -avugm
+		quotaon -avug
+		echo -e "[${green}DONE${NC}]\n"
+	fi
 }
