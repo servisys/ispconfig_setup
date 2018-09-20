@@ -56,8 +56,7 @@ InstallWebServer() {
 	a2enmod dav_fs > /dev/null 2>&1
 	a2enmod dav > /dev/null 2>&1
 	a2enmod auth_digest > /dev/null 2>&1
-	a2enmod headers > /dev/null 2>&1
-	# a2enmod fastcgi > /dev/null 2>&1
+	a2enmod fastcgi > /dev/null 2>&1
 	a2enmod proxy_fcgi > /dev/null 2>&1
 	a2enmod alias > /dev/null 2>&1
 	# a2enmod fcgid > /dev/null 2>&1
