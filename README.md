@@ -632,6 +632,7 @@ Follow the instructions on the screen
 ### Who had contributed to this work? ###
 
 * The scripts and instructions have been produced by Matteo Temporini ( <temporini.matteo@gmail.com> )
+* Special thanks to Travis CI for adding support to Raspberry and a big number of Bugs( https://github.com/tdulcet )
 * Special thanks to Torsten Widmann for contribution to the code
 * Special thanks to Michiel Kamphuis ( http://www.ensync.it/ ) for contribution to Multiserver Setup integration
 * Special thanks to Bartłomiej Gajda ( http://webard.me/ ) for the bug fixes to multiserver setup and beta installation
