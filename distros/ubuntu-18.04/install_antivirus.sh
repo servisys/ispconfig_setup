@@ -7,6 +7,7 @@ InstallAntiVirus() {
   apt_install amavisd-new spamassassin clamav clamav-daemon unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl postgrey rkhunter spampd razor pyzor libmail-dkim-perl
   echo -e "[${green}DONE${NC}]\n"
   sed -i "s/AllowSupplementaryGroups false/AllowSupplementaryGroups true/" /etc/clamav/clamd.conf
+  echo "\$myhostname = \"$CFG_HOSTNAME_FQDN\";" >> /etc/amavis/conf.d/05-node_id
   echo -n "Stopping SpamAssassin... "
   service spamassassin stop
   echo -e "[${green}DONE${NC}]\n"

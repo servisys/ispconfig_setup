@@ -5,6 +5,7 @@
 InstallAntiVirus() {
   echo -n "Installing Antivirus utilities (Amavisd-new, ClamAV), Spam filtering (SpamAssassin) and Rootkit detection (rkhunter)... "
   apt_install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl rkhunter unrar-free p7zip rpm2cpio tnef
+  echo "\$myhostname = \"$CFG_HOSTNAME_FQDN\";" >> /etc/amavis/conf.d/05-node_id
   echo -e "[${green}DONE${NC}]\n"
   echo -n "Stopping SpamAssassin... "
   service spamassassin stop
