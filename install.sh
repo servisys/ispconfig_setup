@@ -118,8 +118,8 @@ if [[ $CFG_HOSTNAME_FQDN =~ $RE ]] || ! [[ $CFG_HOSTNAME_FQDN =~ $RE1 && $CFG_HO
 			read -r line
 		done
 		# hostnamectl set-hostname "$line"
-		subdomain=${line%%.*}
-		hostnamectl set-hostname "$subdomain"
+		#subdomain=${line%%.*}
+		hostnamectl set-hostname "$line"
 		if grep -q "^${IP_ADDRESS[0]}" /etc/hosts; then
 			sed -i "s/^${IP_ADDRESS[0]}.*/${IP_ADDRESS[0]}\t$line\t$subdomain/" /etc/hosts
 		else
