@@ -5,7 +5,7 @@
 InstallMTA() {
   case $CFG_MTA in
 	"courier")
-	  echo -n "Installing SMPT Mail server (Courier) and Mail signing (OpenDKIM, OpenDMARC)... ";
+	  echo -n "Installing SMTP Mail server (Courier) and Mail signing (OpenDKIM, OpenDMARC)... ";
 	  echo "courier-base courier-base/webadmin-configmode boolean false" | debconf-set-selections
 	  echo "courier-ssl courier-ssl/certnotice note" | debconf-set-selections
 	  apt_install courier-authdaemon courier-authlib-mysql courier-pop courier-pop-ssl courier-imap courier-imap-ssl libsasl2-2 libsasl2-modules libsasl2-modules-sql sasl2-bin libpam-mysql courier-maildrop opendkim opendkim-tools opendmarc
@@ -28,7 +28,7 @@ InstallMTA() {
 	  echo -e "[${green}DONE${NC}]\n"
 	  ;;
 	"dovecot")
-	  echo -n "Installing SMPT Mail server (Dovecot) and Mail signing (OpenDKIM, OpenDMARC)... ";
+	  echo -n "Installing SMTP Mail server (Dovecot) and Mail signing (OpenDKIM, OpenDMARC)... ";
 	  echo "dovecot-core dovecot-core/create-ssl-cert boolean false" | debconf-set-selections
 	  echo "dovecot-core dovecot-core/ssl-cert-name string $CFG_HOSTNAME_FQDN" | debconf-set-selections
 	  # apt_install dovecot-imapd dovecot-pop3d dovecot-sieve dovecot-mysql dovecot-lmtpd opendkim opendkim-tools opendmarc
