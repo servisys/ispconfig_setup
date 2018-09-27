@@ -94,7 +94,7 @@ echo -e "[${green}DONE${NC}]\n"
 # Adapted from: https://github.com/virtualmin/slib/blob/master/slib.sh#L460
 RE='^.+\.localdomain$'
 RE1='^.{4,253}$'
-RE2='^([[:alnum:]][[:alnum:]\-]{1,61}[[:alnum:]]\.)+[a-zA-Z]{2,63}$'
+RE2='^([[:alnum:]][[:alnum:]\-]{0,61}[[:alnum:]]\.)+[a-zA-Z]{2,63}$'
 if [[ $CFG_HOSTNAME_FQDN =~ $RE ]]; then
 	echo "The hostname is: $CFG_HOSTNAME_FQDN."
 	echo -e "${yellow}Warning: Hostname cannot be *.localdomain.${NC}\n"
