@@ -10,7 +10,7 @@ InstallPostfix() {
 	apt_remove sendmail
 	echo -e "[${green}DONE${NC}]\n"
   fi
-  echo -n "Installing POP3/IMAP Mail server (Postfix)... "
+  echo -n "Installing SMTP Mail server (Postfix)... "
   echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
   echo "postfix postfix/mailname string $CFG_HOSTNAME_FQDN" | debconf-set-selections
   apt_install postfix postfix-mysql postfix-doc getmail4
