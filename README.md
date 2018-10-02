@@ -24,6 +24,7 @@ Tested on:
 - Ubuntu 16.04 Xenial Xerus ( [Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
 - Ubuntu 18.04 Bionic Beaver ( [Servisys VPS](https://www.servisys.it/), VmWare Esxi, Amazon AWS, Virtualbox, OVH VPS, Hetzner, Digital Ocean)
 - CentOS 7 ([Servisys VPS](https://www.servisys.it/), Vitualbox)
+- Raspbian
 - ISPConfig 3.*
 
 For now, it is tested and developed only on Debian systems.
