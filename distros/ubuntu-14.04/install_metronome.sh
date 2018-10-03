@@ -1,8 +1,8 @@
 #---------------------------------------------------------------------
-# Function: InstallMetronom
-#    Install Metronom Server
+# Function: InstallMetronome
+#    Install metronomeServer
 #---------------------------------------------------------------------
-InstallMetronom() {
+InstallMetronome() {
   echo -n "Installing Metronome... ";
   apt_install git lua5.1 liblua5.1-0-dev lua-filesystem libidn11-dev libssl-dev lua-zlib lua-expat lua-event lua-bitop lua-socket lua-sec luarocks luarocks
   luarocks install lpc

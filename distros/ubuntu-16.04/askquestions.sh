@@ -52,9 +52,9 @@ AskQuestions() {
 		CFG_HHVMINSTALL=$(whiptail --title "Install HHVM" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install HHVM (Hip Hop Virtual Machine) as PHP engine?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
 	done
 	
-	while [[ ! "$CFG_METRONOM" =~ $RE ]]
+	while [[ ! "$CFG_METRONOME" =~ $RE ]]
 	do
-		CFG_METRONOM=$(whiptail --title "Install Metronome XMPP Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install Metronome XMPP Chat Server?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
+		CFG_METRONOME=$(whiptail --title "Install Metronome XMPP Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Do you want to install Metronome XMPP Chat Server?" 10 50 2 "yes" "" OFF "no""(default)" ON 3>&1 1>&2 2>&3)
 	done
 	
 	while [[ ! "$CFG_AVUPDATE" =~ $RE ]]
