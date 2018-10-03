@@ -278,9 +278,9 @@ if [ -f /etc/debian_version ]; then
 		if [ "$CFG_HHVM" == "yes" ]; then
 			InstallHHVM
 		fi
-		if [ "$CFG_METRONOM" == "yes" ]; then
-			source $APWD/distros/$DISTRO/install_metronom.sh
-			InstallMetronom 
+		if [ "$CFG_METRONOME" == "yes" ]; then
+			source $APWD/distros/$DISTRO/install_metronome.sh
+			Installmetronome
 		fi
 		InstallWebmail 
 	else
@@ -351,9 +351,9 @@ elif [ -f /etc/redhat-release ]; then # /etc/centos-release
 		InstallJailkit 
 	fi
 	InstallFail2ban 
-	if [ "$CFG_METRONOM" == "yes" ]; then
-		source $APWD/distros/$DISTRO/install_metronom.sh
-		InstallMetronom 
+	if [ "$CFG_METRONOME" == "yes" ]; then
+		source $APWD/distros/$DISTRO/install_metronome.sh
+		Installmetronome
 	fi
 	InstallWebmail 
 	InstallISPConfig

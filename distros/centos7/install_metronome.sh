@@ -1,8 +1,8 @@
 #---------------------------------------------------------------------
-# Function: InstallMetronom
-#    Install Metronom Server
+# Function: InstallMetronome
+#    Install metronomeServer
 #---------------------------------------------------------------------
-InstallMetronom() {
+InstallMetronome() {
   echo -n "Installing Metronome... ";
   yum_install git lua lua-devel lua-filesystem libidn-devel openssl-devel lua-bitop lua-socket lua-sec luarocks
   luarocks install lpc
