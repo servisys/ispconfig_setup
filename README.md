@@ -27,10 +27,6 @@ Tested on:
 - Raspbian
 - ISPConfig 3.*
 
-For now, it is tested and developed only on Debian systems.
-
-Maybe it works well also on Ubuntu systems.
-
 ### What is this repository for? ###
 
 This repository contains some scripts for the automation of installation of ISPConfig 3 control panel.
