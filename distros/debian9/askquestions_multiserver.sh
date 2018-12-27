@@ -9,6 +9,20 @@ AskQuestionsMultiserver(){
 		apt_install whiptail
 		echo -e "[${green}DONE${NC}]\n"
 	fi
+	
+	# If no SQL client is installed, ask for it, otherwise remote DB check always fail.
+	if ! command -v mysql >/dev/null; then
+		while [[ ! "$_SQLClient" =~ $RE ]]
+		do
+			_SQLClient=$(whiptail --title "SQL Server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Please select SQL Client type" 10 50 2 "MySQL" "(default)" ON "MariaDB" "" OFF 3>&1 1>&2 2>&3)
+		done
+		
+		if [ "$_SQLClient" == "MySQL" ]; then
+			apt_install mysql-client
+		elif [ "$_SQLClient" == "MariaDB" ]; then
+			apt_install mariadb-client
+		fi
+	fi
 
 	while [[ ! "$CFG_SQLSERVER" =~ $RE ]]
 	do
