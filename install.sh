@@ -248,6 +248,9 @@ if [ "$DISTRO" == "debian8" ]; then
 	do
 		CFG_ISPCVERSION=$(whiptail --title "ISPConfig Version" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Select ISPConfig Version you want to install" 10 50 2 "Stable" "(default)" ON "Beta" "" OFF 3>&1 1>&2 2>&3)
 	done
+fi
+
+if [ "$DISTRO" == "debian8" ] || [ "$DISTRO" == "debian9" ]; then
 	while [[ ! "$CFG_MULTISERVER" =~ $RE ]]
 	do
 		CFG_MULTISERVER=$(whiptail --title "MULTISERVER SETUP" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like to install ISPConfig in a MultiServer Setup?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
@@ -282,7 +285,9 @@ if [ -f /etc/debian_version ]; then
 			source $APWD/distros/$DISTRO/install_metronome.sh
 			Installmetronome
 		fi
-		InstallWebmail 
+		if [ "$CFG_WEBMAIL" != "no" ]; then
+			InstallWebmail 
+		fi
 	else
 		InstallBasePhp    #to remove in feature release
 	fi	

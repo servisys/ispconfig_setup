@@ -64,7 +64,7 @@ AskQuestions() {
 
 	while [[ ! "$CFG_WEBMAIL" =~ $RE ]]
 	do
-		CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Please select your webmail client" 10 50 2 "Roundcube" "(default)" ON "SquirrelMail" "" OFF 3>&1 1>&2 2>&3)
+		CFG_WEBMAIL=$(whiptail --title "Webmail client" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Please select your webmail client" 10 50 3 "Roundcube" "(default)" ON "SquirrelMail" "" OFF "no" "(Skip)" OFF 3>&1 1>&2 2>&3)
 	done
 	CFG_WEBMAIL=${CFG_WEBMAIL,,}
 
