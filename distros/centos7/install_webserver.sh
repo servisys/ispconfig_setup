@@ -28,7 +28,8 @@ InstallWebServer() {
 	patch -Np1 -d suphp-0.7.2 < patchingsuphp.patch
 	cd suphp-0.7.2
 	autoreconf -if
-	make
+	./configure --prefix=/usr/ --sysconfdir=/etc/ --with-apr=/usr/bin/apr-1-config --with-apache-user=apache --with-setid-mode=owner --with-logfile=/var/log/httpd/suphp_log
+        make
 	make install
 	echo "LoadModule suphp_module /usr/lib64/httpd/modules/mod_suphp.so" > /etc/httpd/conf.d/suphp.conf
 	echo "[global]" > /etc/suphp.conf
