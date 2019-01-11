@@ -77,7 +77,7 @@ AskQuestions() {
 	if [ "$CFG_WEBMAIL" == roundcube ]; then
 		while [[ ! "$ROUNDCUBE_DB" =~ $RE ]]
 		do
-			ROUNDCUBE_DB=$(whiptail --title "ROUNDCUBE Database Name" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database name" --nocancel 10 50 3>&1 1>&2 2>&3)
+			ROUNDCUBE_DB=$(whiptail --title "ROUNDCUBE Database Name" --backtitle "$WT_BACKTITLE" --inputbox "Please specify the roundcube database name" --nocancel 10 50 "roundcube" 3>&1 1>&2 2>&3)
 		done
 		while [[ ! "$ROUNDCUBE_USER" =~ $RE ]]
 		do
