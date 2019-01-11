@@ -96,6 +96,35 @@ InstallWebServer() {
     systemctl enable  httpd.service
     systemctl restart  httpd.service
 	# echo -e "${green}done! ${NC}\n"
+	
+#https://www.howtoforge.com/tutorial/how-to-install-wordpress-with-hhvm-and-nginx-on-centos-7/#step-configure-hhvm-and-nginx
+#http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/
+
+ echo -n "Installing Hhvm (Apache)... "
+ hide_output yum install -y git
+ hide_output yum install -y cpp gcc-c++ cmake psmisc {binutils,boost,jemalloc,numactl}-devel \
+ {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel \
+ lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel \
+ {unixODBC,expat,mariadb}-devel lib{edit,curl,xml2,xslt}-devel \
+ glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel \
+ mariadb mariadb-server libc-client make
+
+ hide_output rpm -Uvh http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/hhvm-3.15.3-1.el7.centos.x86_64.rpm
+ ln -s /usr/local/bin/hhvm /bin/hhvm
+
+ echo "[Unit]" >> /etc/systemd/system/hhvm.service
+ echo "Description=HHVM HipHop Virtual Machine (FCGI)" >> /etc/systemd/system/hhvm.service
+ echo "After=network.target nginx.service mariadb.service" >> /etc/systemd/system/hhvm.service
+ echo "" >> /etc/systemd/system/hhvm.service
+ echo "[Service]" >> /etc/systemd/system/hhvm.service
+ echo "ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user nginx --mode daemon -vServer.Type=fastcgi -  vServer.FileSocket=/var/run/hhvm/hhvm.sock" >> /etc/systemd/system/hhvm.service
+ echo "" >> /etc/systemd/system/hhvm.service
+ echo "[Install]" >> /etc/systemd/system/hhvm.service
+ echo "WantedBy=multi-user.target" >> /etc/systemd/system/hhvm.service
+
+ hhvm --version
+ echo -e "[${green}DONE${NC}]\n"
+	
 elif [ "$CFG_WEBSERVER" == "nginx" ]; then
 	CFG_NGINX=y
 	CFG_APACHE=n
