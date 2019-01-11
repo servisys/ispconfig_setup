@@ -101,7 +101,6 @@ InstallWebServer() {
 #http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/
 
  echo -n "Installing Hhvm (Apache)... "
- hide_output yum install -y git
  hide_output yum install -y cpp gcc-c++ cmake psmisc {binutils,boost,jemalloc,numactl}-devel \
  {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel \
  lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel \
@@ -132,7 +131,7 @@ elif [ "$CFG_WEBSERVER" == "nginx" ]; then
     yum -y install nginx
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and modules... "
-	yum -y install mod_ssl php php-mysql php-mbstring
+	yum -y install php php-mysql php-mbstring
 	yum -y install php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc php-pecl-apc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy
     echo -n "Installing needed programs for PHP and Apache... "
 	yum -y install curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel mod_fcgid php-cli httpd-devel php-fpm wget
@@ -149,7 +148,6 @@ elif [ "$CFG_WEBSERVER" == "nginx" ]; then
 #http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/
 
  echo -n "Installing Hhvm (nginx)... "
- hide_output yum install -y git
  hide_output yum install -y cpp gcc-c++ cmake psmisc {binutils,boost,jemalloc,numactl}-devel \
  {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel \
  lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel \
