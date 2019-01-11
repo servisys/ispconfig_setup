@@ -170,6 +170,16 @@ elif [ "$CFG_WEBSERVER" == "nginx" ]; then
 
  hhvm --version
  echo -e "[${green}DONE${NC}]\n"
+ 
+ 	echo "Installing phpMyAdmin... "
+	yum -y install phpmyadmin
+	echo -e "[${green}DONE${NC}]\n"
+   	sed -i "s/Require ip 127.0.0.1/#Require ip 127.0.0.1/" /etc/httpd/conf.d/phpMyAdmin.conf
+    	sed -i '0,/Require ip ::1/ s/Require ip ::1/#Require ip ::1\n       Require all granted/' /etc/httpd/conf.d/phpMyAdmin.conf
+	sed -i "s/'cookie'/'http'/" /etc/phpMyAdmin/config.inc.php
+    systemctl enable  nginx.service
+    systemctl restart  nginx.service
+	echo -e "${green}done! ${NC}\n"
  fi
 
   echo -e "${green}done! ${NC}\n"
