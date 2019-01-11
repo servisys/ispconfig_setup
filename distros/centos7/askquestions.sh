@@ -16,7 +16,7 @@ AskQuestions() {
 
 	while [[ ! "$CFG_WEBSERVER" =~ $RE ]]
 	do
-		CFG_WEBSERVER=$(whiptail --title "Web server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Please select Web server type" 10 50 2 "Apache" "(default)" ON "Nginx" "" OFF 3>&1 1>&2 2>&3)
+		CFG_WEBSERVER=$(whiptail --title "Web server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Please select Web server type" 10 50 2 "Apache" "(default)" ON "Nginx" "test" OFF 3>&1 1>&2 2>&3)
 	done
 	CFG_WEBSERVER=${CFG_WEBSERVER,,}
 
