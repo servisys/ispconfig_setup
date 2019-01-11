@@ -616,7 +616,7 @@ cd /tmp; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarb
 * CentOS 7
 
 ```shell
-cd /tmp; sudo yum install wget unzip net-tools; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo bash install.sh
+cd /tmp; sudo yum install -y wget unzip net-tools; wget -O installer.tgz "https://github.com/b1glord/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo bash install.sh
 ```
 
 CentOS 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
