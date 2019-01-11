@@ -25,5 +25,13 @@ InstallBasics() {
   echo -n "Installing Development Tools... "
   hide_output yum -y groupinstall 'Development Tools'  
   echo -e "[${green}DONE${NC}]\n"
+  
+  #ref https://www.howtodojo.com/2017/10/install-git-centos-7/
+  echo -n "Removing Git Old Version... "
+  yum remove git
+  echo -n "Installing Git New Version... "
+  yum install -y https://centos7.iuscommunity.org/ius-release.rpm 
+  yum install -y git2u
+  echo -e "[${green}DONE${NC}]\n"
 }
 
