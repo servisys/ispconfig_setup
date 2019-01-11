@@ -379,5 +379,8 @@ fi
 echo -e "\nYou can visit the GitHub repository at: https://github.com/servisys/ispconfig_setup/"
 echo "If you need support or have questions, ask here: https://www.howtoforge.com/community/#ispconfig-3.23"
 echo "Please report any errors or issues with this auto installer script at: https://github.com/servisys/ispconfig_setup/issues and with ISPConfig at: https://git.ispconfig.org/ispconfig/ispconfig3/issues"
+echo "Please Restart the system for all modules to Loaded"
+sleep 30
+reboot
 exit 0
 
