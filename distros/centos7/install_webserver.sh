@@ -8,23 +8,23 @@ InstallWebServer() {
 	CFG_NGINX=n
 	CFG_APACHE=y
     echo -n "Installing Web server (Apache)... "
-    yum_install httpd
+    yum -y install httpd mod_ssl
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and modules... "
-	yum_install mod_ssl php php-mysql php-mbstring
-	yum_install php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc php-pecl-apc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy
+	yum -y install php php-mysql php-mbstring
+	yum -y install php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc php-pecl-apc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy
 	echo -n "Installing needed programs for PHP and Apache... "
-	yum_install curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel mod_fcgid php-cli httpd-devel php-fpm wget
+	yum -y install curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel mod_fcgid php-cli httpd-devel php-fpm wget
 	echo -e "[${green}DONE${NC}]\n"
 	sed -i "s/error_reporting = E_ALL \& ~E_DEPRECATED \& ~E_STRICT/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED/" /etc/php.ini
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/" /etc/php.ini
 	TIME_ZONE=$(echo "$TIME_ZONE" | sed -n 's/ (.*)$//p')
 	sed -i "s/;date.timezone =/date.timezone=\"${TIME_ZONE//\//\\/}\"/" /etc/php.ini
 	cd /usr/local/src
-	yum_install apr-devel
+	yum -y install apr-devel
 	wget -q http://suphp.org/download/suphp-0.7.2.tar.gz
-	tar zxf suphp-0.7.2.tar.gz
-	wget -q -O suphp.patch https://lists.marsching.com/pipermail/suphp/attachments/20130520/74f3ac02/attachment.patch
+	tar zxvf suphp-0.7.2.tar.gz
+	wget -O suphp.patch https://raw.githubusercontent.com/b1glord/ispconfig_setup_extra/master/suphp.patch
 	patch -Np1 -d suphp-0.7.2 < suphp.patch
 	cd suphp-0.7.2
 	autoreconf -if
@@ -70,13 +70,13 @@ InstallWebServer() {
 	sed -i '0,/<FilesMatch \\.php$>/ s/<FilesMatch \\.php$>/<Directory \/usr\/share>\n<FilesMatch \\.php$>/' /etc/httpd/conf.d/php.conf
 	sed -i '0,/<\/FilesMatch>/ s/<\/FilesMatch>/<\/FilesMatch>\n<\/Directory>/' /etc/httpd/conf.d/php.conf
 	
-	systemctl start php-fpm.service
+    systemctl start php-fpm.service
     systemctl enable php-fpm.service
     systemctl enable httpd.service
 	
 	#removed python support for now
 	echo -n "Installing mod_python... "
-	yum_install python-devel
+	yum -y install python-devel
 	cd /usr/local/src/
 	wget -q http://dist.modpython.org/dist/mod_python-3.5.0.tgz
 	tar xfz mod_python-3.5.0.tgz
@@ -90,23 +90,37 @@ InstallWebServer() {
 	echo "Installing phpMyAdmin... "
 	yum -y install phpmyadmin
 	echo -e "[${green}DONE${NC}]\n"
-    sed -i "s/Require ip 127.0.0.1/#Require ip 127.0.0.1/" /etc/httpd/conf.d/phpMyAdmin.conf
-    sed -i '0,/Require ip ::1/ s/Require ip ::1/#Require ip ::1\n       Require all granted/' /etc/httpd/conf.d/phpMyAdmin.conf
+   	sed -i "s/Require ip 127.0.0.1/#Require ip 127.0.0.1/" /etc/httpd/conf.d/phpMyAdmin.conf
+    	sed -i '0,/Require ip ::1/ s/Require ip ::1/#Require ip ::1\n       Require all granted/' /etc/httpd/conf.d/phpMyAdmin.conf
 	sed -i "s/'cookie'/'http'/" /etc/phpMyAdmin/config.inc.php
-	systemctl enable  httpd.service
+    systemctl enable  httpd.service
     systemctl restart  httpd.service
 	# echo -e "${green}done! ${NC}\n"
-  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
+elif [ "$CFG_WEBSERVER" == "nginx" ]; then
+	CFG_NGINX=y
+	CFG_APACHE=n
     echo -n "Installing Web server (nginx)... "
-	echo -e "\n${red}Sorry but nginx is not yet supported.${NC}" >&2
-	echo -e "For more information, see this issue: https://github.com/servisys/ispconfig_setup/issues/67\n"
-	read DUMMY
-  fi
+    yum -y install nginx
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP and modules... "
+	yum -y install mod_ssl php php-mysql php-mbstring
+	yum -y install php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc php-pecl-apc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy
+    echo -n "Installing needed programs for PHP and Apache... "
+	yum -y install curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel mod_fcgid php-cli httpd-devel php-fpm wget
+	echo -e "[${green}DONE${NC}]\n"
+	sed -i "s/error_reporting = E_ALL \& ~E_DEPRECATED \& ~E_STRICT/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED/" /etc/php.ini
+	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/" /etc/php.ini
+	TIME_ZONE=$(echo "$TIME_ZONE" | sed -n 's/ (.*)$//p')
+	sed -i "s/;date.timezone =/date.timezone=\"${TIME_ZONE//\//\\/}\"/" /etc/php.ini
+   systemctl start php-fpm.service
+   systemctl enable php-fpm.service
+   systemctl enable nginx.service
+ fi
 
   # echo -e "${green}done! ${NC}\n"
 
   echo -n "Installing Let's Encrypt (Certbot)... "
-  yum_install certbot
+  yum -y install certbot
 
   echo -e "[${green}DONE${NC}]\n"
 }
