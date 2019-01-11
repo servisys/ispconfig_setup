@@ -10,7 +10,7 @@ PreInstallCheck() {
 		exit 1
 	fi
 
-	if [ "$(getsebool 2>&1)" != "getsebool:	SELinux is disabled" ]; then if [ "$(getsebool 2>&1)" != "getsebool: SELinux is disabled" ]; then
+	if [ "$(getsebool 2>&1)" != "getsebool:  SELinux is disabled" ]; then
 		sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config
 		sed -i "s/SELINUX=permissive/SELINUX=disabled/" /etc/selinux/config
 
