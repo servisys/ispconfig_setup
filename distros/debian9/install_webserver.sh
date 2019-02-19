@@ -2,6 +2,21 @@
 # Function: InstallWebServer Debian 9
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
+SetupSuryOrg() {
+    if [ ! -f /etc/apt/sources.list.d/deb.sury.org.list ]
+    then
+	echo "Please wait running SetupSuryOrg.."
+	apt_install apt-transport-https
+	curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
+	echo 'deb https://packages.sury.org/php/ stretch main' > /etc/apt/sources.list.d/deb.sury.org.list
+	hide_output apt-get update
+	echo -e "[${green}DONE${NC}]\n"
+    fi
+}
+InstallCertBot() {
+	apt_install certbot
+	echo -e "[${green}DONE${NC}]\n"
+}
 InstallWebServer() {
   
   if [ "$CFG_WEBSERVER" == "apache" ]; then
@@ -29,6 +44,12 @@ InstallWebServer() {
 	echo -n "Installing needed programs for PHP and Apache (mcrypt, etc.)... "
 	apt_install mcrypt imagemagick memcached curl tidy snmp
 	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP 7.0 Opcode Cache... "
+	apt_install php7.0-opcache php-apcu
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Restarting Apache... "
+	service apache2 restart
+	echo -e "[${green}DONE${NC}]\n"
 	
   if [ "$CFG_PHPMYADMIN" == "yes" ]; then
 	echo -n "Installing phpMyAdmin... "
@@ -38,15 +59,59 @@ InstallWebServer() {
 	
   if [ "$CFG_PHP56" == "yes" ]; then
 	echo "Installing PHP 5.6"
-	apt_install apt-transport-https
-	curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
-	echo 'deb https://packages.sury.org/php/ stretch main' > /etc/apt/sources.list.d/deb.sury.org.list
-	hide_output apt-get update
-	apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
-	echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
+	SetupSuryOrg
+	apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring
+	#disable, prevent installing packages.#echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP-FPM for php5.6"
+	#Need to check if soemthing is asked before suppress messages
+	apt_install php5.6-fpm
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP 5.6 Opcode Cache... "
+	apt_install php5.6-opcache php-apcu
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Restarting Apache... "
+	service apache2 restart
 	echo -e "[${green}DONE${NC}]\n"
   fi  
-	
+  if [ "$CFG_PHP72" == "yes" ]; then
+	echo "Installing PHP 7.2"
+	SetupSuryOrg
+	apt_install php7.2 php7.2-common php7.2-gd php7.2-mysql php7.2-imap php7.2-cli php7.2-cgi php-pear php7.2-mcrypt php7.2-curl php7.2-intl php7.2-pspell php7.2-recode php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl php7.2-zip php7.2-mbstring php7.2-soap
+	#disable, prevent installing packages.#echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP-FPM for php7.2"
+	#Need to check if soemthing is asked before suppress messages
+	apt_install php7.2-fpm
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP 7.2 Opcode Cache... "
+	apt_install php7.2-opcache php-apcu
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Restarting Apache... "
+	service apache2 restart
+	echo -e "[${green}DONE${NC}]\n"
+  fi
+  if [ "$CFG_PHP73" == "yes" ]; then
+	echo "Installing PHP 7.3"
+	SetupSuryOrg
+	apt_install php7.3 php7.3-common php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear php7.3-mcrypt php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php7.3-zip php7.3-mbstring php7.3-soap
+	#disable, prevent installing packages.#echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP-FPM for php7.3.. "
+	#Need to check if soemthing is asked before suppress messages
+	apt_install php7.3-fpm
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Installing PHP 7.3 Opcode Cache... "
+	apt_install php7.3-opcache php-apcu
+	echo -e "[${green}DONE${NC}]\n"
+	echo -n "Restarting Apache... "
+	service apache2 restart
+	echo -e "[${green}DONE${NC}]\n"
+  fi
+
+	#Maybe add it here after all packages are installed if really needed.
+	#echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
+
 	echo -n "Activating Apache modules... "
 	a2enmod suexec > /dev/null 2>&1
 	a2enmod rewrite > /dev/null 2>&1
@@ -72,17 +137,18 @@ InstallWebServer() {
 	echo -n "Restarting Apache... "
 	service apache2 restart
 	echo -e "[${green}DONE${NC}]\n"
-	
-	echo -n "Installing Let's Encrypt (Certbot)... "
-	apt_install certbot
+
+	echo -n "Installing PHP Opcode Cache... "	
+	apt_install php7.0-opcache php-apcu
 	echo -e "[${green}DONE${NC}]\n"
-  
-    echo -n "Installing PHP Opcode Cache... "	
-    apt_install php7.0-opcache php-apcu
-	echo -e "[${green}DONE${NC}]\n"
+
 	echo -n "Restarting Apache... "
 	service apache2 restart
 	echo -e "[${green}DONE${NC}]\n"
+
+	echo -n "Installing Let's Encrypt (Certbot)... "
+	InstallCertBot
+
   elif [ "$CFG_WEBSERVER" == "nginx" ]; then	
   CFG_NGINX=y
   CFG_APACHE=n
@@ -115,7 +181,6 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
   fi
 
-   
     if [ "$CFG_PHP56" == "yes" ]; then
 		echo -n "Installing PHP 5.6... "
 		apt_install apt-transport-https
@@ -123,9 +188,9 @@ InstallWebServer() {
 		echo 'deb https://packages.sury.org/php/ stretch main' > /etc/apt/sources.list.d/deb.sury.org.list
 		hide_output apt-get update
 		apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
-		echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
+		#disable, prevent installing packages.# echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 		echo -e "[${green}DONE${NC}]\n"
-	fi  
+	fi
 	echo -n "Installing Let's Encrypt (Certbot)... "
 	apt_install certbot
 	echo -e "[${green}DONE${NC}]\n"
@@ -143,4 +208,21 @@ InstallWebServer() {
 	echo -e "${red}Path for php.ini directory: /etc/php/5.6/fpm ${NC}"
 	echo -e "${red}Path for PHP-FPM pool directory: /etc/php/5.6/fpm/pool.d ${NC}"
   fi
+  if [ "$CFG_PHP72" == "yes" ]; then
+	echo -e "${red}Attention!!! You had installed php7 and php 7.2, to make php 7.2 work you had to configure the following in ISPConfig ${NC}"
+	echo -e "${red}Path for PHP FastCGI binary: /usr/bin/php-cgi7.2 ${NC}"
+	echo -e "${red}Path for php.ini directory: /etc/php/7.2/cgi ${NC}"
+	echo -e "${red}Path for PHP-FPM init script: /etc/init.d/php7.2-fpm ${NC}"
+	echo -e "${red}Path for php.ini directory: /etc/php/7.2/fpm ${NC}"
+	echo -e "${red}Path for PHP-FPM pool directory: /etc/php/7.2/fpm/pool.d ${NC}"
+  fi
+  if [ "$CFG_PHP73" == "yes" ]; then
+	echo -e "${red}Attention!!! You had installed php7 and php 7.3, to make php 7.3 work you had to configure the following in ISPConfig ${NC}"
+	echo -e "${red}Path for PHP FastCGI binary: /usr/bin/php-cgi7.3 ${NC}"
+	echo -e "${red}Path for php.ini directory: /etc/php/7.3/cgi ${NC}"
+	echo -e "${red}Path for PHP-FPM init script: /etc/init.d/php7.3-fpm ${NC}"
+	echo -e "${red}Path for php.ini directory: /etc/php/7.3/fpm ${NC}"
+	echo -e "${red}Path for PHP-FPM pool directory: /etc/php/7.3/fpm/pool.d ${NC}"
+  fi
+
 }
