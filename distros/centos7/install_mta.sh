@@ -5,19 +5,20 @@
 InstallMTA() {
   case $CFG_MTA in
 	"courier")
-	  echo -n "Installing courier... ";
-	  echo -e "${red}Sorry not configured yet! ${NC}\n"
+	  echo -n "Installing POP3/IMAP Mail server (Courier)... ";
+	  echo -e "\n${red}Sorry but Courier is not yet supported.${NC}" >&2
+	  echo -e "For more information, see this issue: https://github.com/servisys/ispconfig_setup/issues/70\n"
 	  echo "Press ENTER"
 	  read DUMMY
 	  ;;
 	"dovecot")
-	  echo -n "Installing dovecot... ";
-	  yum -y install dovecot dovecot-mysql dovecot-pigeonhole > /dev/null 2>&1
-	  touch /etc/dovecot/dovecot-sql.conf  > /dev/null 2>&1
-	  ln -s /etc/dovecot/dovecot-sql.conf /etc/dovecot-sql.conf  > /dev/null 2>&1
-	  systemctl enable dovecot > /dev/null 2>&1
-      systemctl start dovecot > /dev/null 2>&1
-	  echo -e "${green}done! ${NC}\n"
+	  echo -n "Installing POP3/IMAP Mail server (Dovecot)... ";
+	  yum_install dovecot dovecot-mysql dovecot-pigeonhole
+	  touch /etc/dovecot/dovecot-sql.conf
+	  ln -s /etc/dovecot/dovecot-sql.conf /etc/dovecot-sql.conf
+	  systemctl enable dovecot
+      systemctl start dovecot
+	  echo -e "[${green}DONE${NC}]\n"
 	  ;;
   esac
 }

@@ -3,8 +3,8 @@
 #    Install and configure fail2ban
 #---------------------------------------------------------------------
 InstallFail2ban() {
-  echo -n "Installing fail2ban... "
-  apt-get -y install fail2ban > /dev/null 2>&1
+  echo -n "Installing Intrusion protection (Fail2Ban)... "
+  apt_install fail2ban
 
 
   case $CFG_MTA in
@@ -80,7 +80,7 @@ cat >> /etc/fail2ban/jail.local <<EOF
 [pureftpd]
 enabled = true
 port = ftp
-filter = pureftpd
+filter = pure-ftpd
 logpath = /var/log/syslog
 maxretry = 3
 
@@ -93,11 +93,13 @@ maxretry = 5
 
 EOF
 
-  service fail2ban restart > /dev/null 2>&1
+  echo -e "[${green}DONE${NC}]\n"
+  echo -n "Restarting Fail2Ban... "
+  service fail2ban restart
   echo -e "[${green}DONE${NC}]\n"
   
-  echo -n "Installing UFW Firewall... "
-  apt-get -yqq install ufw
+  echo -n "Installing Firewall (UFW)... "
+  apt_install ufw
   echo -e "[${green}DONE${NC}]\n"
 }
 

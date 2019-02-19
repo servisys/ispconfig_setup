@@ -3,7 +3,7 @@
 #    Install chosen MTA. Courier or Dovecot
 #---------------------------------------------------------------------
 InstallMTA() {
-  echo -n "Installing Dovecot... ";
-  apt-get -qqy install dovecot-imapd dovecot-pop3d dovecot-sieve dovecot-mysql dovecot-lmtpd opendkim opendkim-tools > /dev/null 2>&1
+  echo -n "Installing POP3/IMAP Mail server (Dovecot) and Mail signing (OpenDKIM, OpenDMARC)... ";
+  apt_install dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-lmtpd dovecot-managesieved dovecot-lucene dovecot-antispam opendkim opendkim-tools opendmarc
   echo -e "[${green}DONE${NC}]\n"
 }

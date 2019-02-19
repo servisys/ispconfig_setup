@@ -3,22 +3,43 @@
 #    Install the chosen webmail client. Squirrelmail or Roundcube
 #---------------------------------------------------------------------
 InstallWebmail() {
-  echo -n "Installing webmail client ($CFG_WEBMAIL)... "
   case $CFG_WEBMAIL in
 	"roundcube")
-	  RANDPWD=`date +%N%s | md5sum`
+	  echo -n "Installing Webmail client (Roundcube)... "
+	  RANDPWD=$(date +%N%s | md5sum)
 	  echo "roundcube-core roundcube/dbconfig-install boolean true" | debconf-set-selections
 	  echo "roundcube-core roundcube/database-type select mysql" | debconf-set-selections
 	  echo "roundcube-core roundcube/mysql/admin-pass password $CFG_MYSQL_ROOT_PWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/db/dbname string roundcube" | debconf-set-selections
 	  echo "roundcube-core roundcube/mysql/app-pass password $RANDOMPWD" | debconf-set-selections
 	  echo "roundcube-core roundcube/app-password-confirm password $RANDPWD" | debconf-set-selections
-	  apt-get -y install roundcube roundcube-mysql git > /dev/null 2>&1
-	  if [ $CFG_WEBSERVER == "apache" ]; then
+	  apt_install roundcube roundcube-mysql git
+	  echo -n "Installing Webmail client Plugins (Roundcube)... "
+	  cd /tmp
+	  wget -q -O ispconfig3_roundcube.tgz https://github.com/w2c/ispconfig3_roundcube/tarball/master
+	  tar xzf ispconfig3_roundcube.tgz
+	  cp -r /tmp/*ispconfig3_roundcube*/ispconfig3_* /usr/share/roundcube/plugins/
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_account /var/lib/roundcube/plugins/ispconfig3_account
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_autoreply /var/lib/roundcube/plugins/ispconfig3_autoreply
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_autoselect /var/lib/roundcube/plugins/ispconfig3_autoselect
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_fetchmail /var/lib/roundcube/plugins/ispconfig3_fetchmail
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_filter /var/lib/roundcube/plugins/ispconfig3_filter
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_forward /var/lib/roundcube/plugins/ispconfig3_forward
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_pass /var/lib/roundcube/plugins/ispconfig3_pass
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_spam /var/lib/roundcube/plugins/ispconfig3_spam
+	  ln -s /usr/share/roundcube/plugins/ispconfig3_wblist /var/lib/roundcube/plugins/ispconfig3_wblist
+	  sed -i "/'zipdownload',/a 'jqueryui',\n'ispconfig3_account',\n'ispconfig3_autoreply',\n'ispconfig3_pass',\n'ispconfig3_spam',\n'ispconfig3_fetchmail',\n'ispconfig3_filter',\n'ispconfig3_forward'," /etc/roundcube/config.inc.php
+	  mv /usr/share/roundcube/plugins/ispconfig3_account/config/config.inc.php.dist /usr/share/roundcube/plugins/ispconfig3_account/config/config.inc.php
+	  sed -i "s/\$rcmail_config\['remote_soap_pass'\] = '.*';/\$rcmail_config\['remote_soap_pass'\] = '$CFG_ROUNDCUBE_PWD';/" /usr/share/roundcube/plugins/ispconfig3_account/config/config.inc.php
+	  sed -i "s/\$rcmail_config\['soap_url'\] = '.*';/\$rcmail_config['soap_url'] = 'https\:\/\/$CFG_HOSTNAME_FQDN\:8080\/remote\/';/" /usr/share/roundcube/plugins/ispconfig3_account/config/config.inc.php
+	  mv /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php.dist /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
+	  sed -i "s/\$rcmail_config\['password_min_length'\] = 6;/\$rcmail_config\['password_min_length'\] = 8;/" /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
+	  sed -i "s/\$rcmail_config\['password_check_symbol'\] = TRUE;/\$rcmail_config\['password_check_symbol'\] = FALSE;/" /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
+	  if [ "$CFG_WEBSERVER" == "apache" ]; then
 	  	sed -i '1iAlias /webmail /var/lib/roundcube' /etc/roundcube/apache.conf
-	  	sed -i "/Options +FollowSymLinks/a\\`echo -e '\n\r'`  DirectoryIndex index.php\\`echo -e '\n\r'`\\`echo -e '\n\r'`  <IfModule mod_php5.c>\\`echo -e '\n\r'`        AddType application/x-httpd-php .php\\`echo -e '\n\r'`\\`echo -e '\n\r'`        php_flag magic_quotes_gpc Off\\`echo -e '\n\r'`        php_flag track_vars On\\`echo -e '\n\r'`        php_flag register_globals Off\\`echo -e '\n\r'`        php_value include_path .:/usr/share/php\\`echo -e '\n\r'`  </IfModule>" /etc/roundcube/apache.conf
+	  	sed -i "/Options +FollowSymLinks/a\\$(echo -e '\n\r')  DirectoryIndex index.php\\$(echo -e '\n\r')\\$(echo -e '\n\r')  <IfModule mod_php5.c>\\$(echo -e '\n\r')        AddType application/x-httpd-php .php\\$(echo -e '\n\r')\\$(echo -e '\n\r')        php_flag magic_quotes_gpc Off\\$(echo -e '\n\r')        php_flag track_vars On\\$(echo -e '\n\r')        php_flag register_globals Off\\$(echo -e '\n\r')        php_value include_path .:/usr/share/php\\$(echo -e '\n\r')  </IfModule>" /etc/roundcube/apache.conf
 	  	sed -i "s/\$rcmail_config\['default_host'\] = '';/\$rcmail_config\['default_host'\] = 'localhost';/" /etc/roundcube/main.inc.php
-	  else
+	  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
 		echo "  location /roundcube {" > /etc/nginx/roundcube.conf
 		echo "          root /var/lib/;" >> /etc/nginx/roundcube.conf
 		echo "           index index.php index.html index.htm;" >> /etc/nginx/roundcube.conf
@@ -69,8 +90,9 @@ InstallWebmail() {
 	  fi
 	;;
 	"squirrelmail")
-	  echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
-	  apt-get -y install squirrelmail wamerican > /dev/null 2>&1
+	 echo -n "Installing Webmail client (SquirrelMail)... "
+	 echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
+	  apt_install squirrelmail wamerican
 	  ln -s /etc/squirrelmail/apache.conf /etc/apache2/conf.d/squirrelmail
 	  sed -i 1d /etc/squirrelmail/apache.conf
 	  sed -i '1iAlias /webmail /usr/share/squirrelmail' /etc/squirrelmail/apache.conf
@@ -97,11 +119,14 @@ InstallWebmail() {
 	  esac
 	  ;;
   esac
-  if [ $CFG_WEBSERVER == "apache" ]; then
-	  service apache2 restart > /dev/null 2>&1
-  else
-	  service nginx restart > /dev/null 2>&1
+  echo -e "[${green}DONE${NC}]\n"
+  if [ "$CFG_WEBSERVER" == "apache" ]; then
+	  echo -n "Restarting Apache... "
+	  service apache2 restart
+  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
+	  echo -n "Restarting nginx... "
+	  service nginx restart
   fi
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }
 

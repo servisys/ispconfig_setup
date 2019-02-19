@@ -3,7 +3,7 @@
 #    Install bind DNS server
 #---------------------------------------------------------------------
 InstallBind() {
-  echo -n "Installing bind... ";
-  apt-get -y install bind9 dnsutils > /dev/null 2>&1
-  echo -e "${green}done! ${NC}\n"
+   echo -n "Installing DNS server (Bind)... ";
+  apt_install bind9 dnsutils
+  echo -e "[${green}DONE${NC}]\n"
 }

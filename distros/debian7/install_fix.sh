@@ -1,6 +1,6 @@
 InstallFix(){
-  if [ $CFG_WEBMAIL == "roundcube" ]; then
-  	echo "Installing roundcube fix... "
+  if [ "$CFG_WEBMAIL" == "roundcube" ]; then
+  	echo -n "Installing Roundcube fix... "
 	cd /tmp
 	git clone https://github.com/w2c/ispconfig3_roundcube.git
 	cd /tmp/ispconfig3_roundcube/
@@ -11,6 +11,7 @@ InstallFix(){
 	sed -i "s/\$rcmail_config\['plugins'\] = array();/\$rcmail_config\['plugins'\] = array(\"jqueryui\", \"ispconfig3_account\", \"ispconfig3_autoreply\", \"ispconfig3_pass\", \"ispconfig3_spam\", \"ispconfig3_fetchmail\", \"ispconfig3_filter\");/" /etc/roundcube/main.inc.php
 	sed -i "s/\$rcmail_config\['skin'\] = 'default';/\$rcmail_config\['skin'\] = 'classic';/" /etc/roundcube/main.inc.php
 	#nano /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php #  <---- This should not be a Part of Installer. Every Admi can add this after Installation
+	echo -e "[${green}DONE${NC}]\n"
   fi
   if [ $CFG_DKIM == "n" ]; then
 	mkdir -p /var/db/dkim/
@@ -20,12 +21,15 @@ InstallFix(){
 	echo "\$enable_dkim_signing = 1;"  >> /etc/amavis/conf.d/20-debian_defaults
 	echo "dkim_key('$CFG_HOSTNAME_FQDN', 'dkim', '/var/db/dkim/$CFG_HOSTNAME_FQDN.key.pem');"  >> /etc/amavis/conf.d/20-debian_defaults
 	echo "@dkim_signature_options_bysender_maps = ({ '.' => { ttl => 21*24*3600, c => 'relaxed/simple' } } );"  >> /etc/amavis/conf.d/20-debian_defaults
-	MYNET=`cat /etc/postfix/main.cf | grep "mynetworks =" | sed 's/mynetworks = //'`
+	MYNET=$(grep "mynetworks =" /etc/postfix/main.cf | sed 's/mynetworks = //')
 	echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
 	if [ -f /etc/init.d/amavisd-new ]; then
+		echo -n "Restarting Amavisd-new... "
 		service amavisd-new restart
 	else
+		echo -n "Restarting Amavisd... "
 		service amavis restart
 	fi
+	echo -e "[${green}DONE${NC}]\n"
   fi  
 }

@@ -3,8 +3,8 @@
 #    Install and configure web stats
 #---------------------------------------------------------------------
 InstallWebStats() {
-  echo -n "Installing stats... ";
-  yum -y install awstats perl-DateTime-Format-HTTP perl-DateTime-Format-Builder > /dev/null 2>&1
-  echo -e "${green}done! ${NC}\n"
+  echo -n "Installing Statistics (Webalizer and AWStats)... ";
+  yum_install webalizer awstats perl-DateTime-Format-HTTP perl-DateTime-Format-Builder
+  echo -e "[${green}DONE${NC}]\n"
 }
 

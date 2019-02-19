@@ -3,9 +3,9 @@
 #    Install the chosen webmail client. Squirrelmail or Roundcube
 #---------------------------------------------------------------------
 InstallWebmail() {
-  echo -n "Installing webmail client ($CFG_WEBMAIL)... "
+  echo -n "Installing Webmail client (SquirrelMail)... "
   echo "dictionaries-common dictionaries-common/default-wordlist select american (American English)" | debconf-set-selections
-  apt-get -yqq install squirrelmail wamerican > /dev/null 2>&1
+  apt_install squirrelmail wamerican
   ln -s /etc/squirrelmail/apache.conf /etc/apache2/conf-enabled/squirrelmail.conf
   sed -i 1d /etc/squirrelmail/apache.conf
   sed -i '1iAlias /webmail /usr/share/squirrelmail' /etc/squirrelmail/apache.conf
@@ -32,10 +32,13 @@ InstallWebmail() {
 	  esac
   mkdir /var/lib/squirrelmail/tmp
   chown www-data /var/lib/squirrelmail/tmp
+  echo -e "[${green}DONE${NC}]\n"
   if [ "$CFG_WEBSERVER" == "apache" ]; then
-	  service apache2 restart > /dev/null 2>&1
-  else
-	  service nginx restart > /dev/null 2>&1
+	  echo -n "Restarting Apache... "
+	  hide_output service apache2 restart
+  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
+	  echo -n "Restarting nginx... "
+	  hide_output service nginx restart
   fi
   echo -e "[${green}DONE${NC}]\n"
 }

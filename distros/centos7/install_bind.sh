@@ -3,8 +3,8 @@
 #    Install bind DNS server
 #---------------------------------------------------------------------
 InstallBind() {
-  echo -n "Installing bind... ";
-  yum -y install bind bind-utils haveged > /dev/null 2>&1
+  echo -n "Installing DNS server (Bind)... ";
+  yum_install bind bind-utils haveged
   cp /etc/named.conf /etc/named.conf_bak
   echo "options {" > /etc/named.conf
   echo "      listen-on port 53 { any; };" >> /etc/named.conf
@@ -31,6 +31,8 @@ InstallBind() {
   touch /etc/named.conf.local
   systemctl enable named.service
   systemctl start named.service
+  systemctl enable haveged.service
+  systemctl start haveged.service
 
-  echo -e "${green}done! ${NC}\n"
+  echo -e "[${green}DONE${NC}]\n"
 }

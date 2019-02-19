@@ -1,0 +1,40 @@
+language: bash
+sudo: enabled
+
+matrix:
+  include:
+  - name: "MySQL SQL server, Apache web server and Dovecot mail server"
+    env: CFG_SQLSERVER="MySQL" CFG_MYSQL_ROOT_PWD="password" CFG_WEBSERVER="Apache" CFG_XCACHE="yes" CFG_PHPMYADMIN="no" CFG_MTA="Dovecot" CFG_HHVMINSTALL="no" CFG_METRONOME="yes" CFG_AVUPDATE="yes" CFG_QUOTA="yes" CFG_ISPC="standard" CFG_JKIT="yes" CFG_WEBMAIL="squirrelmail" SSL_COUNTRY="IT" SSL_STATE="Italy" SSL_LOCALITY="Udine" SSL_ORGANIZATION="Servisys di Temporini Matteo" SSL_ORGUNIT="IT department"
+  - name: "MySQL SQL server, Apache web server and Courier mail server"
+    env: CFG_SQLSERVER="MySQL" CFG_MYSQL_ROOT_PWD="password" CFG_WEBSERVER="Apache" CFG_XCACHE="yes" CFG_PHPMYADMIN="no" CFG_MTA="Courier" CFG_HHVMINSTALL="no" CFG_METRONOME="yes" CFG_AVUPDATE="yes" CFG_QUOTA="yes" CFG_ISPC="standard" CFG_JKIT="yes" CFG_WEBMAIL="squirrelmail" SSL_COUNTRY="IT" SSL_STATE="Italy" SSL_LOCALITY="Udine" SSL_ORGANIZATION="Servisys di Temporini Matteo" SSL_ORGUNIT="IT department"
+  - name: "MySQL SQL server, nginx web server and Dovecot mail server"
+    env: CFG_SQLSERVER="MySQL" CFG_MYSQL_ROOT_PWD="password" CFG_WEBSERVER="nginx" CFG_XCACHE="yes" CFG_PHPMYADMIN="no" CFG_MTA="Dovecot" CFG_HHVMINSTALL="no" CFG_METRONOME="yes" CFG_AVUPDATE="yes" CFG_QUOTA="yes" CFG_ISPC="standard" CFG_JKIT="yes" CFG_WEBMAIL="squirrelmail" SSL_COUNTRY="IT" SSL_STATE="Italy" SSL_LOCALITY="Udine" SSL_ORGANIZATION="Servisys di Temporini Matteo" SSL_ORGUNIT="IT department"
+  - name: "MySQL SQL server, nginx web server and Courier mail server"
+    env: CFG_SQLSERVER="MySQL" CFG_MYSQL_ROOT_PWD="password" CFG_WEBSERVER="nginx" CFG_XCACHE="yes" CFG_PHPMYADMIN="no" CFG_MTA="Courier" CFG_HHVMINSTALL="no" CFG_METRONOME="yes" CFG_AVUPDATE="yes" CFG_QUOTA="yes" CFG_ISPC="standard" CFG_JKIT="yes" CFG_WEBMAIL="squirrelmail" SSL_COUNTRY="IT" SSL_STATE="Italy" SSL_LOCALITY="Udine" SSL_ORGANIZATION="Servisys di Temporini Matteo" SSL_ORGUNIT="IT department"
+  - name: "MariaDB SQL server, Apache web server and Dovecot mail server"
+    env: CFG_SQLSERVER="MariaDB" CFG_MYSQL_ROOT_PWD="password" CFG_WEBSERVER="Apache" CFG_XCACHE="yes" CFG_PHPMYADMIN="no" CFG_MTA="Dovecot" CFG_HHVMINSTALL="no" CFG_METRONOME="yes" CFG_AVUPDATE="yes" CFG_QUOTA="yes" CFG_ISPC="standard" CFG_JKIT="yes" CFG_WEBMAIL="squirrelmail" SSL_COUNTRY="IT" SSL_STATE="Italy" SSL_LOCALITY="Udine" SSL_ORGANIZATION="Servisys di Temporini Matteo" SSL_ORGUNIT="IT department"
+  - name: "MariaDB SQL server, Apache web server and Courier mail server"
+    env: CFG_SQLSERVER="MariaDB" CFG_MYSQL_ROOT_PWD="password" CFG_WEBSERVER="Apache" CFG_XCACHE="yes" CFG_PHPMYADMIN="no" CFG_MTA="Courier" CFG_HHVMINSTALL="no" CFG_METRONOME="yes" CFG_AVUPDATE="yes" CFG_QUOTA="yes" CFG_ISPC="standard" CFG_JKIT="yes" CFG_WEBMAIL="squirrelmail" SSL_COUNTRY="IT" SSL_STATE="Italy" SSL_LOCALITY="Udine" SSL_ORGANIZATION="Servisys di Temporini Matteo" SSL_ORGUNIT="IT department"
+  - name: "MariaDB SQL server, nginx web server and Dovecot mail server"
+    env: CFG_SQLSERVER="MariaDB" CFG_MYSQL_ROOT_PWD="password" CFG_WEBSERVER="nginx" CFG_XCACHE="yes" CFG_PHPMYADMIN="no" CFG_MTA="Dovecot" CFG_HHVMINSTALL="no" CFG_METRONOME="yes" CFG_AVUPDATE="yes" CFG_QUOTA="yes" CFG_ISPC="standard" CFG_JKIT="yes" CFG_WEBMAIL="squirrelmail" SSL_COUNTRY="IT" SSL_STATE="Italy" SSL_LOCALITY="Udine" SSL_ORGANIZATION="Servisys di Temporini Matteo" SSL_ORGUNIT="IT department"
+  - name: "MariaDB SQL server, nginx web server and Courier mail server"
+    env: CFG_SQLSERVER="MariaDB" CFG_MYSQL_ROOT_PWD="password" CFG_WEBSERVER="nginx" CFG_XCACHE="yes" CFG_PHPMYADMIN="no" CFG_MTA="Courier" CFG_HHVMINSTALL="no" CFG_METRONOME="yes" CFG_AVUPDATE="yes" CFG_QUOTA="yes" CFG_ISPC="standard" CFG_JKIT="yes" CFG_WEBMAIL="squirrelmail" SSL_COUNTRY="IT" SSL_STATE="Italy" SSL_LOCALITY="Udine" SSL_ORGANIZATION="Servisys di Temporini Matteo" SSL_ORGUNIT="IT department"
+
+before_script:
+    - sudo sed -i "s/^127.0.1.1.*/127.0.1.1\t$HOSTNAME.example.com\t$HOSTNAME/" /etc/hosts
+    - cat /etc/fstab
+    - sudo apt-get -yqq update
+    - sudo apt-get -yqq dist-upgrade
+    - sudo apt-get -yqq install systemd
+
+script:
+    - echo "y" | sudo bash install.sh
+    - curl -IkL "https://$HOSTNAME:8080"
+    # - bash -c 'shopt -s globstar; shellcheck -s bash **/*.sh'
+
+after_script:
+    - cat /etc/fstab
+
+after_failure:
+    - cat /var/log/ispconfig_setup.log
+    - cat /var/log/ispconfig_install.log
