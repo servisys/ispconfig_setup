@@ -603,8 +603,34 @@ You can choose during install:
 - ISPConfig 3 Multiserver Setup (* Debian 8 only for now)
 
 ### How do I get set up? ###
-
+### Tested on Ubuntu 18.04/16.04 ###
 Follow one of the above guides to install a fresh copy of a supported Linux distribution.
+## For using percona mysql server 5.7 instead mysql 5.5 just add their repo: ##
+
+```shell
+cd /tmp; wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb; sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb; sudo apt update
+```
+## For using the last nginx just add his PPA repo: ##
+
+```shell
+sudo apt-get install software-properties-common -y; sudo add-apt-repository ppa:nginx/stable; sudo apt-get update
+```
+### apache2 has critical CVE-2019-0211 https://security-tracker.debian.org/tracker/CVE-2019-0211 so install the latest one:
+
+## For using the last apache2 just add his PPA repo:
+
+```shell
+sudo add-apt-repository ppa:ondrej/apache2; sudo apt-get update
+```
+
+## For using the last PHP just add his PPA repo:
+```shell
+sudo add-apt-repository ppa:ondrej/php;  sudo apt-get update
+```
+
+### All new packages will install automaticly of you add their PPA repos before run install.sh ###
+
+For Debian/Ubutnu
 
 Run the following command:
 
