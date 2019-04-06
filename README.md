@@ -610,20 +610,23 @@ Follow one of the above guides to install a fresh copy of a supported Linux dist
 ```shell
 cd /tmp; wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb; sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb; sudo apt update
 ```
+
 ### For using the last nginx just add his PPA repo: ###
 
 ```shell
 sudo apt-get install software-properties-common -y; sudo add-apt-repository ppa:nginx/stable; sudo apt-get update
 ```
+
 ### apache2 has critical CVE-2019-0211 https://security-tracker.debian.org/tracker/CVE-2019-0211 so install the latest one: ###
 
-### For using the last apache2 just add his PPA repo:###
+### For using the last apache2 just add his PPA repo: ###
 
 ```shell
 sudo add-apt-repository ppa:ondrej/apache2; sudo apt-get update
 ```
 
 ### For using the last PHP just add his PPA repo: ###
+
 ```shell
 sudo add-apt-repository ppa:ondrej/php;  sudo apt-get update
 ```
