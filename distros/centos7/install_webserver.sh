@@ -24,7 +24,7 @@ InstallWebServer() {
 	yum_install apr-devel
 	wget -q http://suphp.org/download/suphp-0.7.2.tar.gz
 	tar zxf suphp-0.7.2.tar.gz
-	wget -q -O suphp.patch https://lists.marsching.com/pipermail/suphp/attachments/20130520/74f3ac02/attachment.patch
+	wget -q -O suphp.patch https://raw.githubusercontent.com/b1glord/ispconfig_setup_extra/master/suphp.patch
 	patch -Np1 -d suphp-0.7.2 < suphp.patch
 	cd suphp-0.7.2
 	autoreconf -if
