@@ -108,7 +108,12 @@ failregex = .*pure-ftpd: \(.*@<HOST>\) \[WARNING\] Authentication failed for use
 ignoreregex =
 EOF
 
-echo "ignoreregex =" >> /etc/fail2ban/filter.d/postfix-sasl.conf
+cat > /etc/fail2ban/filter.d/postfix-sasl.conf <<EOF
+[Definition]
+ignoreregex =
+EOF
+
+
 
   echo -e "[${green}DONE${NC}]\n"
   echo -n "Restarting Fail2Ban... "
