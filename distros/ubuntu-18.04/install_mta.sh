@@ -8,6 +8,9 @@ InstallMTA() {
 	  echo -n "Installing POP3/IMAP Mail server (Courier) and Mail signing (OpenDKIM, OpenDMARC)... ";
 	  echo "courier-base courier-base/webadmin-configmode boolean false" | debconf-set-selections
 	  echo "courier-ssl courier-ssl/certnotice note" | debconf-set-selections
+	  echo "courier-maildrop courier-maildrop/deprecated note" | debconf-set-selections
+	  echo "courier-base courier-base/certnotice note" | debconf-set-selections
+	  echo "courier-base courier-base/courier-user note" | debconf-set-selections
 	  apt_install courier-authdaemon courier-authlib-mysql courier-pop courier-pop-ssl courier-imap courier-imap-ssl libsasl2-2 libsasl2-modules libsasl2-modules-sql sasl2-bin libpam-mysql courier-maildrop opendkim opendkim-tools opendmarc
 	  sed -i 's/START=no/START=yes/' /etc/default/saslauthd
 	  cd /etc/courier
