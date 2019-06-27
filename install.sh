@@ -283,7 +283,7 @@ if [ -f /etc/debian_version ]; then
 		fi
 		if [ "$CFG_METRONOME" == "yes" ]; then
 			source $APWD/distros/$DISTRO/install_metronome.sh
-			Installmetronome
+			InstallMetronome
 		fi
 		if [ "$CFG_WEBMAIL" != "no" ]; then
 			InstallWebmail 
