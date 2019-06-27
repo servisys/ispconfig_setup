@@ -24,13 +24,13 @@ InstallWebServer() {
 	yum_install apr-devel
 	wget -q http://suphp.org/download/suphp-0.7.2.tar.gz
 	tar zxf suphp-0.7.2.tar.gz
-	wget -q -O suphp.patch https://lists.marsching.com/pipermail/suphp/attachments/20130520/74f3ac02/attachment.patch
-	patch -Np1 -d suphp-0.7.2 < suphp.patch
+	wget -O patchingsuphp.patch https://www.webhostinghero.com/downloads/php/suphp.patch
+	patch -Np1 -d suphp-0.7.2 < patchingsuphp.patch
 	cd suphp-0.7.2
 	autoreconf -if
 	./configure --prefix=/usr/ --sysconfdir=/etc/ --with-apr=/usr/bin/apr-1-config --with-apache-user=apache --with-setid-mode=owner --with-logfile=/var/log/httpd/suphp_log
-    make
-    make install
+        make
+	make install
 	echo "LoadModule suphp_module /usr/lib64/httpd/modules/mod_suphp.so" > /etc/httpd/conf.d/suphp.conf
 	echo "[global]" > /etc/suphp.conf
 	echo ";Path to logfile" >> /etc/suphp.conf 
