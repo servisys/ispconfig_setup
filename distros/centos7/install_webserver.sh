@@ -24,8 +24,8 @@ InstallWebServer() {
 	yum_install apr-devel
 	wget -q http://suphp.org/download/suphp-0.7.2.tar.gz
 	tar zxf suphp-0.7.2.tar.gz
-	wget -O patchingsuphp.patch https://www.webhostinghero.com/downloads/php/suphp.patch
-	patch -Np1 -d suphp-0.7.2 < patchingsuphp.patch
+	wget -q -O suphp.patch https://raw.githubusercontent.com/b1glord/ispconfig_setup_extra/master/suphp.patch
+	patch -Np1 -d suphp-0.7.2 < suphp.patch
 	cd suphp-0.7.2
 	autoreconf -if
 	./configure --prefix=/usr/ --sysconfdir=/etc/ --with-apr=/usr/bin/apr-1-config --with-apache-user=apache --with-setid-mode=owner --with-logfile=/var/log/httpd/suphp_log
