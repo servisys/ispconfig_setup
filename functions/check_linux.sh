@@ -87,6 +87,13 @@ CheckLinux() {
 		
 		elif echo "$VERSION_ID" | grep -iq "9"; then
 			DISTRO=debian9
+
+		#---------------------------------------------------------------------
+		#	Debian 10 Buster
+		#---------------------------------------------------------------------
+		
+		elif echo "$VERSION_ID" | grep -iq "10"; then
+			DISTRO=debian10
 		fi
 	
 	elif echo "$ID" | grep -iq "raspbian"; then
