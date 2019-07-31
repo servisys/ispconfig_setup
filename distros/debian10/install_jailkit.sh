@@ -23,7 +23,7 @@ InstallJailkit() {
   ./debian/rules binary > /dev/null 2>&1
   cd ..
   hide_output dpkg -i jailkit_$JKV-1_*.deb
-  rm -rf jailkit-$JKV
+  rm -rf jailkit-$JKV*
   echo -e "[${green}DONE${NC}]\n"
 }
 

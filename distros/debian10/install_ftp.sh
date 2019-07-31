@@ -6,6 +6,7 @@ InstallFTP() {
   echo -n "Installing FTP server (Pure-FTPd)... "
   echo "pure-ftpd-common pure-ftpd/virtualchroot boolean true" | debconf-set-selections
   apt_install pure-ftpd-common pure-ftpd-mysql
+  openssl dhparam -out /etc/ssl/private/pure-ftpd-dhparams.pem 2048
   sed -i 's/ftp/\#ftp/' /etc/inetd.conf
   echo 1 > /etc/pure-ftpd/conf/TLS
   mkdir -p /etc/ssl/private/
