@@ -41,7 +41,7 @@ InstallWebmail() {
 		echo "Alias /webmail /var/lib/roundcube" >> /etc/apache2/conf-enabled/roundcube.conf
 		echo -e "[${green}DONE${NC}]\n"
 		echo -n "Reloading Apache... "
-		systemctl  apache2 reload
+		systemctl reload apache2
 	  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
         cat << "EOF" > /etc/nginx/sites-available/roundcube.vhost
 server {
@@ -128,7 +128,7 @@ EOF
 	  systemctl restart apache2
   elif [ "$CFG_WEBSERVER" == "nginx" ]; then
 	  echo -n "Restarting nginx... "
-	  systemctl  nginx restart
+	  systemctl restart nginx
   fi
   echo -e "[${green}DONE${NC}]\n"
 }

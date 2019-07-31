@@ -13,7 +13,7 @@ InstallAntiVirus() {
   echo "$CFG_HOSTNAME_FQDN" > /etc/mailname
   echo -e "[${green}DONE${NC}]\n"
   echo -n "Stopping SpamAssassin... "
-  systemctl  spamassassin stop
+  systemctl  stop spamassassin
   echo -e "[${green}DONE${NC}]\n"
   echo -n "Disabling SpamAssassin... "
   hide_output systemctl disable spamassassin
@@ -24,6 +24,6 @@ InstallAntiVirus() {
 	echo -e "[${green}DONE${NC}]\n"
   fi
   echo -n "Restarting ClamAV... "
-  systemctl  clamav-daemon restart
+  systemctl restart clamav-daemon
   echo -e "[${green}DONE${NC}]\n"
 }

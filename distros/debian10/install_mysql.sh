@@ -15,6 +15,6 @@ InstallSQLServer() {
 	mysql -e "FLUSH PRIVILEGES"
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Restarting MariaDB... "
-	systemctl  mysql restart
+	systemctl restart mysql
     echo -e "[${green}DONE${NC}]\n"
 }
