@@ -12,6 +12,7 @@ We'll use only to inform you on new version of the script :)
 
 # Version #
 v.3.0.5
+
 Added support for debian10 and php7.3
 
 v.3.0.4
