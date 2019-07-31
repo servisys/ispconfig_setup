@@ -5,7 +5,7 @@
 InstallPostfix() {
   if [ -f /etc/init.d/sendmail ]; then
 	echo -n "Removing Sendmail... "
-	service sendmail stop
+	systemctl  sendmail stop
 	hide_output update-rc.d -f sendmail remove
 	apt_remove sendmail
 	echo -e "[${green}DONE${NC}]\n"
@@ -27,6 +27,6 @@ InstallPostfix() {
   sed -i "s/#tlsproxy  unix  -       -       y       -       0       tlsproxy/tlsproxy  unix  -       -       y       -       0       tlsproxy/" /etc/postfix/master.cf
   echo -e "[${green}DONE${NC}]\n"
   echo -n "Restarting Postfix... "
-  service postfix restart
+  systemctl  postfix restart
   echo -e "[${green}DONE${NC}]\n"
 }

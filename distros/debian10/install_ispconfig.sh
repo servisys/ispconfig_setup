@@ -76,7 +76,7 @@ InstallISPConfig() {
     echo "mysql_master_root_password=$CFG_MASTER_MYSQL_ROOT_PWD" >> autoinstall.ini
 	echo "mysql_master_database=dbispconfig" >> autoinstall.ini
 	echo "reconfigure_permissions_in_master_database=no" >> autoinstall.ini
-	echo "reconfigure_services=yes" >> autoinstall.ini
+	echo "reconfigure_systemctl s=yes" >> autoinstall.ini
     echo "ispconfig_port=8080" >> autoinstall.ini
 	echo "create_new_ispconfig_ssl_cert=no" >> autoinstall.ini
     echo "reconfigure_crontab=yes" >> autoinstall.ini

@@ -70,7 +70,7 @@ InstallWebServer() {
 	a2enconf httpoxy > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Restarting Apache... "
-	service apache2 restart
+	systemctl restart apache2
 	echo -e "[${green}DONE${NC}]\n"
 	
 	echo -n "Installing Let's Encrypt (Certbot)... "
@@ -81,14 +81,14 @@ InstallWebServer() {
     apt_install php7.3-opcache php-apcu
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Restarting Apache... "
-	service apache2 restart
+	systemctl restart apache2
 	echo -e "[${green}DONE${NC}]\n"
   elif [ "$CFG_WEBSERVER" == "nginx" ]; then	
   CFG_NGINX=y
   CFG_APACHE=n
 	echo -n "Installing Web server (nginx) and modules... "
 	apt_install nginx
-	service nginx start 
+	systemctl  nginx start 
 	# apt_install php7.3 php7.3-common php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear mcrypt php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php7.3-zip php7.3-mbstring php7.3-imap mcrypt php7.3-snmp php7.3-xmlrpc php7.3-xsl
 	apt_install php7.3 php7.3-common php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear mcrypt libruby php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php-memcache php-imagick php-gettext php7.3-zip php7.3-mbstring php7.3-soap php7.3-opcache
 	echo -e "[${green}DONE${NC}]\n"
@@ -103,7 +103,7 @@ InstallWebServer() {
 	apt_install mcrypt imagemagick memcached curl tidy snmp
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Reloading PHP-FPM... "
-	service php7.3-fpm reload
+	systemctl  php7.3-fpm reload
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing fcgiwrap... "
 	apt_install fcgiwrap

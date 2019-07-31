@@ -95,7 +95,7 @@ EOF
 
   echo -e "[${green}DONE${NC}]\n"
   echo -n "Restarting Fail2Ban... "
-  service fail2ban restart
+  systemctl  fail2ban restart
   echo -e "[${green}DONE${NC}]\n"
   
   echo -n "Installing Firewall (UFW)... "

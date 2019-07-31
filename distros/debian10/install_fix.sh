@@ -3,10 +3,10 @@ InstallFix(){
   echo "@mynetworks = qw( $MYNET );" >> /etc/amavis/conf.d/20-debian_defaults
   if [ -f /etc/init.d/amavisd-new ]; then
 	echo -n "Restarting Amavisd-new... "
-	service amavisd-new restart
+	systemctl  amavisd-new restart
   else
 	echo -n "Restarting Amavisd... "
-	service amavis restart
+	systemctl  amavis restart
   fi
   echo -e "[${green}DONE${NC}]\n"
   
@@ -17,11 +17,11 @@ InstallFix(){
 	sed -i 's/;openssl.cafile=/openssl.cafile=\/etc\/ssl\/certs\/ca-certificates.crt/' /etc/php/7.3/apache2/php.ini
 	sed -i 's/;openssl.cafile=/openssl.cafile=\/etc\/ssl\/certs\/ca-certificates.crt/' /etc/php/7.3/fpm/php.ini
 	if [ "$CFG_WEBSERVER" == "apache" ]; then
-		service apache2 reload
-		service php7.3-fpm reload
+		systemctl  apache2 reload
+		systemctl  php7.3-fpm reload
 	elif [ "$CFG_WEBSERVER" == "nginx" ]; then
-		service nginx reload
-		service php7.3-fpm reload
+		systemctl  nginx reload
+		systemctl  php7.3-fpm reload
 	fi
   fi
 }
