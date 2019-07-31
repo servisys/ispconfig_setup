@@ -3,7 +3,7 @@
 #    Install and configure phpMyAdmin
 #---------------------------------------------------------------------
 InstallphpmyAdmin() {
-    phpMyAdmin = "4.9.0.1" #phpMyAdmin version 
+    phpMyAdmin="4.9.0.1" #phpMyAdmin version 
     echo -n "Installing phpMyAdmin...."
     mkdir /usr/share/phpmyadmin
     mkdir /etc/phpmyadmin
@@ -17,8 +17,8 @@ InstallphpmyAdmin() {
     rm phpMyAdmin-$phpMyAdmin-all-languages.tar.gz
     rm -rf phpMyAdmin-$phpMyAdmin-all-languages
     cp /usr/share/phpmyadmin/config.sample.inc.php  /usr/share/phpmyadmin/config.inc.php
-    sed -i "$ a\\$cfg['blowfish_secret'] = 'bD3e6wva9fnd93jVsb7SDgeiBCd452Dh'; \/* YOU MUST FILL IN THIS FOR COOKIE AUTH! *\/" /usr/share/phpmyadmin/config.inc.php
-    sed -i "$ a\\$cfg['TempDir'] = '\/var\/lib\/phpmyadmin\/tmp';" /usr/share/phpmyadmin/config.inc.php
+    sed -i "$ a\$cfg['blowfish_secret'] = 'bD3e6wva9fnd93jVsb7SDgeiBCd452Dh'; \/* YOU MUST FILL IN THIS FOR COOKIE AUTH! *\/" /usr/share/phpmyadmin/config.inc.php
+    sed -i "$ a\$cfg['TempDir'] = '\/var\/lib\/phpmyadmin\/tmp';" /usr/share/phpmyadmin/config.inc.php
     echo -n "$ a\Creating Apache config file for PhpMyAmin"
     sed -i "$ a\# phpMyAdmin default Apache configuration " /etc/apache2/conf-available/phpmyadmin.conf
     sed -i "$ a\Alias \/phpmyadmin \/usr\/share\/phpmyadmin" /etc/apache2/conf-available/phpmyadmin.conf
