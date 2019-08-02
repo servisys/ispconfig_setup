@@ -31,8 +31,9 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
 	
   if [ "$CFG_PHPMYADMIN" == "yes" ]; then
+	source $APWD/distros/debian10/install_phpmyadmin.sh
 	echo -n "Installing phpMyAdmin... "
-	apt-get -y install phpmyadmin
+	install_phpmyadmin
 	echo -e "[${green}DONE${NC}]\n"
   fi
 	
