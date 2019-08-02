@@ -53,17 +53,17 @@ InstallphpMyAdmin() {
     sed -i "$ a\Deny from All" /etc/apache2/conf-available/phpmyadmin.conf
     sed -i "$ a\</Directory>" /etc/apache2/conf-available/phpmyadmin.conf
     a2enconf phpmyadmin
-    systemctl restart apache2
+    systemctl reload apache2
     echo -e "[${green}..DONE${NC}]\n"
     echo -e "Configuring phpMyAdmin configuration store (database)."
     echo -n "Entering MariaDB shell..."
-    mysql -u root 
+    mysql -u root -p"$CFG_MYSQL_ROOT_PWD"
     mysql -e "CREATE DATABASE phpmyadmin;"
     mysql -e "CREATE USER 'pma'@'localhost' IDENTIFIED BY $CFG_MYSQL_ROOT_PWD;"
     mysql -e "GRANT ALL PRIVILEGES ON phpmyadmin.* TO 'pma'@'localhost' IDENTIFIED BY $CFG_MYSQL_ROOT_PWD WITH GRANT OPTION;"
     mysql -e "FLUSH PRIVILEGES;"
     mysql -e "EXIT;"
-    mysql -u root phpmyadmin < /usr/share/phpmyadmin/sql/create_tables.sql
+    mysql -u root phpmyadmin -p"$CFG_MYSQL_ROOT_PWD" < /usr/share/phpmyadmin/sql/create_tables.sql
     #\s for white space  change the / to | delimiter add escape char \ in front of [ and ] \[ \] - only required in the search for compassion not the substustion!
     # NOTE '' are ok as its enclosed in " " so no need to escape them!!
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controlhost'\]\s=\s'';|\$cfg['Servers'][\$i]['controlhost'] = 'localhost';|" /usr/share/phpmyadmin/config.inc.php
