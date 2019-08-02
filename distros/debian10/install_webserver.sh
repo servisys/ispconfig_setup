@@ -33,7 +33,7 @@ InstallWebServer() {
   if [ "$CFG_PHPMYADMIN" == "yes" ]; then
 	source $APWD/distros/debian10/install_phpmyadmin.sh
 	echo -n "Installing phpMyAdmin... "
-	install_phpmyadmin
+	InstallphpMyAdmin
 	echo -e "[${green}DONE${NC}]\n"
   fi
 	
@@ -113,7 +113,7 @@ InstallWebServer() {
   if [ "$CFG_PHPMYADMIN" == "yes" ]; then
 	source $APWD/distros/debian10/install_phpmyadmin.sh
 	echo -n "Installing phpMyAdmin... "
-	install_phpmyadmin
+	InstallphpMyAdmin
 	echo -e "[${green}DONE${NC}]\n"
   fi
 
