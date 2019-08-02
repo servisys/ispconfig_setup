@@ -53,8 +53,10 @@ InstallphpMyAdmin() {
     sed -i "$ a\Deny from All" /etc/apache2/conf-available/phpmyadmin.conf
     sed -i "$ a\</Directory>" /etc/apache2/conf-available/phpmyadmin.conf
     a2enconf phpmyadmin
-    systemctl reload apache2
     echo -e "[${green}..DONE${NC}]\n"
+    echo -e "Activating new configuration (restarting Apache2)..."
+    systemctl reload apache2
+    echo -e "[${green}.DONE${NC}]\n"
     echo -e "Configuring phpMyAdmin configuration store (database)."
     echo -e "Creating phpMyAdmin tables."
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"CREATE DATABASE phpmyadmin;"
