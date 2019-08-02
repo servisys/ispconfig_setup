@@ -56,16 +56,14 @@ InstallphpMyAdmin() {
     systemctl reload apache2
     echo -e "[${green}..DONE${NC}]\n"
     echo -e "Configuring phpMyAdmin configuration store (database)."
-    echo -n "Entering MariaDB shell..."
-    mysql -u root -p"$CFG_MYSQL_ROOT_PWD"
-    mysql -e "CREATE DATABASE phpmyadmin;"
-    mysql -e "CREATE USER 'pma'@'localhost' IDENTIFIED BY $CFG_MYSQL_ROOT_PWD;"
-    mysql -e "GRANT ALL PRIVILEGES ON phpmyadmin.* TO 'pma'@'localhost' IDENTIFIED BY $CFG_MYSQL_ROOT_PWD WITH GRANT OPTION;"
-    mysql -e "FLUSH PRIVILEGES;"
-    mysql -e "EXIT;"
-    mysql -u root phpmyadmin -p"$CFG_MYSQL_ROOT_PWD" < /usr/share/phpmyadmin/sql/create_tables.sql
-    #\s for white space  change the / to | delimiter add escape char \ in front of [ and ] \[ \] - only required in the search for compassion not the substustion!
-    # NOTE '' are ok as its enclosed in " " so no need to escape them!!
+    echo -e "Creating phpMyAdmin tables."
+    mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"CREATE DATABASE phpmyadmin;"
+    mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"CREATE USER 'pma'@'localhost' IDENTIFIED BY '$CFG_MYSQL_ROOT_PWD';"
+    mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"GRANT ALL PRIVILEGES ON phpmyadmin.* TO 'pma'@'localhost' IDENTIFIED BY '$CFG_MYSQL_ROOT_PWD' WITH GRANT OPTION;"
+    mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"FLUSH PRIVILEGES;"
+    mysql -u root -p"$CFG_MYSQL_ROOT_PWD" phpmyadmin < /usr/share/phpmyadmin/sql/create_tables.sql
+    echo -e "[${green}...DONE${NC}]\n"
+    
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controlhost'\]\s=\s'';|\$cfg['Servers'][\$i]['controlhost'] = 'localhost';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controlport'\]\s=\s'';|\$cfg['Servers'][\$i]['controlport'] = '';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controluser'\]\s=\s'pma';|\$cfg['Servers'][\$i]['controluser'] = 'pma';|" /usr/share/phpmyadmin/config.inc.php
