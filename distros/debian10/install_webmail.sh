@@ -6,6 +6,7 @@ InstallWebmail() {
   case $CFG_WEBMAIL in
 	"roundcube")
 	  echo -n "Installing Webmail client (Roundcube)... "
+	  echo "CREATE DATABASE roundcube;" | mysql --defaults-file=/etc/mysql/debian.cnf
 	  CFG_ROUNDCUBE_PWD=$(< /dev/urandom tr -dc A-Z-a-z-0-9 | head -c12)
 	  echo "roundcube-core roundcube/dbconfig-install boolean true" | debconf-set-selections
 	  echo "roundcube-core roundcube/database-type select mysql" | debconf-set-selections
