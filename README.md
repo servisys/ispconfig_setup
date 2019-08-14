@@ -15,6 +15,7 @@ v.3.0.5
 
 Debian 10 changes file path for root use : 
 	su -
+	
 Added support for Debian 10 Buster and php7.3
 	service changed to systemctl for all service functions (start,stop,restart etc)
 	few other minor changes to accommodate Debian 10
