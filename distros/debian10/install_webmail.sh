@@ -37,7 +37,7 @@ InstallWebmail() {
 	  mv /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php.dist /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
 	  sed -i "s/\$rcmail_config\['password_min_length'\] = 6;/\$rcmail_config\['password_min_length'\] = 8;/" /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
 	  sed -i "s/\$rcmail_config\['password_check_symbol'\] = TRUE;/\$rcmail_config\['password_check_symbol'\] = FALSE;/" /usr/share/roundcube/plugins/ispconfig3_pass/config/config.inc.php
-	  sed -i "s/\$config\['default_host'\] = '';/\$config['default_host'] = 'localhost';/" /etc/roundcube/config.inc.php
+	  sed -i "s/\$config\['default_host'\] = array(\"localhost\");/\$config['default_host'] = 'localhost';/" /etc/roundcube/config.inc.php
 	  if [ "$CFG_WEBSERVER" == "apache" ]; then
 		echo "Alias /webmail /var/lib/roundcube" >> /etc/apache2/conf-enabled/roundcube.conf
 		echo -e "[${green}DONE${NC}]\n"
