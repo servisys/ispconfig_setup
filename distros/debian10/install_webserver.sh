@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: InstallWebServer Debian 9
+# Function: InstallWebServer Debian 10
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
