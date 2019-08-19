@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: AskQuestions Debian 9
+# Function: AskQuestions Debian 10
 #	Ask for all needed user input
 #---------------------------------------------------------------------
 AskQuestions() {
@@ -22,7 +22,7 @@ AskQuestions() {
 		CFG_WEBSERVER=$(whiptail --title "Web server" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Please select Web server type" 10 50 2 "Apache" "(default)" ON "nginx" "" OFF 3>&1 1>&2 2>&3)
 	done
 	CFG_WEBSERVER=${CFG_WEBSERVER,,}
-		
+
 	while [[ ! "$CFG_PHP56" =~ $RE ]]
 	do
 		CFG_PHP56=$(whiptail --title "Install PHP 5.6" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "By default ISPConfig comes with PHP 7, do you want to install also PHP 5.6 version?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)

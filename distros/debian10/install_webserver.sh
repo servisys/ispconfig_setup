@@ -1,9 +1,9 @@
 #---------------------------------------------------------------------
-# Function: InstallWebServer Debian 9
+# Function: InstallWebServer Debian 10
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
-  
+
   if [ "$CFG_WEBSERVER" == "apache" ]; then
   CFG_NGINX=n
   CFG_APACHE=y
@@ -22,21 +22,21 @@ InstallWebServer() {
 	#Need to check if soemthing is asked before suppress messages
 	apt_install php7.3-fpm
 	#Need to check if soemthing is asked before suppress messages
-	a2enmod actions > /dev/null 2>&1 
-	a2enmod proxy_fcgi > /dev/null 2>&1 
-	a2enmod alias > /dev/null 2>&1 
+	a2enmod actions > /dev/null 2>&1
+	a2enmod proxy_fcgi > /dev/null 2>&1
+	a2enmod alias > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing needed programs for PHP and Apache (mcrypt, etc.)... "
 	apt_install mcrypt imagemagick memcached curl tidy snmp
 	echo -e "[${green}DONE${NC}]\n"
-	
+
   if [ "$CFG_PHPMYADMIN" == "yes" ]; then
 	source $APWD/distros/debian10/install_phpmyadmin.sh
 	echo -n "Installing phpMyAdmin... "
 	InstallphpMyAdmin
 	echo -e "[${green}DONE${NC}]\n"
   fi
-	
+
   if [ "$CFG_PHP56" == "yes" ]; then
 	echo "Installing PHP 5.6"
 	apt_install apt-transport-https
@@ -46,8 +46,8 @@ InstallWebServer() {
 	apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 	echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 	echo -e "[${green}DONE${NC}]\n"
-  fi  
-	
+  fi
+
 	echo -n "Activating Apache modules... "
 	a2enmod suexec > /dev/null 2>&1
 	a2enmod rewrite > /dev/null 2>&1
@@ -63,7 +63,7 @@ InstallWebServer() {
 	a2enmod cgi > /dev/null 2>&1
 	a2enmod headers > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
-	
+
 	echo -n "Disabling HTTP_PROXY... "
 	echo "<IfModule mod_headers.c>" >> /etc/apache2/conf-available/httpoxy.conf
 	echo "     RequestHeader unset Proxy early" >> /etc/apache2/conf-available/httpoxy.conf
@@ -73,23 +73,23 @@ InstallWebServer() {
 	echo -n "Restarting Apache... "
 	systemctl restart apache2
 	echo -e "[${green}DONE${NC}]\n"
-	
+
 	echo -n "Installing Let's Encrypt (Certbot)... "
 	apt_install certbot
 	echo -e "[${green}DONE${NC}]\n"
-  
-    echo -n "Installing PHP Opcode Cache... "	
+
+    echo -n "Installing PHP Opcode Cache... "
     apt_install php7.3-opcache php-apcu
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Restarting Apache... "
 	systemctl restart apache2
 	echo -e "[${green}DONE${NC}]\n"
-  elif [ "$CFG_WEBSERVER" == "nginx" ]; then	
+  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
   CFG_NGINX=y
   CFG_APACHE=n
 	echo -n "Installing Web server (nginx) and modules... "
 	apt_install nginx
-	systemctl start nginx  
+	systemctl start nginx
 	# apt_install php7.3 php7.3-common php-bcmath php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear mcrypt php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php7.3-zip php7.3-mbstring php7.3-imap mcrypt php7.3-snmp php7.3-xmlrpc php7.3-xsl
 	apt_install php7.3 php7.3-common php-bcmath php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear mcrypt libruby php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php-memcache php-imagick php-gettext php7.3-zip php7.3-mbstring php7.3-soap php7.3-opcache
 	echo -e "[${green}DONE${NC}]\n"
@@ -109,7 +109,7 @@ InstallWebServer() {
 	echo -n "Installing fcgiwrap... "
 	apt_install fcgiwrap
 	echo -e "[${green}DONE${NC}]\n"
-  
+
   if [ "$CFG_PHPMYADMIN" == "yes" ]; then
 	source $APWD/distros/debian10/install_phpmyadmin.sh
 	echo -n "Installing phpMyAdmin... "
@@ -117,7 +117,7 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
   fi
 
-   
+
     if [ "$CFG_PHP56" == "yes" ]; then
 		echo -n "Installing PHP 5.6... "
 		apt_install apt-transport-https
@@ -127,15 +127,15 @@ InstallWebServer() {
 		apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 		echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 		echo -e "[${green}DONE${NC}]\n"
-	fi  
+	fi
 	echo -n "Installing Let's Encrypt (Certbot)... "
 	apt_install certbot
 	echo -e "[${green}DONE${NC}]\n"
-	
-	# echo -n "Installing PHP Opcode Cache... "	
+
+	# echo -n "Installing PHP Opcode Cache... "
     # apt_install php7.3-opcache php-apcu
 	# echo -e "[${green}DONE${NC}]\n"
-  
+
   fi
   if [ "$CFG_PHP56" == "yes" ]; then
 	echo -e "${red}Attention!!! You had installed php7 and php 5.6, to make php 5.6 work you had to configure the following in ISPConfig ${NC}"
