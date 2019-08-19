@@ -5,7 +5,7 @@
 # ISPConfig 3 system installer
 #
 # Script: install.sh
-# Version: 3.0.2
+# Version: 3.0.5
 # Author: Matteo Temporini <temporini.matteo@gmail.com>
 # Description: This script will install all the packages needed to install
 # ISPConfig 3 on your server.
@@ -250,7 +250,7 @@ if [ "$DISTRO" == "debian8" ]; then
 	done
 fi
 
-if [ "$DISTRO" == "debian8" ] || [ "$DISTRO" == "debian9" ]; then
+if [ "$DISTRO" == "debian8" ] || [ "$DISTRO" == "debian9" ] || [ "$DISTRO" == "debian10" ]; then
 	while [[ ! "$CFG_MULTISERVER" =~ $RE ]]
 	do
 		CFG_MULTISERVER=$(whiptail --title "MULTISERVER SETUP" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like to install ISPConfig in a MultiServer Setup?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)

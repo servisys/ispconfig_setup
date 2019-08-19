@@ -1,3 +1,6 @@
+v.3.0.5
+- Added support for debain10 and php7.3
+
 v.3.0.4
 - Added Raspbian support
 - Bug fix
