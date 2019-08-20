@@ -38,12 +38,12 @@ InstallWebServer() {
   fi
 	
   if [ "$CFG_PHP56" == "yes" ]; then
-	echo "Installing PHP 5.6"
-	apt-get install apt-transport-https
+	echo "Installing PHP 5.6... "
+	apt_install apt-transport-https > /dev/null 2>&1
 	curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
 	echo 'deb https://packages.sury.org/php/ buster main' > /etc/apt/sources.list.d/deb.sury.org.list
 	apt-get update > /dev/null 2>&1
-	apt-get install install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
+	apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 	echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 	echo -e "[${green}DONE${NC}]\n"
   fi  
@@ -121,11 +121,11 @@ InstallWebServer() {
    
     if [ "$CFG_PHP56" == "yes" ]; then
 		echo -n "Installing PHP 5.6... "
-		apt-get install apt-transport-https
+		apt_install apt-transport-https
 		curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
 		echo 'deb https://packages.sury.org/php/ buster main' > /etc/apt/sources.list.d/deb.sury.org.list
 		apt-get update > /dev/null 2>&1
-		apt-get install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
+		apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 		echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 		echo -e "[${green}DONE${NC}]\n"
 	fi  
@@ -139,7 +139,7 @@ InstallWebServer() {
   
   fi
   if [ "$CFG_PHP56" == "yes" ]; then
-	echo -e "${red}Attention!!! You had installed php7 and php 5.6, to make php 5.6 work you had to configure the following in ISPConfig ${NC}"
+	echo -e "${red}Attention!!! You have installed php7 and php 5.6, to make php 5.6 work you have to configure the following in ISPConfig ${NC}"
 	echo -e "${red}Path for PHP FastCGI binary: /usr/bin/php-cgi5.6 ${NC}"
 	echo -e "${red}Path for php.ini directory: /etc/php/5.6/cgi ${NC}"
 	echo -e "${red}Path for PHP-FPM init script: /etc/init.d/php5.6-fpm ${NC}"
