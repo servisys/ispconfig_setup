@@ -11,8 +11,8 @@ InstallphpMyAdmin() {
     chown -R www-data:www-data /var/lib/phpmyadmin
     touch /etc/phpmyadmin/htpasswd.setup
     cd /tmp
-    wget https://files.phpmyadmin.net/phpMyAdmin/$phpMyAdmin/phpMyAdmin-$phpMyAdmin-all-languages.tar.gz
-    tar xfz phpMyAdmin-$phpMyAdmin-all-languages.tar.gz
+    wget https://files.phpmyadmin.net/phpMyAdmin/$phpMyAdmin/phpMyAdmin-$phpMyAdmin-all-languages.tar.gz > /dev/null 2>&1
+    tar xfz phpMyAdmin-$phpMyAdmin-all-languages.tar.gz > /dev/null 2&1
     mv phpMyAdmin-$phpMyAdmin-all-languages/* /usr/share/phpmyadmin/
     rm phpMyAdmin-$phpMyAdmin-all-languages.tar.gz
     rm -rf phpMyAdmin-$phpMyAdmin-all-languages
@@ -21,37 +21,49 @@ InstallphpMyAdmin() {
     sed -i "$ a\$cfg['TempDir'] = '/var/lib/phpmyadmin/tmp';" /usr/share/phpmyadmin/config.inc.php
     echo -n "Creating Apache config file for phpMyAdmin"
     touch /etc/apache2/conf-available/phpmyadmin.conf
-    echo "# phpMyAdmin default Apache configuration" >> /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\Alias /phpmyadmin /usr/share/phpmyadmin" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\<Directory /usr/share/phpmyadmin>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\Options FollowSymLinks" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\DirectoryIndex index.php" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\<IfModule mod_php7.c>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\AddType application/x-httpd-php .php" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\php_flag magic_quotes_gpc Off" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\php_flag track_vars On" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\php_flag register_globals Off" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\php_value include_path ." /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\</IfModule>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\</Directory>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\# Authorize for setup" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\<Directory /usr/share/phpmyadmin/setup>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\<IfModule mod_authn_file.c>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\AuthType Basic"/etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\AuthName 'phpMyAdmin Setup'" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\AuthUserFile /etc/phpmyadmin/htpasswd.setup" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\</IfModule>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\Require valid-user" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\</Directory>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\# Disallow web access to directories that don't need it" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\<Directory /usr/share/phpmyadmin/libraries>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\Order Deny,Allow" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\Deny from All" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\</Directory>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\<Directory /usr/share/phpmyadmin/setup/lib>" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\Order Deny,Allow" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\Deny from All" /etc/apache2/conf-available/phpmyadmin.conf
-    sed -i "$ a\</Directory>" /etc/apache2/conf-available/phpmyadmin.conf
+    cat > /etc/apache2/conf-available/phpmyadmin.conf <<EOF
+    # phpMyAdmin default Apache configuration
+
+    Alias /phpmyadmin /usr/share/phpmyadmin 
+
+    <Directory /usr/share/phpmyadmin>
+        Options FollowSymLinks
+        DirectoryIndex index.php
+
+        <IfModule mod_php7.c>
+            AddType application/x-httpd-php .php
+
+            php_flag magic_quotes_gpc Off
+            php_flag track_vars On
+            php_flag register_globals Off
+            php_value include_path .
+        </IfModule>
+    </Directory>
+
+    # Authorize for setup 
+
+    <Directory /usr/share/phpmyadmin/setup>
+        <IfModule mod_authn_file.c>
+            AuthType Basic
+            AuthName "phpMyAdmin Setup"
+            AuthUserFile /etc/phpmyadmin/htpasswd.setup
+        </IfModule> 
+        Require valid-user
+    </Directory>
+
+    # Disallow web access to directories that don't need it
+
+    <Directory /usr/share/phpmyadmin/libraries>
+        Order Deny,Allow
+        Deny from All
+    </Directory>
+    <Directory /usr/share/phpmyadmin/setup/lib>
+        Order Deny,Allow
+        Deny from All 
+     </Directory>
+
+EOF
+
     a2enconf phpmyadmin
     echo -e "[${green}..DONE${NC}]\n"
     echo -e "Activating new configuration (restarting Apache2)..."
