@@ -12,7 +12,7 @@ InstallphpMyAdmin() {
     touch /etc/phpmyadmin/htpasswd.setup
     cd /tmp
     wget https://files.phpmyadmin.net/phpMyAdmin/$phpMyAdmin/phpMyAdmin-$phpMyAdmin-all-languages.tar.gz > /dev/null 2>&1
-    tar xfz phpMyAdmin-$phpMyAdmin-all-languages.tar.gz > /dev/null 2&1
+    tar xfz phpMyAdmin-$phpMyAdmin-all-languages.tar.gz > /dev/null 2>&1
     mv phpMyAdmin-$phpMyAdmin-all-languages/* /usr/share/phpmyadmin/
     rm phpMyAdmin-$phpMyAdmin-all-languages.tar.gz
     rm -rf phpMyAdmin-$phpMyAdmin-all-languages
