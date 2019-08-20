@@ -19,7 +19,6 @@ InstallphpMyAdmin() {
     cp /usr/share/phpmyadmin/config.sample.inc.php  /usr/share/phpmyadmin/config.inc.php
     sed -i "s|\$cfg\['blowfish_secret'\]\s=\s'';|\$cfg['blowfish_secret'] = '$blowfish';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "$ a\$cfg['TempDir'] = '/var/lib/phpmyadmin/tmp';" /usr/share/phpmyadmin/config.inc.php
-    echo -n "Creating Apache config file for phpMyAdmin"
     touch /etc/apache2/conf-available/phpmyadmin.conf
     cat > /etc/apache2/conf-available/phpmyadmin.conf <<EOF
     # phpMyAdmin default Apache configuration
@@ -64,19 +63,14 @@ InstallphpMyAdmin() {
 
 EOF
 
-    a2enconf phpmyadmin > /dev/null 2&1
-    echo -e "[${green}..DONE${NC}]\n"
-    echo -e "Activating new configuration (restarting Apache2)..."
+    a2enconf phpmyadmin > /dev/null 2>&1
     systemctl reload apache2 
-    echo -e "[${green}.DONE${NC}]\n"
-    echo -e "Configuring phpMyAdmin configuration store (database)."
-    echo -e "Creating phpMyAdmin tables."
+   
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"CREATE DATABASE phpmyadmin;"
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"CREATE USER 'pma'@'localhost' IDENTIFIED BY '$CFG_MYSQL_ROOT_PWD';"
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"GRANT ALL PRIVILEGES ON phpmyadmin.* TO 'pma'@'localhost' IDENTIFIED BY '$CFG_MYSQL_ROOT_PWD' WITH GRANT OPTION;"
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"FLUSH PRIVILEGES;"
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" phpmyadmin < /usr/share/phpmyadmin/sql/create_tables.sql
-    echo -e "[${green}...DONE${NC}]\n"
     
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controlhost'\]\s=\s'';|\$cfg['Servers'][\$i]['controlhost'] = 'localhost';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controlport'\]\s=\s'';|\$cfg['Servers'][\$i]['controlport'] = '';|" /usr/share/phpmyadmin/config.inc.php
@@ -102,5 +96,4 @@ EOF
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['central_columns'\]\s=\s'pma__central_columns';|\$cfg['Servers'][\$i]['central_columns'] = 'pma__central_columns';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['designer_settings'\]\s=\s'pma__designer_settings';|\$cfg['Servers'][\$i]['designer_settings'] = 'pma__designer_settings';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['export_templates'\]\s=\s'pma__export_templates';|\$cfg['Servers'][\$i]['export_templates'] = 'pma__export_templates';|" /usr/share/phpmyadmin/config.inc.php
-    echo -e "[${green}..DONE${NC}]\n"
 }
