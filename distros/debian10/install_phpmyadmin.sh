@@ -64,10 +64,10 @@ InstallphpMyAdmin() {
 
 EOF
 
-    a2enconf phpmyadmin
+    a2enconf phpmyadmin > /dev/null 2&1
     echo -e "[${green}..DONE${NC}]\n"
     echo -e "Activating new configuration (restarting Apache2)..."
-    systemctl reload apache2
+    systemctl reload apache2 
     echo -e "[${green}.DONE${NC}]\n"
     echo -e "Configuring phpMyAdmin configuration store (database)."
     echo -e "Creating phpMyAdmin tables."
