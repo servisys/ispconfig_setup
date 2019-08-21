@@ -64,7 +64,11 @@ InstallphpMyAdmin() {
 EOF
 
     a2enconf phpmyadmin > /dev/null 2>&1
-    systemctl reload apache2 
+    if [ "$CFG_WEBSERVER" == "apache" ]; then
+        systemctl reload apache2 
+    elif [ "$CFG_WEBSERVER" == "nginx" ]; then
+        systemctl reload nginx
+    fi
    
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"CREATE DATABASE phpmyadmin;"
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"CREATE USER 'pma'@'localhost' IDENTIFIED BY '$CFG_MYSQL_ROOT_PWD';"
