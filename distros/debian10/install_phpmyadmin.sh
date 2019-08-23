@@ -19,55 +19,56 @@ InstallphpMyAdmin() {
     cp /usr/share/phpmyadmin/config.sample.inc.php  /usr/share/phpmyadmin/config.inc.php
     sed -i "s|\$cfg\['blowfish_secret'\]\s=\s'';|\$cfg['blowfish_secret'] = '$blowfish';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "$ a\$cfg['TempDir'] = '/var/lib/phpmyadmin/tmp';" /usr/share/phpmyadmin/config.inc.php
-    touch /etc/apache2/conf-available/phpmyadmin.conf
-    cat > /etc/apache2/conf-available/phpmyadmin.conf <<EOF
-    # phpMyAdmin default Apache configuration
+    if [ "$CFG_WEBSERVER" == "apache" ]; then
+        touch /etc/apache2/conf-available/phpmyadmin.conf
+        cat > /etc/apache2/conf-available/phpmyadmin.conf <<EOF
+# phpMyAdmin default Apache configuration
 
-    Alias /phpmyadmin /usr/share/phpmyadmin 
+Alias /phpmyadmin /usr/share/phpmyadmin 
 
-    <Directory /usr/share/phpmyadmin>
-        Options FollowSymLinks
-        DirectoryIndex index.php
+<Directory /usr/share/phpmyadmin>
+    Options FollowSymLinks
+    DirectoryIndex index.php
 
-        <IfModule mod_php7.c>
-            AddType application/x-httpd-php .php
+    <IfModule mod_php7.c>
+        AddType application/x-httpd-php .php
 
-            php_flag magic_quotes_gpc Off
-            php_flag track_vars On
-            php_flag register_globals Off
-            php_value include_path .
-        </IfModule>
-    </Directory>
+        php_flag magic_quotes_gpc Off
+        php_flag track_vars On
+        php_flag register_globals Off
+        php_value include_path .
+    </IfModule>
+</Directory>
 
-    # Authorize for setup 
+# Authorize for setup 
 
-    <Directory /usr/share/phpmyadmin/setup>
-        <IfModule mod_authn_file.c>
-            AuthType Basic
-            AuthName "phpMyAdmin Setup"
-            AuthUserFile /etc/phpmyadmin/htpasswd.setup
-        </IfModule> 
-        Require valid-user
-    </Directory>
+<Directory /usr/share/phpmyadmin/setup>
+    <IfModule mod_authn_file.c>
+        AuthType Basic
+        AuthName "phpMyAdmin Setup"
+        AuthUserFile /etc/phpmyadmin/htpasswd.setup
+    </IfModule> 
+    Require valid-user
+</Directory>
 
-    # Disallow web access to directories that don't need it
+# Disallow web access to directories that don't need it
 
-    <Directory /usr/share/phpmyadmin/libraries>
-        Order Deny,Allow
-        Deny from All
-    </Directory>
-    <Directory /usr/share/phpmyadmin/setup/lib>
-        Order Deny,Allow
-        Deny from All 
-     </Directory>
+<Directory /usr/share/phpmyadmin/libraries>
+    Order Deny,Allow
+    Deny from All
+</Directory>
+<Directory /usr/share/phpmyadmin/setup/lib>
+    Order Deny,Allow
+    Deny from All 
+</Directory>
 
 EOF
 
-    a2enconf phpmyadmin > /dev/null 2>&1
-    if [ "$CFG_WEBSERVER" == "apache" ]; then
+        a2enconf phpmyadmin > /dev/null 2>&1
         systemctl reload apache2 
     elif [ "$CFG_WEBSERVER" == "nginx" ]; then
-        systemctl reload nginx
+        source $APWD/distros/debian10/phpmyadmin_nginx.sh
+        config_phpMyAdmin_nginx
     fi
    
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"CREATE DATABASE phpmyadmin;"
