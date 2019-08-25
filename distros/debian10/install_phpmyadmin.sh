@@ -76,29 +76,12 @@ EOF
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"GRANT ALL PRIVILEGES ON phpmyadmin.* TO 'pma'@'localhost' IDENTIFIED BY '$CFG_MYSQL_ROOT_PWD' WITH GRANT OPTION;"
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" -e"FLUSH PRIVILEGES;"
     mysql -u root -p"$CFG_MYSQL_ROOT_PWD" phpmyadmin < /usr/share/phpmyadmin/sql/create_tables.sql
-    
+    # used to manipulate storage uncommented and values set
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controlhost'\]\s=\s'';|\$cfg['Servers'][\$i]['controlhost'] = 'localhost';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controlport'\]\s=\s'';|\$cfg['Servers'][\$i]['controlport'] = '';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controluser'\]\s=\s'pma';|\$cfg['Servers'][\$i]['controluser'] = 'pma';|" /usr/share/phpmyadmin/config.inc.php
     sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['controlpass'\]\s=\s'pmapass';|\$cfg['Servers'][\$i]['controlpass'] = '$CFG_MYSQL_ROOT_PWD';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['pmadb'\]\s=\s'phpmyadmin';|\$cfg['Servers'][\$i]['pmadb'] = 'phpmyadmin';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['bookmarktable'\]\s=\s'pma__bookmark';|\$cfg['Servers'][\$i]['bookmarktable'] = 'pma__bookmark';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['relation'\]\s=\s'pma__relation';|\$cfg['Servers'][\$i]['relation'] = 'pma__relation';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['table_info'\]\s=\s'pma__table_info';|\$cfg['Servers'][\$i]['table_info'] = 'pma__table_info';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['table_coords'\]\s=\s'pma__table_coords';|\$cfg['Servers'][\$i]['table_coords'] = 'pma__table_coords';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['pdf_pages'\]\s=\s'pma__pdf_pages';|\$cfg['Servers'][\$i]['pdf_pages'] = 'pma__pdf_pages';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['column_info'\]\s=\s'pma__column_info';|\$cfg['Servers'][\$i]['column_info'] = 'pma__column_info';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['history'\]\s=\s'pma__history';|\$cfg['Servers'][\$i]['history'] = 'pma__history';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['table_uiprefs'\]\s=\s'pma__table_uiprefs';|\$cfg['Servers'][\$i]['table_uiprefs'] = 'pma__table_uiprefs';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['tracking'\]\s=\s'pma__tracking';|\$cfg['Servers'][\$i]['tracking'] = 'pma__tracking';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['userconfig'\]\s=\s'pma__userconfig';|\$cfg['Servers'][\$i]['userconfig'] = 'pma__userconfig';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['recent'\]\s=\s'pma__recent';|\$cfg['Servers'][\$i]['recent'] = 'pma__recent';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['favorite'\]\s=\s'pma__favorite';|\$cfg['Servers'][\$i]['favorite'] = 'pma__favorite';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['users'\]\s=\s'pma__users';|\$cfg['Servers'][\$i]['users'] = 'pma__users';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['usergroups'\]\s=\s'pma__usergroups';|\$cfg['Servers'][\$i]['usergroups'] = 'pma__usergroups';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['navigationhiding'\]\s=\s'pma__navigationhiding';|\$cfg['Servers'][\$i]['navigationhiding'] = 'pma__navigationhiding';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['savedsearches'\]\s=\s'pma__savedsearches';|\$cfg['Servers'][\$i]['savedsearches'] = 'pma__savedsearches';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['central_columns'\]\s=\s'pma__central_columns';|\$cfg['Servers'][\$i]['central_columns'] = 'pma__central_columns';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['designer_settings'\]\s=\s'pma__designer_settings';|\$cfg['Servers'][\$i]['designer_settings'] = 'pma__designer_settings';|" /usr/share/phpmyadmin/config.inc.php
-    sed -i "s|//\s\$cfg\['Servers'\]\[\$i\]\['export_templates'\]\s=\s'pma__export_templates';|\$cfg['Servers'][\$i]['export_templates'] = 'pma__export_templates';|" /usr/share/phpmyadmin/config.inc.php
+    # uncomment the Storage database and tables section
+    sed -i '/\*\sStorage\sdatabase\sand\stables\s\*/,/\*\*/ s|^//||' /usr/share/phpmyadmin/config.inc.php
+    
 }
