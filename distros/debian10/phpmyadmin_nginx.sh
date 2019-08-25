@@ -3,15 +3,16 @@
 #    Configure phpMyAdmin for nginx
 #---------------------------------------------------------------------
 config_phpMyAdmin_nginx() {
-    touch /etc/nginx/conf.d/phpMyAdmin.conf
-    cat /etc/nginx/conf.d/phpMyAdmin.conf <<EOF
+    touch /etc/nginx/conf.d/phpmyadmin.conf
+    # Write default ngnix  vhost configuration file for phpmyadmin - to be included in all other hosts
+    cat /etc/nginx/conf.d/phpmyadmin.conf <<EOF
 
 ## phpMyAdmin default nginx configuration
 
 server {
    listen 80;
    server_name "";
-   root /usr/share/phpMyAdmin;
+   root /usr/share/phpmyadmin;
 
    location /phpmyadmin {
                root /usr/share/;
@@ -67,6 +68,15 @@ server {
 }
 
 EOF
-    a2enconf phpmyadmin > /dev/null 2>&1
-    systemctl reload nginx
+
+#write vhost nginx phpmyadmin file for ISPConfig vhost
+# uncommmenting the phpmyadmin section
+# sed '/start/,/stop/ s/^#//' serach between the start stop patterns removing #. 
+# includes stop stop patterns so stop pattern needs recommenting out
+sed -i '/location\s\/phpmyadmin\s{/,/location\s\/squirrelmail\s{/ s/^#//' /etc/nginx/sites-available/ispconfig.vhost
+sed -i '/location\s\/squirrelmail\s{/ s/^/#/' /etc/nginx/sites-available/ispconfig.vhost
+
+
+    systemctl restart nginx
+    systemctl restart php7.3-fpm
 }
