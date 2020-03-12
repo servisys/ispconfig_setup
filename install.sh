@@ -346,6 +346,8 @@ elif [ -f /etc/redhat-release ]; then # /etc/centos-release
 	InstallMTA 
 	InstallAntiVirus 
 	InstallWebServer
+	if [ "$CFG_HHVM" == "yes" ]; then
+	InstallHHVM
 	InstallFTP 
 	if [ "$CFG_QUOTA" == "yes" ]; then
 		InstallQuota 
