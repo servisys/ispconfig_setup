@@ -1,3 +1,4 @@
+InstallHhvm() {
 echo -n "Installing HHVM HipHop Virtual Machine (FCGI)... "
 
 touch /etc/yum.repos.d/hhvm.repo
