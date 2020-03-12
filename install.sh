@@ -349,6 +349,7 @@ elif [ -f /etc/redhat-release ]; then # /etc/centos-release
 	if [ "$CFG_HHVM" == "yes" ]; then
 	source $APWD/distros/$DISTRO/install_hhvm.sh
 	InstallHHVM
+	fi
 	InstallFTP 
 	if [ "$CFG_QUOTA" == "yes" ]; then
 		InstallQuota 
