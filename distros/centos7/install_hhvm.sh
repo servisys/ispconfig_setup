@@ -1,21 +1,22 @@
- echo -n "Installing HHVM HipHop Virtual Machine (FCGI)... "
- yum -y install -y epel-release git zeromq-devel
+echo -n "Installing HHVM HipHop Virtual Machine (FCGI)... "
 
- yum -y install cpp gcc-c++ cmake psmisc {binutils,boost,jemalloc,numactl}-devel \
- {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel \
- lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel \
- {unixODBC,expat,mariadb}-devel lib{edit,curl,xml2,xslt}-devel \
- glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel \
- mariadb mariadb-server libc-client make
+touch /etc/yum.repos.d/hhvm.repo
+echo "[hhvm]" >> /etc/yum.repos.d/hhvm.repo
+echo "name=gleez hhvm-repo" >> /etc/yum.repos.d/hhvm.repo
+echo "baseurl=http://mirrors.linuxeye.com/hhvm-repo/7/\$basearch/" >> /etc/yum.repos.d/hhvm.repo
+echo "enabled=1" >> /etc/yum.repos.d/hhvm.repo
+echo "gpgcheck=0" >> /etc/yum.repos.d/hhvm.repo
 
- rpm -Uvh http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/hhvm-3.15.3-1.el7.centos.x86_64.rpm
+ yum -y install zeromq-devel hhvm
 
 # Configure Hhvm (optional)
  ln -s /usr/local/bin/hhvm /bin/hhvm
  mkdir /var/run/hhvm/
+# Change the port (optional)
+#sed -i "s/hhvm.server.port = 9001/hhvm.server.port = 9009/" /etc/hhvm/server.ini
 sed -i "s%date.timezone = Asia/Calcutta%date.timezone = Europe/Istanbul%" /etc/hhvm/server.ini
 
-
+touch /etc/systemd/system/hhvm.service
  echo "[Unit]" >> /etc/systemd/system/hhvm.service
  echo "Description=HHVM HipHop Virtual Machine (FCGI)" >> /etc/systemd/system/hhvm.service
  echo "After=network.target nginx.service mariadb.service" >> /etc/systemd/system/hhvm.service
