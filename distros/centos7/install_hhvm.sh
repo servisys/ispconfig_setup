@@ -1,4 +1,5 @@
-InstallHhvm() {
+InstallHHVM() {
+  if [ $CFG_HHVM = "yes" ]; then
 echo -n "Installing HHVM HipHop Virtual Machine (FCGI)... "
 
 touch /etc/yum.repos.d/hhvm.repo
@@ -37,3 +38,5 @@ systemctl start hhvm.service
 
  hhvm --version
  echo -e "[${green}DONE${NC}]\n"
+ fi
+}
