@@ -97,10 +97,54 @@ InstallWebServer() {
     systemctl restart  httpd.service
 	# echo -e "${green}done! ${NC}\n"
   elif [ "$CFG_WEBSERVER" == "nginx" ]; then
+  	CFG_NGINX=y
+	CFG_APACHE=n
     echo -n "Installing Web server (nginx)... "
-	echo -e "\n${red}Sorry but nginx is not yet supported.${NC}" >&2
-	echo -e "For more information, see this issue: https://github.com/servisys/ispconfig_setup/issues/67\n"
-	read DUMMY
+	yum -y install nginx fcgi-devel spawn-fcgi
+	echo -n "Installing PHP and modules... "
+	yum -y install mod_ssl php php-mbstring
+	echo -n "Installing PHP modules... "
+	yum -y install php-fpm php-cli php-mysql php-gd php-imap php-ldap php-odbc php-pear php-xml php-xmlrpc php-pecl-apc php-magickwand php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy
+	
+	systemctl stop httpd.service
+	systemctl disable httpd.service
+	
+	sed -i "/; error_reporting/ a error_reporting = E_ALL & ~E_NOTICE" /etc/php.ini
+	TIME_ZONE=$(echo "$TIME_ZONE" | sed -n 's/ (.*)$//p')
+	sed -i "s/;date.timezone =/date.timezone=\"${TIME_ZONE//\//\\/}\"/" /etc/php.ini
+	sed -i "/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0" /etc/php.ini
+	
+	systemctl enable php-fpm
+	systemctl restart php-fpm
+
+    echo -n "Installing fcgiwrap... "
+	#This installs fcgiwrap to /usr/local/sbin/fcgiwrap.
+	cd /usr/local/src/
+	git clone git://github.com/gnosek/fcgiwrap.git
+	cd fcgiwrap
+	autoreconf -i
+	./configure
+	make
+	make install	
+
+# modify the /etc/sysconfig/spawn-fcgi file as follows:
+
+	echo "FCGI_SOCKET=/var/run/fcgiwrap.socket" >> /etc/sysconfig/spawn-fcgi
+	echo "FCGI_PROGRAM=/usr/local/sbin/fcgiwrap" >> /etc/sysconfig/spawn-fcgi
+	echo "FCGI_USER=apache" >> /etc/sysconfig/spawn-fcgi
+	echo "FCGI_GROUP=apache" >> /etc/sysconfig/spawn-fcgi
+	echo 'FCGI_EXTRA_OPTIONS="-M 0770"' >> /etc/sysconfig/spawn-fcgi
+	echo 'OPTIONS="OPTIONS="-u $FCGI_USER -g $FCGI_GROUP -s $FCGI_SOCKET -S $FCGI_EXTRA_OPTIONS -F 1 -P /var/run/spawn-fcgi.pid' >> /etc/sysconfig/spawn-fcgi
+	echo '-- $FCGI_PROGRAM"' >> /etc/sysconfig/spawn-fcgi
+	
+	#Now add the user nginx to the group apache:
+	usermod -a -G apache nginx
+	chkconfig spawn-fcgi on
+	systemctl start spawn-fcgi
+
+	systemctl enable nginx.service
+	systemctl start nginx.service
+	# echo -e "${green}done! ${NC}\n"
   fi
 
   # echo -e "${green}done! ${NC}\n"
