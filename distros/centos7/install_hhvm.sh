@@ -15,7 +15,7 @@ echo "gpgcheck=0" >> /etc/yum.repos.d/hhvm.repo
  ln -s /usr/local/bin/hhvm /bin/hhvm
  mkdir /var/run/hhvm/
 # Change the port (optional)
-#sed -i "s/hhvm.server.port = 9001/hhvm.server.port = 9009/" /etc/hhvm/server.ini
+sed -i "s/hhvm.server.port = 9001/hhvm.server.port = 9011/" /etc/hhvm/server.ini
 sed -i "s%date.timezone = Asia/Calcutta%date.timezone = Europe/Istanbul%" /etc/hhvm/server.ini
 
 touch /etc/systemd/system/hhvm.service
@@ -33,8 +33,8 @@ echo "" >> /etc/systemd/system/hhvm.service
  echo "[Install]" >> /etc/systemd/system/hhvm.service
  echo "WantedBy=multi-user.target" >> /etc/systemd/system/hhvm.service
 
-systemctl enable hhvm.service
-systemctl start hhvm.service
+systemctl enable hhvm
+systemctl start hhvm
 
  hhvm --version
  echo -e "[${green}DONE${NC}]\n"
