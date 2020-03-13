@@ -106,7 +106,7 @@ InstallWebServer() {
   # echo -e "${green}done! ${NC}\n"
 
   echo -n "Installing Let's Encrypt (Certbot)... "
-  yum_install certbot
+  yum -y install certbot
 
   echo -e "[${green}DONE${NC}]\n"
 }
