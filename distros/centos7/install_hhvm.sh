@@ -25,7 +25,7 @@ touch /etc/systemd/system/hhvm.service
  echo "" >> /etc/systemd/system/hhvm.service
  echo "[Service]" >> /etc/systemd/system/hhvm.service
 
-echo "ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user apache2 --mode daemon -vServer.Type=fastcgi -vServer.Port=9010" >> /etc/systemd/system/hhvm.service
+echo "ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user apache --mode daemon -vServer.Type=fastcgi -vServer.Port=9010" >> /etc/systemd/system/hhvm.service
 
 echo "" >> /etc/systemd/system/hhvm.service
  echo "[Install]" >> /etc/systemd/system/hhvm.service
