@@ -32,7 +32,6 @@ echo "" >> /etc/systemd/system/hhvm.service
  echo "WantedBy=multi-user.target" >> /etc/systemd/system/hhvm.service
 
 systemctl enable hhvm.service
-systemctl start hhvm.service
 systemctl daemon-reload
 
  hhvm --version
