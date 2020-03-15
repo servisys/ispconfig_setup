@@ -16,6 +16,7 @@ echo "gpgcheck=0" >> /etc/yum.repos.d/hhvm.repo
  mkdir /var/run/hhvm/
 # Change the admin port (optional)
 sed -i "s/hhvm.server.port = 9001/hhvm.server.port = 9011/" /etc/hhvm/server.ini
+sed -i "%hhvm.server.port = 9001%a hhvm.server.file_socket = /var/run/hhvm/hhvm.sock%" /etc/hhvm/server.ini
 sed -i "s%date.timezone = Asia/Calcutta%date.timezone = $TIME_ZONE%" /etc/hhvm/server.ini
 
 touch /etc/systemd/system/hhvm.service
