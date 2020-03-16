@@ -126,9 +126,10 @@ InstallWebServer() {
 	./configure
 	make
 	make install	
+cp /usr/local/src/fcgiwrap/systemd/fcgiwrap.socket /var/run/fcgiwrap.socket
+cp /usr/local/src/fcgiwrap/systemd/fcgiwrap.service /etc/systemd/system/fcgiwrap.service
 
 # modify the /etc/sysconfig/spawn-fcgi file as follows:
-
 	echo "FCGI_SOCKET=/var/run/fcgiwrap.socket" >> /etc/sysconfig/spawn-fcgi
 	echo "FCGI_PROGRAM=/usr/local/sbin/fcgiwrap" >> /etc/sysconfig/spawn-fcgi
 	echo "FCGI_USER=apache" >> /etc/sysconfig/spawn-fcgi
