@@ -118,26 +118,12 @@ InstallWebServer() {
 	systemctl restart php-fpm
 
     echo -n "Installing fcgiwrap... "
-	#This installs fcgiwrap to /usr/local/sbin/fcgiwrap.
-	cd /usr/local/src/
-	git clone git://github.com/gnosek/fcgiwrap.git
-	cd fcgiwrap
-	autoreconf -i
-	./configure
-	make
-	make install	
-cp -u /usr/local/src/fcgiwrap/systemd/fcgiwrap.socket /var/run/fcgiwrap.socket
-cp -u /usr/local/src/fcgiwrap/systemd/fcgiwrap.service /etc/systemd/system/fcgiwrap.service
+yum -y install fcgiwrap spawn-fcgi
 
 # modify the /etc/sysconfig/spawn-fcgi file as follows:
-	echo "FCGI_SOCKET=/var/run/fcgiwrap.socket" >> /etc/sysconfig/spawn-fcgi
-	echo "FCGI_PROGRAM=/usr/local/sbin/fcgiwrap" >> /etc/sysconfig/spawn-fcgi
-	echo "FCGI_USER=apache" >> /etc/sysconfig/spawn-fcgi
-	echo "FCGI_GROUP=apache" >> /etc/sysconfig/spawn-fcgi
-	echo 'FCGI_EXTRA_OPTIONS="-M 0770"' >> /etc/sysconfig/spawn-fcgi
-	echo 'OPTIONS="OPTIONS="-u $FCGI_USER -g $FCGI_GROUP -s $FCGI_SOCKET -S $FCGI_EXTRA_OPTIONS -F 1 -P /var/run/spawn-fcgi.pid' >> /etc/sysconfig/spawn-fcgi
-	echo '-- $FCGI_PROGRAM"' >> /etc/sysconfig/spawn-fcgi
-	
+
+
+
 	#Now add the user nginx to the group apache:
 	usermod -a -G apache nginx
 	chkconfig spawn-fcgi on
@@ -151,7 +137,7 @@ cp -u /usr/local/src/fcgiwrap/systemd/fcgiwrap.service /etc/systemd/system/fcgiw
   # echo -e "${green}done! ${NC}\n"
 
   echo -n "Installing Let's Encrypt (Certbot)... "
-  yum_install certbot
+  yum -y install certbot
 
   echo -e "[${green}DONE${NC}]\n"
 }
