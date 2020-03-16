@@ -129,11 +129,10 @@ yum -y install fcgiwrap spawn-fcgi fcgi-devel
 	./configure
 	make
 	make install	
-cp -u /usr/local/src/fcgiwrap/systemd/fcgiwrap.socket /var/run/fcgiwrap.socket
-cp -u /usr/local/src/fcgiwrap/systemd/fcgiwrap.service /etc/systemd/system/fcgiwrap.service
+
 
 # modify the /etc/sysconfig/spawn-fcgi file as follows:
-echo "# You must set some working options before the "spawn-fcgi" service will work." >> /etc/sysconfig/spawn-fcgi
+echo '# You must set some working options before the "spawn-fcgi" service will work.' >> /etc/sysconfig/spawn-fcgi
 echo "# If SOCKET points to a file, then this file is cleaned up by the init script." >> /etc/sysconfig/spawn-fcgi
 echo "#" >> /etc/sysconfig/spawn-fcgi
 echo "# See spawn-fcgi(1) for all possible options." >> /etc/sysconfig/spawn-fcgi
@@ -143,14 +142,11 @@ echo "#SOCKET=/var/run/php-fcgi.sock" >> /etc/sysconfig/spawn-fcgi
 echo '#OPTIONS="-u nginx -g nginx -s $SOCKET -S -M 0600 -C 32 -F 1 -P /var/run/spawn-fcgi.pid -- /usr/bin/php-cgi"' >> /etc/sysconfig/spawn-fcgi
 echo "FCGI_SOCKET=/var/run/fcgiwrap.socket" >> /etc/sysconfig/spawn-fcgi
 echo "FCGI_PROGRAM=/usr/local/sbin/fcgiwrap" >> /etc/sysconfig/spawn-fcgi
-echo "FCGI_USER=nginx" >> /etc/sysconfig/spawn-fcgi
-echo "FCGI_GROUP=nginx" >> /etc/sysconfig/spawn-fcgi
+echo "FCGI_USER=apache" >> /etc/sysconfig/spawn-fcgi
+echo "FCGI_GROUP=apache" >> /etc/sysconfig/spawn-fcgi
 echo 'FCGI_EXTRA_OPTIONS="-M 0770"' >> /etc/sysconfig/spawn-fcgi
 echo 'OPTIONS="-u $FCGI_USER -g $FCGI_GROUP -s $FCGI_SOCKET -S $FCGI_EXTRA_OPTIONS -F 1 -P /var/run/spawn-fcgi.pid -- $FCGI_PROGRAM"' >> /etc/sysconfig/spawn-fcgi
 
-chkconfig --levels 235 nginx on
-ln -s '/usr/lib/systemd/system/nginx.service' '/etc/systemd/system/multi-user.target.wants/nginx.service'
-chkconfig --levels 235 spawn-fcgi on
 
 	#Now add the user nginx to the group apache:
 	usermod -a -G apache nginx
