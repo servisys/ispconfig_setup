@@ -114,6 +114,8 @@ InstallWebServer() {
 	sed -i "s/;date.timezone =/date.timezone=\"${TIME_ZONE//\//\\/}\"/" /etc/php.ini
 	sed -i "/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0" /etc/php.ini
 	
+	systemctl enable nginx.service
+	systemctl start nginx.service
 	systemctl enable php-fpm
 	systemctl restart php-fpm
 
@@ -147,14 +149,11 @@ echo "FCGI_GROUP=apache" >> /etc/sysconfig/spawn-fcgi
 echo 'FCGI_EXTRA_OPTIONS="-M 0770"' >> /etc/sysconfig/spawn-fcgi
 echo 'OPTIONS="-u $FCGI_USER -g $FCGI_GROUP -s $FCGI_SOCKET -S $FCGI_EXTRA_OPTIONS -F 1 -P /var/run/spawn-fcgi.pid -- $FCGI_PROGRAM"' >> /etc/sysconfig/spawn-fcgi
 
-
 	#Now add the user nginx to the group apache:
 	usermod -a -G apache nginx
 	chkconfig spawn-fcgi on
 	systemctl start spawn-fcgi
-
-	systemctl enable nginx.service
-	systemctl start nginx.service
+	systemctl restart nginx.service
 	# echo -e "${green}done! ${NC}\n"
   fi
 
