@@ -16,17 +16,16 @@ echo "gpgcheck=0" >> /etc/yum.repos.d/hhvm.repo
  mkdir /var/run/hhvm/
 # Change the admin port (optional)
 sed -i "s/hhvm.server.port = 9001/hhvm.server.port = 9011/" /etc/hhvm/server.ini
-sed -i "/hhvm.server.port = 9011/a hhvm.server.file_socket = \/var\/run\/hhvm\/hhvm.sock" /etc/hhvm/server.ini
 sed -i "s%date.timezone = Asia/Calcutta%date.timezone = $TIME_ZONE%" /etc/hhvm/server.ini
 
-touch /etc/systemd/system/hhvm.service
  echo "[Unit]" >> /etc/systemd/system/hhvm.service
  echo "Description=HHVM HipHop Virtual Machine (FCGI)" >> /etc/systemd/system/hhvm.service
  echo "After=network.target nginx.service mariadb.service" >> /etc/systemd/system/hhvm.service
  echo "" >> /etc/systemd/system/hhvm.service
  echo "[Service]" >> /etc/systemd/system/hhvm.service
 
-echo "ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user apache --mode daemon -vServer.Type=fastcgi -vServer.FileSocket=/var/run/hhvm/hhvm.sock" >> /etc/systemd/system/hhvm.service
+echo "ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user apache --mode daemon -vServer.Type=fastcgi -vServer.Port=9010" >> /etc/systemd/system/hhvm.service
+
 
 echo "" >> /etc/systemd/system/hhvm.service
  echo "[Install]" >> /etc/systemd/system/hhvm.service
