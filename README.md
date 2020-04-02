@@ -11,7 +11,7 @@ We'll use only to inform you on new version of the script :)
 
 
 # Version #
-v.3.0.5
+<b>v.3.0.5</b>
 
 Debian 10 changes file path for root use : 
 	su -
@@ -20,7 +20,7 @@ Added support for Debian 10 Buster and php7.3
 	service changed to systemctl for all service functions (start,stop,restart etc)
 	few other minor changes to accommodate Debian 10
 
-v.3.0.4
+<b>v.3.0.4</b>
 
 This is a system to automate the installation of ISPConfig 3 control Panel ( http://www.ispconfig.org/page/home.html ).
 
