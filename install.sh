@@ -314,7 +314,7 @@ if [ -f /etc/debian_version ]; then
 	
 	if [ "$CFG_WEBMAIL" == "roundcube" ]; then
 		if [ "$DISTRO" != "debian8" ]; then
-			echo -e "\n${red}You will need to edit the username and password in /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of the roundcube user, as the one you set in ISPconfig ${NC}"
+			echo -e "\n${red}You will need to edit the username and password in /var/lib/roundcube/plugins/ispconfig3_account/config/config.inc.php of the roundcube user, as the one you set in ISPconfig (under System > remote users)${NC}"
 		fi
 	fi
 	if [ "$CFG_WEBSERVER" == "nginx" ]; then
