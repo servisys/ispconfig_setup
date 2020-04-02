@@ -4,8 +4,8 @@
 #---------------------------------------------------------------------
 
 #Program Versions
-JKV="2.20"  #Jailkit Version -> Maybe this can be automated
-SUM="b6d1653d915b9c9a190e185981f236e6"
+JKV="2.21"  #Jailkit Version -> Maybe this can be automated
+SUM="d316dc22b9f3ab7464c8bd73c2539304"
 
 InstallJailkit() {
   echo -n "Installing Jailkit... "
