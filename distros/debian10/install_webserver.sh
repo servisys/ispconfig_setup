@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Function: InstallWebServer Debian 9
+# Function: InstallWebServer Debian 10
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
@@ -38,11 +38,11 @@ InstallWebServer() {
   fi
 	
   if [ "$CFG_PHP56" == "yes" ]; then
-	echo "Installing PHP 5.6"
-	apt_install apt-transport-https
+	echo "Installing PHP 5.6... "
+	apt_install apt-transport-https > /dev/null 2>&1
 	curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
-	echo 'deb https://packages.sury.org/php/ stretch main' > /etc/apt/sources.list.d/deb.sury.org.list
-	hide_output apt-get update
+	echo 'deb https://packages.sury.org/php/ buster main' > /etc/apt/sources.list.d/deb.sury.org.list
+	apt-get update > /dev/null 2>&1
 	apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 	echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 	echo -e "[${green}DONE${NC}]\n"
@@ -84,6 +84,7 @@ InstallWebServer() {
 	echo -n "Restarting Apache... "
 	systemctl restart apache2
 	echo -e "[${green}DONE${NC}]\n"
+	#end of installing apache 
   elif [ "$CFG_WEBSERVER" == "nginx" ]; then	
   CFG_NGINX=y
   CFG_APACHE=n
@@ -94,7 +95,7 @@ InstallWebServer() {
 	apt_install php7.3 php7.3-common php-bcmath php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear mcrypt libruby php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php-memcache php-imagick php-gettext php7.3-zip php7.3-mbstring php7.3-soap php7.3-opcache
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP-FPM... "
-	#Need to check if soemthing is asked before suppress messages
+	#Need to check if something is asked before suppress messages
 	apt_install php7.3-fpm
 	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.3/fpm/php.ini
 	TIME_ZONE=$(echo "$TIME_ZONE" | sed -n 's/ (.*)$//p')
@@ -122,8 +123,8 @@ InstallWebServer() {
 		echo -n "Installing PHP 5.6... "
 		apt_install apt-transport-https
 		curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
-		echo 'deb https://packages.sury.org/php/ stretch main' > /etc/apt/sources.list.d/deb.sury.org.list
-		hide_output apt-get update
+		echo 'deb https://packages.sury.org/php/ buster main' > /etc/apt/sources.list.d/deb.sury.org.list
+		apt-get update > /dev/null 2>&1
 		apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 		echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 		echo -e "[${green}DONE${NC}]\n"
@@ -138,7 +139,7 @@ InstallWebServer() {
   
   fi
   if [ "$CFG_PHP56" == "yes" ]; then
-	echo -e "${red}Attention!!! You had installed php7 and php 5.6, to make php 5.6 work you had to configure the following in ISPConfig ${NC}"
+	echo -e "${red}Attention!!! You have installed php7 and php 5.6, to make php 5.6 work you have to configure the following in ISPConfig ${NC}"
 	echo -e "${red}Path for PHP FastCGI binary: /usr/bin/php-cgi5.6 ${NC}"
 	echo -e "${red}Path for php.ini directory: /etc/php/5.6/cgi ${NC}"
 	echo -e "${red}Path for PHP-FPM init script: /etc/init.d/php5.6-fpm ${NC}"
