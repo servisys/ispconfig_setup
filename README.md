@@ -11,6 +11,10 @@ We'll use only to inform you on new version of the script :)
 
 
 # Version #
+<b>v.3.0.6</b>
+
+Debian 10 fix for Debian 10
+
 <b>v.3.0.5</b>
 
 Debian 10 changes file path, for root use :

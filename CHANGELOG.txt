@@ -1,3 +1,7 @@
+v.3.0.6
+- Added fix for Debian 10
+- Removed support for multiserver setup in Debian 9 and Debian 10
+
 v.3.0.5
 - Added support for debain10 and php7.3
 
