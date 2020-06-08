@@ -250,7 +250,7 @@ if [ "$DISTRO" == "debian8" ]; then
 	done
 fi
 
-if [ "$DISTRO" == "debian8" ] || [ "$DISTRO" == "debian9" ] || [ "$DISTRO" == "debian10" ]; then
+if [ "$DISTRO" == "debian8" ]; then
 	while [[ ! "$CFG_MULTISERVER" =~ $RE ]]
 	do
 		CFG_MULTISERVER=$(whiptail --title "MULTISERVER SETUP" --backtitle "$WT_BACKTITLE" --nocancel --radiolist "Would you like to install ISPConfig in a MultiServer Setup?" 10 50 2 "no" "(default)" ON "yes" "" OFF 3>&1 1>&2 2>&3)
