@@ -11,7 +11,7 @@ InstallBasics() {
   echo -e "[${green}DONE${NC}]\n"
 
   echo -n "Installing basic packages (OpenSSH server, NTP, binutils, etc.)... "
-  apt_install ssh openssh-server nano vim-nox ntp debconf-utils binutils sudo git lsb-release e2fsprogs
+  apt_install patch ssh openssh-server nano vim-nox ntp debconf-utils binutils sudo git lsb-release e2fsprogs
   echo -e "[${green}DONE${NC}]\n"
 
   if [ /bin/sh -ef /bin/dash ]; then
