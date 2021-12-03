@@ -40,7 +40,7 @@ InstallWebServer() {
 	echo "Installing PHP 5.6... "
 	apt_install apt-transport-https > /dev/null 2>&1
 	curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
-	echo 'deb https://packages.sury.org/php/ buster main' > /etc/apt/sources.list.d/deb.sury.org.list
+	echo 'deb https://packages.sury.org/php/ bullseye main' > /etc/apt/sources.list.d/deb.sury.org.list
 	apt-get update > /dev/null 2>&1
 	apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 	echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
@@ -121,7 +121,7 @@ InstallWebServer() {
 		echo -n "Installing PHP 5.6... "
 		apt_install apt-transport-https
 		curl https://packages.sury.org/php/apt.gpg | apt-key add -  > /dev/null 2>&1
-		echo 'deb https://packages.sury.org/php/ buster main' > /etc/apt/sources.list.d/deb.sury.org.list
+		echo 'deb https://packages.sury.org/php/ bullseye main' > /etc/apt/sources.list.d/deb.sury.org.list
 		apt-get update > /dev/null 2>&1
 		apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 		echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
