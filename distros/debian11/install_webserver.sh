@@ -11,7 +11,7 @@ InstallWebServer() {
 	echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 	# - DISABLED DUE TO A BUG IN DBCONFIG - echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections
 	echo "dbconfig-common dbconfig-common/dbconfig-install boolean false" | debconf-set-selections
-	apt_install apache2 apache2-doc apache2-utils libapache2-mod-php libapache2-mod-fcgid apache2-suexec-pristine libruby libapache2-mod-python php-memcache php-imagick php-gettext libapache2-mod-passenger
+	apt_install apache2 apache2-doc apache2-utils libapache2-mod-php libapache2-mod-fcgid apache2-suexec-pristine libruby libapache2-mod-python php-memcache php-imagick libapache2-mod-passenger
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and modules... "
 	# Need to check if soemthing is asked before suppress messages
@@ -90,7 +90,7 @@ InstallWebServer() {
 	echo -n "Installing Web server (nginx) and modules... "
 	apt_install nginx
 	systemctl start nginx
-	apt_install php7.4 php7.4-common php-bcmath php7.4-gd php7.4-mysql php7.4-imap php7.4-cli php7.4-cgi php-pear mcrypt libruby php7.4-curl php7.4-intl php7.4-pspell php7.4-recode php7.4-sqlite3 php7.4-tidy php7.4-xmlrpc php7.4-xsl php-memcache php-imagick php-gettext php7.4-zip php7.4-mbstring php7.4-soap php7.4-opcache
+	apt_install php7.4 php7.4-common php-bcmath php7.4-gd php7.4-mysql php7.4-imap php7.4-cli php7.4-cgi php-pear mcrypt libruby php7.4-curl php7.4-intl php7.4-pspell php7.4-recode php7.4-sqlite3 php7.4-tidy php7.4-xmlrpc php7.4-xsl php-memcache php-imagick php7.4-zip php7.4-mbstring php7.4-soap php7.4-opcache
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP-FPM... "
 	#Need to check if something is asked before suppress messages
