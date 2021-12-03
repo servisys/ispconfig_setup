@@ -3,7 +3,7 @@
 #    Install and configure Apache2, php + modules
 #---------------------------------------------------------------------
 InstallWebServer() {
-  
+
   if [ "$CFG_WEBSERVER" == "apache" ]; then
   CFG_NGINX=n
   CFG_APACHE=y
@@ -15,28 +15,27 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP and modules... "
 	# Need to check if soemthing is asked before suppress messages
-	# apt_install php7.3 php7.3-common php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear  php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-zip php7.3-mbstring php7.3-imap mcrypt php7.3-snmp php7.3-xmlrpc php7.3-xsl
-	apt_install php7.3 php7.3-common php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear  php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php7.3-zip php7.3-mbstring php7.3-soap
+	apt_install php7.4 php7.4-common php7.4-gd php7.4-mysql php7.4-imap php7.4-cli php7.4-cgi php-pear  php7.4-curl php7.4-intl php7.4-pspell php7.4-recode php7.4-sqlite3 php7.4-tidy php7.4-xmlrpc php7.4-xsl php7.4-zip php7.4-mbstring php7.4-soap
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP-FPM... "
 	#Need to check if soemthing is asked before suppress messages
-	apt_install php7.3-fpm
+	apt_install php7.4-fpm
 	#Need to check if soemthing is asked before suppress messages
-	a2enmod actions > /dev/null 2>&1 
-	a2enmod proxy_fcgi > /dev/null 2>&1 
-	a2enmod alias > /dev/null 2>&1 
+	a2enmod actions > /dev/null 2>&1
+	a2enmod proxy_fcgi > /dev/null 2>&1
+	a2enmod alias > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing needed programs for PHP and Apache (mcrypt, etc.)... "
 	apt_install mcrypt imagemagick memcached curl tidy snmp
 	echo -e "[${green}DONE${NC}]\n"
-	
+
   if [ "$CFG_PHPMYADMIN" == "yes" ]; then
 	source $APWD/distros/debian10/install_phpmyadmin.sh
 	echo -n "Installing phpMyAdmin... "
 	InstallphpMyAdmin
 	echo -e "[${green}DONE${NC}]\n"
   fi
-	
+
   if [ "$CFG_PHP56" == "yes" ]; then
 	echo "Installing PHP 5.6... "
 	apt_install apt-transport-https > /dev/null 2>&1
@@ -46,8 +45,8 @@ InstallWebServer() {
 	apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 	echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 	echo -e "[${green}DONE${NC}]\n"
-  fi  
-	
+  fi
+
 	echo -n "Activating Apache modules... "
 	a2enmod suexec > /dev/null 2>&1
 	a2enmod rewrite > /dev/null 2>&1
@@ -63,7 +62,7 @@ InstallWebServer() {
 	a2enmod cgi > /dev/null 2>&1
 	a2enmod headers > /dev/null 2>&1
 	echo -e "[${green}DONE${NC}]\n"
-	
+
 	echo -n "Disabling HTTP_PROXY... "
 	echo "<IfModule mod_headers.c>" >> /etc/apache2/conf-available/httpoxy.conf
 	echo "     RequestHeader unset Proxy early" >> /etc/apache2/conf-available/httpoxy.conf
@@ -73,44 +72,43 @@ InstallWebServer() {
 	echo -n "Restarting Apache... "
 	systemctl restart apache2
 	echo -e "[${green}DONE${NC}]\n"
-	
+
 	echo -n "Installing Let's Encrypt (Certbot)... "
 	apt_install certbot
 	echo -e "[${green}DONE${NC}]\n"
-  
-    echo -n "Installing PHP Opcode Cache... "	
-    apt_install php7.3-opcache php-apcu
+
+    echo -n "Installing PHP Opcode Cache... "
+    apt_install php7.4-opcache php-apcu
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Restarting Apache... "
 	systemctl restart apache2
 	echo -e "[${green}DONE${NC}]\n"
-	#end of installing apache 
-  elif [ "$CFG_WEBSERVER" == "nginx" ]; then	
+	#end of installing apache
+  elif [ "$CFG_WEBSERVER" == "nginx" ]; then
   CFG_NGINX=y
   CFG_APACHE=n
 	echo -n "Installing Web server (nginx) and modules... "
 	apt_install nginx
-	systemctl start nginx  
-	# apt_install php7.3 php7.3-common php-bcmath php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear mcrypt php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php7.3-zip php7.3-mbstring php7.3-imap mcrypt php7.3-snmp php7.3-xmlrpc php7.3-xsl
-	apt_install php7.3 php7.3-common php-bcmath php7.3-gd php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi php-pear mcrypt libruby php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 php7.3-tidy php7.3-xmlrpc php7.3-xsl php-memcache php-imagick php-gettext php7.3-zip php7.3-mbstring php7.3-soap php7.3-opcache
+	systemctl start nginx
+	apt_install php7.4 php7.4-common php-bcmath php7.4-gd php7.4-mysql php7.4-imap php7.4-cli php7.4-cgi php-pear mcrypt libruby php7.4-curl php7.4-intl php7.4-pspell php7.4-recode php7.4-sqlite3 php7.4-tidy php7.4-xmlrpc php7.4-xsl php-memcache php-imagick php-gettext php7.4-zip php7.4-mbstring php7.4-soap php7.4-opcache
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing PHP-FPM... "
 	#Need to check if something is asked before suppress messages
-	apt_install php7.3-fpm
-	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.3/fpm/php.ini
+	apt_install php7.4-fpm
+	sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
 	TIME_ZONE=$(echo "$TIME_ZONE" | sed -n 's/ (.*)$//p')
-	sed -i "s/;date.timezone =/date.timezone=\"${TIME_ZONE//\//\\/}\"/" /etc/php/7.3/fpm/php.ini
+	sed -i "s/;date.timezone =/date.timezone=\"${TIME_ZONE//\//\\/}\"/" /etc/php/7.4/fpm/php.ini
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing needed programs for PHP and nginx (mcrypt, etc.)... "
 	apt_install mcrypt imagemagick memcached curl tidy snmp
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Reloading PHP-FPM... "
-	systemctl reload php7.3-fpm
+	systemctl reload php7.4-fpm
 	echo -e "[${green}DONE${NC}]\n"
 	echo -n "Installing fcgiwrap... "
 	apt_install fcgiwrap
 	echo -e "[${green}DONE${NC}]\n"
-  
+
   if [ "$CFG_PHPMYADMIN" == "yes" ]; then
 	source $APWD/distros/debian10/install_phpmyadmin.sh
 	echo -n "Installing phpMyAdmin... "
@@ -118,7 +116,7 @@ InstallWebServer() {
 	echo -e "[${green}DONE${NC}]\n"
   fi
 
-   
+
     if [ "$CFG_PHP56" == "yes" ]; then
 		echo -n "Installing PHP 5.6... "
 		apt_install apt-transport-https
@@ -128,15 +126,15 @@ InstallWebServer() {
 		apt_install php5.6 php5.6-common php5.6-gd php5.6-mysql php5.6-imap php5.6-cli php5.6-cgi php5.6-mcrypt php5.6-curl php5.6-intl php5.6-pspell php5.6-recode php5.6-sqlite3 php5.6-tidy php5.6-xmlrpc php5.6-xsl php5.6-zip php5.6-mbstring php5.6-fpm
 		echo -e "Package: *\nPin: origin packages.sury.org\nPin-Priority: 100" > /etc/apt/preferences.d/deb-sury-org
 		echo -e "[${green}DONE${NC}]\n"
-	fi  
+	fi
 	echo -n "Installing Let's Encrypt (Certbot)... "
 	apt_install certbot
 	echo -e "[${green}DONE${NC}]\n"
-	
-	# echo -n "Installing PHP Opcode Cache... "	
-    # apt_install php7.3-opcache php-apcu
+
+	# echo -n "Installing PHP Opcode Cache... "
+    # apt_install php7.4-opcache php-apcu
 	# echo -e "[${green}DONE${NC}]\n"
-  
+
   fi
   if [ "$CFG_PHP56" == "yes" ]; then
 	echo -e "${red}Attention!!! You have installed php7 and php 5.6, to make php 5.6 work you have to configure the following in ISPConfig ${NC}"
