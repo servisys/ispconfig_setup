@@ -659,12 +659,12 @@ Run the following command as root user:
 * Debian/Raspbian 7, 8, 9 and 10 and Ubuntu 14.04, 15.10, 16.04, 16.10 and 18.04
 
 ```shell
-cd /tmp; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
+cd /tmp; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; bash install.sh
 ```
 * CentOS 7
 
 ```shell
-cd /tmp; sudo yum install wget unzip net-tools; wget -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo install.sh
+cd /tmp; sudo yum install wget unzip net-tools; wget --no-check-certificate -O installer.tgz "https://github.com/servisys/ispconfig_setup/tarball/master"; tar zxvf installer.tgz; cd *ispconfig*; sudo install.sh
 ```
 
 CentOS 7 is in a very early stage, we got to test a bit, any help will be appreciated. 
