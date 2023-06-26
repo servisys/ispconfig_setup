@@ -681,5 +681,5 @@ Follow the instructions on the screen
 * Special thanks to Torsten Widmann for contribution to the code
 * Special thanks to Michiel Kamphuis ( http://www.ensync.it/ ) for contribution to Multiserver Setup integration
 * Special thanks to Bartłomiej Gajda ( http://webard.me/ ) for the bug fixes to multiserver setup and beta installation
-* The code is based on the "Automatic Debian System Installation for ISPConfig 3" of Author: Mark Stunnenberg <mark@e-rave.nl>
+* The code is based on the "Automatic Debian System Installation for ISPConfig 3" of Author: Mark Stunnenberg [@marknl](https://github.com/marknl/)
 * Howtoforge community https://www.howtoforge.com/community/
