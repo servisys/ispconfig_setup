@@ -19,7 +19,7 @@ InstallJailkit() {
   fi
   tar xfz jailkit-$JKV.tar.gz
   cd jailkit-$JKV
-  echo 5 > debian/compat
+  echo 7 > debian/compat
   ./debian/rules binary > /dev/null 2>&1
   cd ..
   hide_output dpkg -i jailkit_$JKV-1_*.deb
