@@ -13,10 +13,10 @@ InstallAntiVirus() {
   echo "$CFG_HOSTNAME_FQDN" > /etc/mailname
   echo -e "[${green}DONE${NC}]\n"
   echo -n "Stopping SpamAssassin... "
-  systemctl  stop spamassassin
+  systemctl  stop spamd
   echo -e "[${green}DONE${NC}]\n"
   echo -n "Disabling SpamAssassin... "
-  hide_output systemctl disable spamassassin
+  hide_output systemctl disable spamd
   echo -e "[${green}DONE${NC}]\n"
   if [ "$CFG_AVUPDATE" == "yes" ]; then
 	echo -n "Updating Freshclam Antivirus Database. Please Wait... "
