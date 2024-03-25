@@ -9,7 +9,7 @@ SUM="d316dc22b9f3ab7464c8bd73c2539304"
 
 InstallJailkit() {
   echo -n "Installing Jailkit... "
-  apt_install build-essential autoconf automake libtool flex bison debhelper binutils python
+  apt_install build-essential autoconf automake libtool flex bison debhelper binutils python3 python-is-python3
   cd /tmp
   wget -q https://olivier.sessink.nl/jailkit/jailkit-$JKV.tar.gz
   if [[ ! "$(md5sum jailkit-$JKV.tar.gz | head -c 32)" = "$SUM" ]]; then
