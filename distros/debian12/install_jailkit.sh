@@ -9,21 +9,7 @@ SUM="c7018645430248613c6241bf529d95ef"
 
 InstallJailkit() {
   echo -n "Installing Jailkit... "
-  apt_install build-essential autoconf automake libtool flex bison debhelper binutils python3 python-is-python3
-  cd /tmp
-  wget -q https://olivier.sessink.nl/jailkit/jailkit-$JKV.tar.gz
-  if [[ ! "$(md5sum jailkit-$JKV.tar.gz | head -c 32)" = "$SUM" ]]; then
-    echo -e "\n${red}Error: md5sum does not match${NC}" >&2
-    echo "Please try running this script again" >&2
-    exit 1
-  fi
-  tar xfz jailkit-$JKV.tar.gz
-  cd jailkit-$JKV
-  echo 7 > debian/compat
-  ./debian/rules binary > /dev/null 2>&1
-  cd ..
-  hide_output dpkg -i jailkit_$JKV-1_*.deb
-  rm -rf jailkit-$JKV*
+  apt_install build-essential autoconf automake libtool flex bison debhelper binutils jailkit
   echo -e "[${green}DONE${NC}]\n"
 }
 
