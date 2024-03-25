@@ -101,6 +101,12 @@ CheckLinux() {
 
     elif echo "$VERSION_ID" | grep -iq "11"; then
       DISTRO=debian11
+    #---------------------------------------------------------------------
+    #	Debian 12 Bookworm
+    #---------------------------------------------------------------------
+
+    elif echo "$VERSION_ID" | grep -iq "12"; then
+      DISTRO=debian12
 		fi
 
 	elif echo "$ID" | grep -iq "raspbian"; then
